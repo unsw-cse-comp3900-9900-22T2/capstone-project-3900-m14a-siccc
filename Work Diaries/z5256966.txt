@@ -1,5 +1,6 @@
 Week 1
-Created 5 member group named Siccc. Picked a Scrum master.
+Created 5 member group named Siccc. Picked a Scrum master. 
 I created a Jira account and joined the Jira project.
-Worked on the proposal. Wrote some user stories and acceptance criteria. 
+Discussed which project to choose and selected Recipe reccomendation syste.
 Discussed with team to hold meetings at Thurs 1pm on teams to discuess about the progress.
+Worked on the proposal. Wrote some user stories and acceptance criteria. 
