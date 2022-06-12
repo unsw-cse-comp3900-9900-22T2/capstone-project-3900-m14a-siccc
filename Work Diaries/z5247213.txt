@@ -1,3 +1,18 @@
 Week 1
 
-I am a team member in this team. We decided the project this week and started the draft of proposal.
+I am a team member in this team. 
+- We decided the project this week and started the draft of proposal.
+- Attended the meeting on Thursday.
+- Accessed the Jira.
+
+Week 2
+
+- I did the data flow diagram for the customer. 
+- I attended the meeting on Thursday. 
+- Started to create a new proposal for submission and discussed with teammates about the proposal. 
+- Tried to do the proposal.
+- Created the Github and accessed the project.
+
+Week 3
+
+-
