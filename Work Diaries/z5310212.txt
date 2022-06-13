@@ -4,3 +4,7 @@ Researched on the novel functionality, came up with blacklisting ingredients and
 Week 2
 Made storyboard for recipe contributor user, fixed up some user stories. 
 Added user stories to Jira 
+
+Week 3
+Add storyboard for recipe contributor 
+Start working on Backend code 
