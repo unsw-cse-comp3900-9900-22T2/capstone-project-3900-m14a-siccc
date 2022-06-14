@@ -5,7 +5,7 @@ import re
 db = None
 
 try:
-    db = psycopg2.connect("dbname=recipeMatcherDB user=postgres password=hello123")
+    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     cur = db.cursor()
     qry = """
     select * 
