@@ -1,6 +1,4 @@
-import sys
 import psycopg2
-import re
 
 db = None
 
