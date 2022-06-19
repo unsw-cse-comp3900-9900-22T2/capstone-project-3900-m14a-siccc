@@ -15,4 +15,9 @@ Week 2
 
 Week 3
 
--
+- Discussed the proposal.
+- Planning to do the demo.
+
+Week 4
+
+- Do demo. - input ingredients data 
