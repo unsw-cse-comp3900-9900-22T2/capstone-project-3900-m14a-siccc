@@ -1,7 +1,28 @@
 Week 1
 
-Groups formed. I was nominated scrum master so i created the Jira account and added all the other members. We decided on a time to have a meeting besides the tutorial as well as creating all the necessary group chats in teams and messenger. We read through all the projects one by one and came up a list of pros and cons of each one. After discussing it in depth we decided on Project 1 as it was something that we could accomplish. 
+Groups formed. I was nominated scrum master so i created the Jira account and added all the other members. 
+We decided on a time to have a meeting besides the tutorial as well as creating all the necessary group chats 
+in teams and messenger. We read through all the projects one by one and came up a list of pros and cons of each one. 
+After discussing it in depth we decided on Project 1 as it was something that we could accomplish. 
 
 Week 2
 
-A first draft of user stories were written by all members. We also decided on the sprints structure. The acceptance criteria for the user stories were also written up. During the lab we were able to discuss which user stories were missing or were able to be grouped together. During our Monday lab we also assigned tasks for all members for the Thursday meeting which consisted of dividing up work for the systems architecture and story boards. On Thursday we had a meeting which went over our storyboards and diagrams for the system architecture and discussed if anything could be improved/changed. We also decided to start on writing the report and divided up the work based on sections. I was assigned to write the descriptions on how some defined user stories provided novel functionality compared to existing systems. I inputting my user stories and acceptance criteria into the Jira backlog.
+A first draft of user stories were written by all members. We also decided on the sprints structure. 
+The acceptance criteria for the user stories were also written up. During the lab we were able to 
+discuss which user stories were missing or were able to be grouped together. During our Monday lab 
+we also assigned tasks for all members for the Thursday meeting which consisted of dividing up work for 
+the systems architecture and story boards. On Thursday we had a meeting which went over our storyboards 
+and diagrams for the system architecture and discussed if anything could be improved/changed. We also 
+decided to start on writing the report and divided up the work based on sections. I was assigned to write 
+the descriptions on how some defined user stories provided novel functionality compared to existing systems. 
+I inputting my user stories and acceptance criteria into the Jira backlog.
+
+Week 3
+
+For this week, we decided to switch our database to PostgreSQL rather than reading from a json file.
+Since I had experience working with databases, I was assigned to construct the database and get it 
+running for all members to access. I decided to host the database on AWS as they had a free tier option.
+We were able to connect all the members to the database by the end of the week. I also added to the proposal
+an ER diagram to model the database and provide a schema. On our Thursday meeting we wrapped up the
+final touches for our proposal and started to get working on the coding side of things. We assigned
+roles such as who is doing frontend/backend/database coding. We assigned individuals based on experience.
