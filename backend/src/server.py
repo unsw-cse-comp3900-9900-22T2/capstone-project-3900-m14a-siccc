@@ -1,6 +1,7 @@
 from json import dumps
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
+from src.error import InputError
 
 def defaultHandler(err):
     response = err.get_response()
@@ -21,7 +22,7 @@ CORS(APP)
 def echo():
     data = request.args.get('data')
     if data == 'echo':
-   	    raise InputError(description='Cannot echo "echo"')
+           raise InputError(description='Cannot echo "echo"')
     return dumps({
         'data': data
     })
