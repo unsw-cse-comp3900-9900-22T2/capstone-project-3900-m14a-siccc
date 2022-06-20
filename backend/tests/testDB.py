@@ -6,15 +6,15 @@ try:
     db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     cur = db.cursor()
     qry = """
-    select category
+    select calories
     from ingredients
     where name = %s
     """
-    cur.execute(qry, ['bacon'])
+    cur.execute(qry, ['egg'])
     info = cur.fetchone()
+    calories, = info
     cur.close()
-    category,  = info
-    print(category)
+    print(calories)
 
 except Exception as err:
     print("DB error: ", err)
