@@ -138,6 +138,31 @@ def retrieveIngredients(db):
     else:
         return info 
 
+def retrieveRecipe(db, id):
+    """ Helper function to retrieve recipe information given a 
+        recipe id
+
+            Parameters:
+                db: database
+                id (int): recipe identifier
+
+            Returns:
+                recipe (list): list of tuples of ingredient details
+    """
+    cur = db.cursor()
+    qry = """
+    select * 
+    from recipes
+    where id = %d
+    """
+    cur.execute(qry, [id])
+    info = cur.fetchone()
+    cur.close()
+    if not info:
+        return None
+    else:
+        return info 
+
 def convertCalories(currCalories, gramToConvert):
     """ Helper function to convert the calories of the ingredients
         to any specified number of grams
