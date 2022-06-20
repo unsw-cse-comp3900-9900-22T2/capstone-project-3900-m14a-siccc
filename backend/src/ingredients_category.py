@@ -40,12 +40,11 @@ def sortingIngredients(db):
                 ingredients (list): the list of categories after sorting
     """
 
-    cate = sortingCategories(db)
-    
     cur = db.cursor()
     qry = """
     select * 
-    from categories
+    from ingredients
+    group by categories
     order by name;
     """
     cur.execute(qry)
