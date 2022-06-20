@@ -5,4 +5,9 @@ Week 2
 - added to user stories and acceptance criteria
 - created storyboard for recipe explorers
 - wrote background section of proposal
-- next week will add user stories to Jira and start coding frontend
+
+Week 3
+- added user stories and acceptance criteria to Jira
+- started first sprint
+- finished storyboard and edited proposal
+- started familiarising myself with frontend (ReactJS)
