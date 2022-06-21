@@ -63,5 +63,5 @@ def recipeDetails(recipeID):
         "photo": info[4],
         "calories": info[5],
         "cookingSteps": info[6],
-        "ingredients": info[7]
+        "ingredients": info[8]
     }
