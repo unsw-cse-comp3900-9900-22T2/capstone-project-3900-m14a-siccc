@@ -1,43 +1,35 @@
+import psycopg2
+from src.helper import retrieveRecipeList
 
-
-def recipeMatch(db, ingredients_list):
+def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
         Parameters:
-            ingredients_list (str): list of ingredients user selected
+            ingredientsList (str): list of ingredients user selected
         
         Return:
-            recipe_list (str): list of recipes satisfying the ingredients
+            recipeList (list): list of recipes id's satisfying the ingredients
     """
     # [[relevent percetage, recipe information], ..., 
     # [relevent percetage, recipe information]]
-    recipes = [] 
-    
-    cur = db.cursor()
-    qry = """
-    select * 
-    from recipes
-    """
-    cur.execute(qry)
-    info = cur.fetchone()
-    for r in info:
-        ingredients_meal = map(str, r[8].split(","))
+    recipeList = []
+    matches = len(ingredientsList)
+    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    info = retrieveRecipeList(db)
+    for recipe in info:
+        ingredientString = recipe[8]
+        ingredients = ingredientString.split(',')
         matching = 0
-        for i in ingredients_meal:
-            for j in ingredients_list:
-                if i == j:
+        for i in ingredientsList:
+            for j in ingredients:
+                if i in j:
                     matching += 1
                     continue
-        matching_percentage = matching / len(ingredients_list)
-        if matching_percentage > 0:
-            recipes.append(r)
-    cur.close()
-
-    # order from higher percentage to lower percentage
-    recipe_list = sorted(recipes, key=lambda x:x[7], reverse=True) 
-
-    if len(recipe_list) < 0:
+        if matching == matches:
+            recipeList.append(recipe[0])
+            
+    if len(recipeList) < 0:
         return None
     else:
-        return recipe_list
+        return recipeList

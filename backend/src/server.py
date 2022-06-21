@@ -1,7 +1,8 @@
 from json import dumps
-from flask import Flask, request, send_from_directory
+from flask import Flask, request
 from flask_cors import CORS
 from src.error import InputError
+from src.search import recipeMatch
 
 def defaultHandler(err):
     response = err.get_response()
@@ -17,14 +18,7 @@ def defaultHandler(err):
 APP = Flask(__name__, static_url_path = '/static')
 CORS(APP)
 
-# Example
-@APP.route("/echo", methods=['GET'])
-def echo():
-    data = request.args.get('data')
-    if data == 'echo':
-           raise InputError(description='Cannot echo "echo"')
-    return dumps({
-        'data': data
-    })
-
-
+@APP.route("", methods=['GET'])
+def search_flask():
+    ingredients = request.args.get("ingredients")
+    return dumps(recipeMatch(ingredients))
