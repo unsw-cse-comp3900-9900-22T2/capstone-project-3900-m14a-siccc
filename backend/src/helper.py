@@ -153,7 +153,7 @@ def retrieveRecipe(db, id):
     qry = """
     select * 
     from recipes
-    where id = %d
+    where id = %s
     """
     cur.execute(qry, [id])
     info = cur.fetchone()
@@ -162,6 +162,50 @@ def retrieveRecipe(db, id):
         return None
     else:
         return info 
+
+def retrieveRecipeList(db):
+    """ Helper function to retrieve list of recipes
+
+            Parameters:
+                db : database
+        
+            Returns:
+                info: list of all recipes
+    """
+    cur = db.cursor()
+    qry = """
+    select *
+    from recipes
+    """
+    cur.execute(qry)
+    info = cur.fetchall()
+    cur.close()
+    if not info:
+        return None
+    else:
+        return info
+    
+def retrieveRecipeIngredientsList(db):
+    """ Helper function to retrieve list of recipe ingredients
+
+            Parameters:
+                db : database
+        
+            Returns:
+                info: list of all recipes ingredients
+    """
+    cur = db.cursor()
+    qry = """
+    select ingredients
+    from recipes
+    """
+    cur.execute(qry)
+    info = cur.fetchall()
+    cur.close()
+    if not info:
+        return None
+    else:
+        return info
 
 def convertCalories(currCalories, gramToConvert):
     """ Helper function to convert the calories of the ingredients
