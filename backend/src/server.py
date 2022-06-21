@@ -38,3 +38,7 @@ def recipeDetailsFlask():
         'cookingSteps': info['cookingSteps'],
         'ingredients': info['ingredients']
     })
+    
+if __name__ == "__main__":
+    APP.run(port=3000)
+
