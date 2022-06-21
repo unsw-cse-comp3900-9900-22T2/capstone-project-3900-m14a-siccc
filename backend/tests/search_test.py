@@ -1,4 +1,4 @@
-from src.search import recipeMatch
+from src.recipe import recipeMatch
 import pytest
 
 def test_simple():

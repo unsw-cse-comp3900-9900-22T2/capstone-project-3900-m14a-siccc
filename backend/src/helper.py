@@ -153,7 +153,7 @@ def retrieveRecipe(db, id):
     qry = """
     select * 
     from recipes
-    where id = %d
+    where id = %s
     """
     cur.execute(qry, [id])
     info = cur.fetchone()
