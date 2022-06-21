@@ -29,15 +29,15 @@ def sortingCategories(db):
         return info 
 
 
-def sortingIngredients(db):
+def sortingAllIngredients(db):
     """ Sorting ingredients function to sort the list of ingredients
-        by alphabetically.
+        in all categories by alphabetically.
 
             Parameters:
                 db: database
 
             Returns:
-                ingredients (list): the list of categories after sorting
+                ingredients (list): the list of ingredients after sorting
     """
 
     # cate = sortingCategories(db)
@@ -47,6 +47,34 @@ def sortingIngredients(db):
     select * 
     from ingredients
     order by categories, name;
+    """
+    cur.execute(qry)
+    info = cur.fetchone()
+    cur.close()
+
+    if not info:
+        return None
+    else:
+        return info 
+
+
+def sortingIngredients(db, cate):
+    """ Sorting ingredients function to sort the list of ingredients
+        in one category by alphabetically.
+
+            Parameters:
+                db: database
+
+            Returns:
+                ingredients (list): the list of ingredients after sorting
+    """
+
+    cur = db.cursor()
+    qry = f"""
+    select * 
+    from ingredients
+    where category = {cate}
+    order by name;
     """
     cur.execute(qry)
     info = cur.fetchone()
