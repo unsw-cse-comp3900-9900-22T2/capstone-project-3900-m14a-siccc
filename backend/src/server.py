@@ -25,10 +25,9 @@ def recipeMatchFlask():
         'recipes': recipeMatch(ingredients)
     })
 
-@APP.route("/recipe/details", methods=['GET'])
-def recipeDetailsFlask():
-    recipeID = request.args.get("recipeID")
-    info = recipeDetails(recipeID)
+@APP.route("/recipe/details/<page_id>", methods=['GET'])
+def recipeDetailsFlask(page_id):
+    info = recipeDetails(page_id)
     return dumps({
         'recipeID': info['recipeID'],
         'title': info['title'],
