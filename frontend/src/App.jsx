@@ -16,7 +16,7 @@ function App() {
           </Route>
           {/*<Route element ={<RecipeView />} path ="/recipe-view/">
           </Route>*/}
-          <Route element ={<RecipeDetails />} path ="/recipe-detail/:id">
+          <Route element ={<RecipeDetails />} path ="/recipe-details/:id">
           </Route>
         </Routes>
       </Router>

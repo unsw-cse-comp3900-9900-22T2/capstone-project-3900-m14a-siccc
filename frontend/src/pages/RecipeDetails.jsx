@@ -3,27 +3,35 @@ import { useParams } from 'react-router-dom';
 import { apiFetch } from '../helpers.jsx';
 
 const RecipeDetails = () => {
-  const params = useParams();
   const [recipe, setRecipe] = React.useState({})
+  const params = useParams();
   
-  const viewDetail = async () => {
-    try {
-      const body = {
-        recipeID: params.id
-      }
-      const recipeData = await apiFetch('GET', `recipe/view`, null, body);
-      setRecipe(recipeData);
+  React.useEffect(() => {
+    const viewDetail = async () => {
+      try {
+        const recipeData = await apiFetch('GET', `recipe/details/${params.id}`, null);
+        setRecipe(recipeData);
+        //console.log('here');
 
-    } catch (err) {
-      alert(err.message);
+      } catch (err) {
+        alert(err.message);
+      }
     }
-  }
-  
-  viewDetail();
+    viewDetail();
+  }, [params.id]);
+
   return (
     <>
       <>recipe{params.id}</>
       <h1>{recipe.title}</h1>
+      <p>{recipe.servings} servings</p>
+      <p>{recipe.timeToCook} minutes</p>
+      <p>Meal Type: {recipe.mealType}</p>
+      <p>{recipe.photo}</p>
+      <p>{recipe.calories}</p>
+      <p>{recipe.cookingSteps}</p>
+      <p>Ingredients: {recipe.ingredients}</p>
+      
     </>
   );
 }
