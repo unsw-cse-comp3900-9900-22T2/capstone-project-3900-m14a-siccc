@@ -1,3 +1,5 @@
+
+
 """ Sorts list of categories alphabetically and 
     sends data to front end
 """
@@ -85,3 +87,4 @@ def sortingIngredients(db, cate):
         return None
     else:
         return info 
+
