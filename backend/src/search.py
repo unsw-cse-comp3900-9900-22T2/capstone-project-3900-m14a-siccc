@@ -22,7 +22,7 @@ def recipeMatch(db, ingredients_list):
     cur.execute(qry)
     info = cur.fetchone()
     for r in info:
-        ingredients_meal = r[8]
+        ingredients_meal = map(str, r[8].split(","))
         matching = 0
         for i in ingredients_meal:
             for j in ingredients_list:
