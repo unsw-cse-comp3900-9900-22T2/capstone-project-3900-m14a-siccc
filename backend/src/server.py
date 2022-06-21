@@ -21,7 +21,9 @@ CORS(APP)
 @APP.route("/recipe/view", methods=['GET'])
 def recipeMatchFlask():
     ingredients = request.args.get("ingredients")
-    return dumps(recipeMatch(ingredients))
+    return dumps({
+        'recipes': recipeMatch(ingredients)
+    })
 
 @APP.route("/recipe/details", methods=['GET'])
 def recipeDetailsFlask():
@@ -38,3 +40,7 @@ def recipeDetailsFlask():
         'cookingSteps': info['cookingSteps'],
         'ingredients': info['ingredients']
     })
+    
+if __name__ == "__main__":
+    APP.run(port=5005)
+
