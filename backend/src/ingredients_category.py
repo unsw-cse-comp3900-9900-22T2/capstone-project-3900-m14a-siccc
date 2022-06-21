@@ -64,6 +64,7 @@ def sortingIngredients(db, cate):
 
             Parameters:
                 db: database
+                cate: the name of the categories
 
             Returns:
                 ingredients (list): the list of ingredients after sorting
