@@ -21,7 +21,8 @@ CORS(APP)
 
 @APP.route("/recipe/view", methods=['POST'])
 def recipeMatchFlask():
-    ingredients = request.get_json("ingredients")
+    temp = request.get_json()
+    ingredients = temp['ingredients']
     return dumps({
         'recipes': recipeMatch(ingredients)
     })
