@@ -30,17 +30,7 @@ def recipeMatchFlask():
 @APP.route("/recipe/details/<page_id>", methods=['GET'])
 def recipeDetailsFlask(page_id):
     info = recipeDetails(page_id)
-    return dumps({
-        'recipeID': info['recipeID'],
-        'title': info['title'],
-        'servings': info['servings'],
-        'timeToCook': info['timeToCook'],
-        'mealType': info['mealType'],
-        'photo': info['photo'],
-        'calories': info['calories'],
-        'cookingSteps': info['cookingSteps'],
-        'ingredients': info['ingredients']
-    })
+    return dumps(info)
     
 @APP.route("/ingredients/view", methods=['GET'])
 def IngredientsView():
