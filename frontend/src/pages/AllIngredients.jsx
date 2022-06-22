@@ -20,12 +20,12 @@ const AllIngredients = () => {
   const recipeMatch = async () => {
     try {
       const body = {
-        ingredients: [],
+        ingredients: ["bacon"],
       }
       const recipeData = await apiFetch('POST', `recipe/view`, null, body);
-      setRecipes(recipeData);
+      setRecipes(recipeData.recipes);
       console.log(recipeData);
-      console.log(recipes);
+      console.log(recipes.recipes);
       console.log('here');
 
     } catch (err) {
@@ -46,6 +46,15 @@ const AllIngredients = () => {
           )
         }) }
         <button name="search" onClick={recipeMatch}>Search</button>
+        {recipes.map((r, idx) => {
+          return (
+            <p key={idx}>
+              {r}
+            </p>
+          )
+        }) }
+        <p>{recipes}</p>
+
       </>
       
       
