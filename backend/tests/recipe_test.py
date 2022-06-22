@@ -30,3 +30,7 @@ def test_details():
         'ingredients': '3g olive oil, 100g of bacon, 2 eggs'
     }
     assert recipeDetails(1) == info
+
+def test_viewAllIngredients(): 
+    ingredients = ["bacon", "broccoli", "cinnamon", "egg", "olive oil", "thyme", "turkey"]
+    assert test_viewAllIngredients() == ingredients

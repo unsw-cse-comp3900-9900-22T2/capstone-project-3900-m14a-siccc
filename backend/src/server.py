@@ -2,7 +2,7 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from src.error import InputError
-from src.recipe import recipeMatch, recipeDetails
+from src.recipe import IngredientsViewAll, recipeMatch, recipeDetails
 
 def defaultHandler(err):
     response = err.get_response()
@@ -40,6 +40,12 @@ def recipeDetailsFlask(page_id):
         'ingredients': info['ingredients']
     })
     
+@APP.route("/ingredients/view", methods=['GET'])
+def recipeMatchFlask():
+    return dumps(IngredientsViewAll)
+    
 if __name__ == "__main__":
     APP.run(port=5005)
+
+
 

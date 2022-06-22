@@ -1,5 +1,6 @@
+import json
 import psycopg2
-from src.helper import retrieveRecipe, retrieveRecipeList
+from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList
 
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
@@ -65,3 +66,11 @@ def recipeDetails(recipeID):
         "cookingSteps": info[6],
         "ingredients": info[8]
     }
+
+def IngredientsViewAll():
+    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    info = retrieveIngredientNames(db)
+    list = []
+    for ingredient in info: 
+        list.append(ingredient)
+    return json.dumps(list)
