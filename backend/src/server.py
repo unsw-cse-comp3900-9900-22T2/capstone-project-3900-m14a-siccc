@@ -2,7 +2,8 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from src.error import InputError
-from src.recipe import IngredientsViewAll, recipeMatch, recipeDetails
+from src.recipe import recipeMatch, recipeDetails
+from src.ingredients import IngredientsViewAll
 
 def defaultHandler(err):
     response = err.get_response()
@@ -41,7 +42,7 @@ def recipeDetailsFlask(page_id):
     })
     
 @APP.route("/ingredients/view", methods=['GET'])
-def recipeMatchFlask():
+def IngredientsView():
     return dumps(IngredientsViewAll)
     
 if __name__ == "__main__":

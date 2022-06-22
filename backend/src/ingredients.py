@@ -7,6 +7,6 @@ def IngredientsViewAll():
     info = retrieveIngredientNames(db)
     list = []
     for ingredient in info: 
-        list.append(ingredient)
-    return json.dumps(list)
+        list.append(ingredient[0])
+    return sorted(list)
 
