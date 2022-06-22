@@ -43,7 +43,8 @@ def recipeDetailsFlask(page_id):
     
 @APP.route("/ingredients/view", methods=['GET'])
 def IngredientsView():
-    return dumps(IngredientsViewAll)
+    info = IngredientsViewAll()
+    return dumps(info)
     
 if __name__ == "__main__":
     APP.run(port=5005)
