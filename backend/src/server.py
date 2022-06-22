@@ -18,7 +18,7 @@ def defaultHandler(err):
 APP = Flask(__name__, static_url_path = '/static')
 CORS(APP)
 
-@APP.route("/recipe/view", methods=['GET'])
+@APP.route("/recipe/view", methods=['POST'])
 def recipeMatchFlask():
     ingredients = request.args.get("ingredients")
     return dumps({
