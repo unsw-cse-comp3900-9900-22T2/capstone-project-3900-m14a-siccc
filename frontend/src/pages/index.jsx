@@ -78,6 +78,7 @@ function CatList(props) {
   })
   return (
     <ul>
+      <input value={props.input}/>
       {filteredData.map((item) => (
         <li key={item.id}>
           <input value={item.name} type="checkbox"/>
