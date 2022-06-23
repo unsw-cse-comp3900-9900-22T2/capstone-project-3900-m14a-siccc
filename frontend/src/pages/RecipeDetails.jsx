@@ -1,10 +1,11 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiFetch } from '../helpers.jsx';
 
 const RecipeDetails = () => {
-  const [recipe, setRecipe] = React.useState({})
+  const navigate = useNavigate();
   const params = useParams();
+  const [recipe, setRecipe] = React.useState({})
   
   React.useEffect(() => {
     const viewDetail = async () => {
@@ -31,6 +32,7 @@ const RecipeDetails = () => {
       <p>{recipe.calories}</p>
       <p>{recipe.cookingSteps}</p>
       <p>Ingredients: {recipe.ingredients}</p>
+      <button onClick={() => navigate(`/`)}>Back</button>
       
     </>
   );
