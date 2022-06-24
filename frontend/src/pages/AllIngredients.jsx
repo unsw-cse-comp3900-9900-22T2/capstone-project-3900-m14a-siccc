@@ -134,18 +134,20 @@ const AllIngredients = () => {
                   {category}
                 </h1>
               {
-                categories[category].map((ingredient, idx2) => (
-                  <div key = {idx2}>
-                    <label>
-                      {ingredient.text}
-                      <input
-                        onChange={() => toggleCategoryIngredients(category, idx2)}
-                        type="checkbox"
-                        checked={ingredient.check}
-                      />
-                    </label>
-                  </div>
-                ))
+                categories[category].map((ingredient, idx2) => {
+                  return(
+                    <div key = {idx2}>
+                      <label>
+                        {ingredient.text}
+                        <input
+                          onChange={() => toggleCategoryIngredients(category, idx2)}
+                          type="checkbox"
+                          checked={ingredient.check}
+                        />
+                      </label>
+                    </div>
+                  )
+                })
               }
               </div>
             )
