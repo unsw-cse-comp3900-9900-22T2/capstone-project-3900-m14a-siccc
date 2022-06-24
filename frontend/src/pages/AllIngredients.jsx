@@ -89,7 +89,7 @@ const AllIngredients = () => {
   }
 
   function toggleCategoryIngredients (category, index) {
-    const newCategory = categories;
+    const newCategory = {...categories};
     newCategory[category][index].check = !categories[category][index].check;
     setCategories(newCategory);
     console.log(categories)
