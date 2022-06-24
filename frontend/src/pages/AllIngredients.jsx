@@ -6,6 +6,7 @@ const AllIngredients = () => {
   const navigate = useNavigate();
   const [ingredients, setIngredients] = React.useState([]);
   const [recipes, setRecipes] =  React.useState([]);
+  const [categories, setCategories] = React.useState([]);
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -66,6 +67,33 @@ const AllIngredients = () => {
       alert(err.message);
     }
   }
+  
+  const viewAllIngredientsInCategories = async () => {
+    try {
+      const ingredientsInCategoriesDict = {};
+      const ingredientsInCategoriesData = await apiFetch('GET', 'ingredients/categories', null);
+
+      for (const [category, ingredients] of Object.entries(ingredientsInCategoriesData)) {
+        const ingredientList = [];
+        for (const ingredient of ingredients) {
+          const elem = { text: ingredient, check: false };
+          ingredientList.push(elem);
+        }
+        ingredientsInCategoriesDict[category] = ingredientList
+      }
+      setCategories(ingredientsInCategoriesDict)
+      console.log(categories)
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  function toggleCategoryIngredients (category, index) {
+    const newCategory = categories;
+    newCategory[category][index].check = !categories[category][index].check;
+    setCategories(newCategory);
+    console.log(categories)
+  }
 
   return (
     <>
@@ -97,9 +125,33 @@ const AllIngredients = () => {
           )
         }) }
 
+        <button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>
+        {
+          Object.keys(categories).map((category, idx) => {
+            return(
+              <div key = {idx}>
+                <h1>
+                  {category}
+                </h1>
+              {
+                categories[category].map((ingredient, idx2) => (
+                  <div key = {idx2}>
+                    <label>
+                      {ingredient.text}
+                      <input
+                        onChange={() => toggleCategoryIngredients(category, idx2)}
+                        type="checkbox"
+                        checked={ingredient.check}
+                      />
+                    </label>
+                  </div>
+                ))
+              }
+              </div>
+            )
+         })
+       }
       </>
-      
-      
     </>
   );
 }
