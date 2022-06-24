@@ -8,20 +8,26 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import AllIngredients from './pages/AllIngredients';
+import RecipeDetails from './pages/RecipeDetails';
+// import RecipeView from './pages/RecipeView';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 function App() {
   return (
-    // <div className="App">
-    //   Recipe Recommendation System !
-    //   { Menu }
-    // </div>
-    <ChakraProvider>
-    <Router>
-      <Routes>
-        <Route exact path='/' element={<Home/>}/>
-        <Route exact path='/test' element={<Test/>}/>
-      </Routes>
-    </Router>
-    </ChakraProvider>
+    <>
+      <Router>
+        <Routes>
+          <Route element ={<AllIngredients />} path ="/">
+          </Route>
+          {/*<Route element ={<RecipeView />} path ="/recipe-view/">
+          </Route>*/}
+          <Route element ={<RecipeDetails />} path ="/recipe-details/:id">
+          </Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 

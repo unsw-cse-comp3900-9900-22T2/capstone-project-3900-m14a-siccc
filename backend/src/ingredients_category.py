@@ -1,3 +1,5 @@
+
+
 """ Sorts list of categories alphabetically and 
     sends data to front end
 """
@@ -20,7 +22,7 @@ def sortingCategories(db):
     order by name;
     """
     cur.execute(qry)
-    info = cur.fetchone()
+    info = cur.fetchall()
     cur.close()
 
     if not info:
@@ -49,7 +51,7 @@ def sortingAllIngredients(db):
     order by categories, name;
     """
     cur.execute(qry)
-    info = cur.fetchone()
+    info = cur.fetchall()
     cur.close()
 
     if not info:
@@ -78,10 +80,11 @@ def sortingIngredients(db, cate):
     order by name;
     """
     cur.execute(qry)
-    info = cur.fetchone()
+    info = cur.fetchall()
     cur.close()
 
     if not info:
         return None
     else:
         return info 
+

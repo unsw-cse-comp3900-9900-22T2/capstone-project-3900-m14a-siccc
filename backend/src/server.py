@@ -3,6 +3,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
+from src.ingredients import IngredientsViewAll
 
 def defaultHandler(err):
     response = err.get_response()
@@ -18,29 +19,26 @@ def defaultHandler(err):
 APP = Flask(__name__, static_url_path = '/static')
 CORS(APP)
 
-@APP.route("/recipe/view", methods=['GET'])
+@APP.route("/recipe/view", methods=['POST'])
 def recipeMatchFlask():
-    ingredients = request.args.get("ingredients")
+    temp = request.get_json()
+    ingredients = temp['ingredients']
     return dumps({
         'recipes': recipeMatch(ingredients)
     })
 
-@APP.route("/recipe/details", methods=['GET'])
-def recipeDetailsFlask():
-    recipeID = request.args.get("recipeID")
-    info = recipeDetails(recipeID)
-    return dumps({
-        'recipeID': info['recipeID'],
-        'title': info['title'],
-        'servings': info['servings'],
-        'timeToCook': info['timeToCook'],
-        'mealType': info['mealType'],
-        'photo': info['photo'],
-        'calories': info['calories'],
-        'cookingSteps': info['cookingSteps'],
-        'ingredients': info['ingredients']
-    })
+@APP.route("/recipe/details/<page_id>", methods=['GET'])
+def recipeDetailsFlask(page_id):
+    info = recipeDetails(page_id)
+    return dumps(info)
+    
+@APP.route("/ingredients/view", methods=['GET'])
+def IngredientsView():
+    info = IngredientsViewAll()
+    return dumps(info)
     
 if __name__ == "__main__":
     APP.run(port=5005)
+
+
 

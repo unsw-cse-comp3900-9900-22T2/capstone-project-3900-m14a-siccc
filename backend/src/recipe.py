@@ -1,5 +1,6 @@
+import json
 import psycopg2
-from src.helper import retrieveRecipe, retrieveRecipeList
+from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList
 
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
@@ -27,7 +28,18 @@ def recipeMatch(ingredientsList):
                     matching += 1
                     continue
         if matching == matches:
-            recipeList.append(recipe[0])
+            ingDict = {
+                "recipeID": recipe[0],
+                "title": recipe[7],
+                "servings": recipe[1],
+                "timeToCook": recipe[2],
+                "mealType": recipe[3],
+                "photo": recipe[4],
+                "calories": recipe[5],
+                "cookingSteps": recipe[6],
+                "ingredients": recipe[8]
+            }
+            recipeList.append(ingDict)
             
     if len(recipeList) < 0:
         return None
@@ -65,3 +77,4 @@ def recipeDetails(recipeID):
         "cookingSteps": info[6],
         "ingredients": info[8]
     }
+

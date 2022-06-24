@@ -1,3 +1,4 @@
+from src.ingredients import IngredientsViewAll
 from src.recipe import recipeDetails, recipeMatch
 import pytest
 
@@ -30,3 +31,7 @@ def test_details():
         'ingredients': '3g olive oil, 100g of bacon, 2 eggs'
     }
     assert recipeDetails(1) == info
+
+def test_viewAllIngredients(): 
+    ingredients = ["bacon", "broccoli", "cinnamon", "egg", "olive oil", "thyme", "turkey"]
+    assert IngredientsViewAll() == ingredients
