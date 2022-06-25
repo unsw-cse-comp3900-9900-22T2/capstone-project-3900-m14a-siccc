@@ -7,6 +7,7 @@ const AllIngredients = () => {
   const [ingredients, setIngredients] = React.useState([]);
   const [recipes, setRecipes] =  React.useState([]);
   const [categories, setCategories] = React.useState({});
+  const [clickedSearch, setClickedSearch] = React.useState(false);
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -55,6 +56,7 @@ const AllIngredients = () => {
       
       // If user clicks search
       if (clicked) {
+        setClickedSearch(true);
         localStorage.setItem('categories', JSON.stringify(categories));
         for (const [, ingredients] of Object.entries(categories)) {
           console.log(ingredients)
@@ -136,10 +138,13 @@ const AllIngredients = () => {
 
   React.useEffect(() => {
     
-    console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
+    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
     //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-    const dicLen = Object.keys(JSON.parse(localStorage.getItem('categories'))).length;
-    if (localStorage.getItem('categories') && dicLen !== 0) {
+
+    // Check that there is local storage stored
+    if (localStorage.getItem('categories') && 
+      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
+
       setCategories(JSON.parse(localStorage.getItem('categories')));
       recipeMatch(false);
       console.log("ssssss")
@@ -208,7 +213,9 @@ const AllIngredients = () => {
             </div>
           )
         }) }</div>
-        : <h1>No Available Recipes</h1>
+        : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
+          ? <h1>No Available Recipes</h1>
+          : <></>
       }
       
     </>
