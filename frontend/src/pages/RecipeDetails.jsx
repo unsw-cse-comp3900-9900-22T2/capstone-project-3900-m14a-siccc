@@ -26,13 +26,13 @@ const RecipeDetails = () => {
     <>
       <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
         <Box >
-          <>recipe{params.id}</>
+          {/* <>recipe{params.id}</> */}
           <h1>{recipe.title}</h1>
           <p>{recipe.photo}</p>
           <p>Meal Type: {recipe.mealType}</p>
           <p>{recipe.servings} servings</p>
           <p>{recipe.timeToCook} minutes</p>
-          <p>{recipe.calories}</p>
+          <p>{recipe.calories} calories</p>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='10px'>
             <Box >
               <p>Ingredients: {recipe.ingredients}</p>

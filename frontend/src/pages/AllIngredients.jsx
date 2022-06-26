@@ -1,6 +1,10 @@
 import React from 'react';
 import { apiFetch } from '../helpers.jsx';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@chakra-ui/react'
+import { Input } from '@chakra-ui/react'
+import { useState } from "react";
+
 
 const AllIngredients = () => {
   const navigate = useNavigate();
@@ -8,6 +12,12 @@ const AllIngredients = () => {
   const [recipes, setRecipes] =  React.useState([]);
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
+  const [inputText, setInputText] = useState("");
+
+  let inputHandler = (e) => {
+    var lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -78,7 +88,7 @@ const AllIngredients = () => {
           }
         }
       }
-      // Maytches recipe to selected ingredients
+      // Matches recipe to selected ingredients
       const body = {
         ingredients: selectedIngredients,
       }
@@ -155,11 +165,21 @@ const AllIngredients = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      <p>hello</p>
-      <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
-      {ingredients.map((ingredient, idx) => (
+  // List for ingredient search bar
+  function List(props) {
+    viewAllIngredients();
+    const filteredData = ingredients.filter((el) => {
+      if (props.input === '') {  
+        return null;
+      }
+      else {
+          return el.text.includes(props.input)
+      }
+    })
+
+    return(
+      <div>
+      {filteredData.map((ingredient, idx) => (
         <div key={idx}>
           <label>
             {ingredient.text}
@@ -171,53 +191,79 @@ const AllIngredients = () => {
           </label>
         </div>
       ))}
+      </div>
+    )
+  }
 
-      {/*<button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>*/}
-      <h2>Select your ingredients</h2>
-      {
-        Object.keys(categories).map((category, idx) => {
-          return(
-            <div key = {idx}>
-              <h1>
-                {category}
-              </h1>
-            {
-              categories[category].map((ingredient, idx2) => {
-                return(
-                  <div key = {idx2}>
-                    <label>
-                      {ingredient.text}
-                      <input
-                        onChange={() => toggleCategoryIngredients(category, idx2)}
-                        type="checkbox"
-                        checked={ingredient.check}
-                      />
-                    </label>
-                  </div>
-                )
-              })
-            }
-            </div>
-          )
-        })
-      }
-      <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search</button>
-      {recipes.length !== 0
-        ? <div>{recipes.map((recipe, idx) => {
-          return (
-            <div key={idx}>
-              <div>{recipe.photo}</div>
-              <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
-              <p>ingredients: {recipe.ingredients}</p>
-              <hr></hr>
-            </div>
-          )
-        }) }</div>
-        : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
-          ? <h1>No Available Recipes</h1>
-          : <></>
-      }
-      
+  return (
+    <>
+      <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+        {/* <p>hello</p> */}
+        {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
+        {ingredients.map((ingredient, idx) => (
+          <div key={idx}>
+            <label>
+              {ingredient.text}
+              <input
+                onChange={() => toggleIngredients(idx)}
+                type="checkbox"
+                checked={ingredient.check}
+              />
+            </label>
+          </div>
+        ))} */}
+
+        {/*<button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>*/}
+        <h2>Select your ingredients</h2>
+        <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
+        <List input={inputText}/>
+
+        {
+          Object.keys(categories).map((category, idx) => {
+            return(
+              <div key = {idx}>
+                <h3>
+                  {category}
+                </h3>
+              {
+                categories[category].map((ingredient, idx2) => {
+                  return(
+                    <div key = {idx2}>
+                      <label>
+                        {ingredient.text}
+                        <input
+                          onChange={() => toggleCategoryIngredients(category, idx2)}
+                          type="checkbox"
+                          checked={ingredient.check}
+                        />
+                      </label>
+                    </div>
+                  )
+                })
+              }
+              </div>
+            )
+          })
+        }
+        
+        <br/><br/>
+        <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</button>
+        {recipes.length !== 0
+          ? <div>{recipes.map((recipe, idx) => {
+            return (
+              <div key={idx}>
+                <div>{recipe.photo}</div>
+                <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
+                <p>ingredients: {recipe.ingredients}</p>
+                <hr></hr>
+              </div>
+            )
+          }) }</div>
+          : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
+            ? <h1>No Available Recipes</h1>
+            : <></>
+        }
+      </Box>
     </>
   );
 }
