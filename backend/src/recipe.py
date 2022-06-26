@@ -41,10 +41,7 @@ def recipeMatch(ingredientsList):
             }
             recipeList.append(ingDict)
             
-    if len(recipeList) < 0:
-        return None
-    else:
-        return recipeList
+    return recipeList
 
 def recipeDetails(recipeID):
     """ Retrieves recipe details given a recipe id
