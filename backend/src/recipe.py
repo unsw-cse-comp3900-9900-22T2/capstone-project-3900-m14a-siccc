@@ -15,7 +15,7 @@ def recipeMatch(ingredientsList):
     # [[relevent percetage, recipe information], ..., 
     # [relevent percetage, recipe information]]
     recipeList = []
-    matches = len(ingredientsList)
+    userIngrLen = len(ingredientsList)
     db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     info = retrieveRecipeList(db)
     for recipe in info:
@@ -27,7 +27,7 @@ def recipeMatch(ingredientsList):
                 if i in j:
                     matching += 1
                     continue
-        if matching == matches:
+        if matching == len(ingredients):
             ingDict = {
                 "recipeID": recipe[0],
                 "title": recipe[7],

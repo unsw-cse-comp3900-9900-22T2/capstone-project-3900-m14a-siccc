@@ -25,6 +25,8 @@ function App() {
           </Route>*/}
           <Route element ={<RecipeDetails />} path ="/recipe-details/:id">
           </Route>
+          <Route element ={<Home />} path ="/test">
+          </Route>
         </Routes>
       </Router>
     </>

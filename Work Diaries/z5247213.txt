@@ -21,7 +21,11 @@ Week 3
 Week 4
 
 - Do demo. - input ingredients data 
+<<<<<<< HEAD
 - Do the blackend. - ingredients-categroies.py and ingredients.py
+=======
+- Do the backend. - ingredients-categroies.py and ingredients.py
+>>>>>>> main
 - Test the frontend and blackend in the cse machine machine. 
 - Created a draft of retrospective A. 
 
