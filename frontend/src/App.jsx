@@ -12,6 +12,7 @@ import AllIngredients from './pages/AllIngredients';
 import RecipeDetails from './pages/RecipeDetails';
 // import RecipeView from './pages/RecipeView';
 
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
