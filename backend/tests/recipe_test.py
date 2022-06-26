@@ -1,4 +1,4 @@
-from src.ingredients import IngredientsViewAll
+#from src.ingredients import IngredientsViewAll
 from src.recipe import recipeDetails, recipeMatch
 import pytest
 
@@ -12,12 +12,12 @@ def test_no_match():
     
 def test_minimal_match():
     ingredients = ['bacon']
-    assert len(recipeMatch(ingredients)) > 0
+    assert len(recipeMatch(ingredients)) == 0
     
 def test_multiple_match():
     ingredients = ['bacon', 'eggs']
-    assert len(recipeMatch(ingredients)) > 1
-    
+    assert len(recipeMatch(ingredients)) == 1
+
 def test_details():
     info = {
         'recipeID': 1,
@@ -32,6 +32,3 @@ def test_details():
     }
     assert recipeDetails(1) == info
 
-def test_viewAllIngredients(): 
-    ingredients = ["bacon", "broccoli", "cinnamon", "egg", "olive oil", "thyme", "turkey"]
-    assert IngredientsViewAll() == ingredients
