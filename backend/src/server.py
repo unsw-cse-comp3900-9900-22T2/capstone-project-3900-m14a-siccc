@@ -4,6 +4,7 @@ from flask_cors import CORS
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
+from src.ingredients_category import sortIngredientsInCategories
 
 def defaultHandler(err):
     response = err.get_response()
@@ -21,7 +22,8 @@ CORS(APP)
 
 @APP.route("/recipe/view", methods=['POST'])
 def recipeMatchFlask():
-    ingredients = request.get_json("ingredients")
+    temp = request.get_json()
+    ingredients = temp['ingredients']
     return dumps({
         'recipes': recipeMatch(ingredients)
     })
@@ -29,21 +31,17 @@ def recipeMatchFlask():
 @APP.route("/recipe/details/<page_id>", methods=['GET'])
 def recipeDetailsFlask(page_id):
     info = recipeDetails(page_id)
-    return dumps({
-        'recipeID': info['recipeID'],
-        'title': info['title'],
-        'servings': info['servings'],
-        'timeToCook': info['timeToCook'],
-        'mealType': info['mealType'],
-        'photo': info['photo'],
-        'calories': info['calories'],
-        'cookingSteps': info['cookingSteps'],
-        'ingredients': info['ingredients']
-    })
+    return dumps(info)
     
 @APP.route("/ingredients/view", methods=['GET'])
 def IngredientsView():
-    return dumps(IngredientsViewAll)
+    info = IngredientsViewAll()
+    return dumps(info)
+
+@APP.route("/ingredients/categories", methods=['GET'])
+def ingredientsCategories():
+    info = sortIngredientsInCategories()
+    return dumps(info)
     
 if __name__ == "__main__":
     APP.run(port=5005)
