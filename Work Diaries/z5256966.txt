@@ -10,3 +10,11 @@ Started working on proposal
 Added more user stories
 Did a basic system architecture diagram
 Added some of the user stories onto Jira
+
+Week 3
+Finished off the system architecture diagram
+Connected to the database
+Set up the frontend
+Selected basic user stories to work on for the first Demo
+
+Week 4

@@ -26,3 +26,15 @@ We were able to connect all the members to the database by the end of the week. 
 an ER diagram to model the database and provide a schema. On our Thursday meeting we wrapped up the
 final touches for our proposal and started to get working on the coding side of things. We assigned
 roles such as who is doing frontend/backend/database coding. We assigned individuals based on experience.
+
+Week 4
+
+The main goals for this week was to have a working demo by week 5. We prioritised the high priority
+user stories and decided to take on 1/3 of the user stories. We mainly focused on the recipe explorer,
+and leaving the recipe contributor for the later sprints. We had to divide up the work load in terms of
+front end and backend. I was assigned the backend, and I wrote tests and coded up a few functions that 
+I wrapped in Flask routes to send to the frontend. The backend functions that I worked on was the
+recipe match, recipe search and ingredient category sorting. Since I finished my backend work quite quickly, I 
+decided to help out with frontend work doing ingredient categories and sorting. We also decided to have 2 1 hour meetings
+on Wednesday and Friday rather than have a 2 hour meeting on Thursday, which will give us more chances to
+update all members on what we're working on, struggling with and plan to do next.

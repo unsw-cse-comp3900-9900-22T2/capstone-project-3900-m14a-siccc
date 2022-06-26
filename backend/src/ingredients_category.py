@@ -1,20 +1,17 @@
-
+import psycopg2
 
 """ Sorts list of categories alphabetically and 
     sends data to front end
 """
 
-def sortingCategories(db):
+def sortingCategories():
     """ Sorting categories function to sort the list of categories 
         by alphabetically.
-
-            Parameters:
-                db: database
-
+        
             Returns:
                 categories (list): the list of categories after sorting
     """
-
+    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     cur = db.cursor()
     qry = """
     select * 
@@ -24,26 +21,23 @@ def sortingCategories(db):
     cur.execute(qry)
     info = cur.fetchall()
     cur.close()
+    
+    result = []
+    for cate in info:
+        cat, = cate 
+        result.append(cat)
 
-    if not info:
-        return None
-    else:
-        return info 
+    return result
 
 
-def sortingAllIngredients(db):
+def sortingAllIngredients():
     """ Sorting ingredients function to sort the list of ingredients
         in all categories by alphabetically.
-
-            Parameters:
-                db: database
 
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
-
-    # cate = sortingCategories(db)
-
+    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     cur = db.cursor()
     qry = """
     select * 
@@ -53,38 +47,54 @@ def sortingAllIngredients(db):
     cur.execute(qry)
     info = cur.fetchall()
     cur.close()
+    
+    result = []
+    for ing in info:
+        ingredient, = ing
+        result.append(ingredient)
 
-    if not info:
-        return None
-    else:
-        return info 
+    return result
 
 
-def sortingIngredients(db, cate):
+def sortingIngredients(cate):
     """ Sorting ingredients function to sort the list of ingredients
         in one category by alphabetically.
 
             Parameters:
-                db: database
                 cate: the name of the categories
 
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
-
+    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     cur = db.cursor()
     qry = f"""
     select * 
     from ingredients
-    where category = {cate}
+    where category = %s
     order by name;
     """
-    cur.execute(qry)
+    cur.execute(qry, [cate])
     info = cur.fetchall()
     cur.close()
-
-    if not info:
-        return None
-    else:
-        return info 
-
+    
+    result = []
+    for ing in info:
+        veg, _, _ = ing 
+        result.append(veg)
+    
+    return result
+    
+def sortIngredientsInCategories():
+    """ Sorts all categories and ingredients in the categories and 
+        returns a dictionary
+        
+            Returns:
+                (dict) : dictionary of all ingredients and categories sorted
+    """
+    result = {}
+    listOfCategories = sortingCategories()
+    for cate in listOfCategories:
+        listOfIngredients = sortingIngredients(cate)
+        result[cate] = listOfIngredients
+    return result

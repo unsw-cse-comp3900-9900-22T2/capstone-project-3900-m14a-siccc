@@ -4,6 +4,7 @@ from flask_cors import CORS
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
+from src.ingredients_category import sortIngredientsInCategories
 
 def defaultHandler(err):
     response = err.get_response()
@@ -35,6 +36,11 @@ def recipeDetailsFlask(page_id):
 @APP.route("/ingredients/view", methods=['GET'])
 def IngredientsView():
     info = IngredientsViewAll()
+    return dumps(info)
+
+@APP.route("/ingredients/categories", methods=['GET'])
+def ingredientsCategories():
+    info = sortIngredientsInCategories()
     return dumps(info)
     
 if __name__ == "__main__":
