@@ -46,10 +46,41 @@ const AllIngredients = () => {
   }
 
   // Function to set ingrdients selected
-  function toggleIngredients (index) {
+  function toggleIngredients (index, ingredientName) {
+
+    // Executes this code since the index changes for filtered list
+    if (ingredientName) {
+      for (const ingredient of ingredients) {
+        if (ingredient.text === ingredientName) {
+          index = ingredients.indexOf(ingredient);
+        }
+      }
+    }
+
     const newIngredient = [...ingredients];
     newIngredient[index].check = !ingredients[index].check;
     setIngredients(newIngredient);
+
+
+    const newCategory = {...categories};
+    //console.log(newCategory[category][index].text)
+    //console.log(ingredients[index].text);
+
+    // Shows selected ingredient on categories view
+    for (const [categoryName, ingredientsList] of Object.entries(categories)) {
+      for (const ingredientDict of ingredientsList) {
+        if(ingredientDict.text === newIngredient[index].text) {
+          const matchIdx = categories[categoryName].indexOf(ingredientDict);
+          newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
+          /*console.log(newIngredient[index].text);
+          console.log(matchIdx);
+          console.log(categoryName);*/
+          break;
+        }
+        console.log(ingredientDict.text);
+      }
+    }
+    setCategories(newCategory);
   }
 
   // Displays all recipes that match
@@ -88,6 +119,7 @@ const AllIngredients = () => {
           }
         }
       }
+
       // Matches recipe to selected ingredients
       const body = {
         ingredients: selectedIngredients,
@@ -131,7 +163,8 @@ const AllIngredients = () => {
     newCategory[category][index].check = !categories[category][index].check;
     setCategories(newCategory);
 
-    /*const newIngredient = [...ingredients];
+    // Shows selected ingredient on all ingredients view
+    const newIngredient = [...ingredients];
     console.log(newCategory[category][index].text)
     for (const ingredient of ingredients) {
       if (newCategory[category][index].text === ingredient.text){
@@ -141,7 +174,7 @@ const AllIngredients = () => {
 
       }
     }
-    setIngredients(newIngredient);*/
+    setIngredients(newIngredient);
     console.log(ingredients)
     console.log(newCategory)
   }
@@ -184,7 +217,7 @@ const AllIngredients = () => {
           <label>
             {ingredient.text}
             <input
-              onChange={() => toggleIngredients(idx)}
+              onChange={() => toggleIngredients(idx, ingredient.text)}
               type="checkbox"
               checked={ingredient.check}
             />
@@ -199,7 +232,7 @@ const AllIngredients = () => {
     <>
       <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
         {/* <p>hello</p> */}
-        {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
+        {/*<button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
         {ingredients.map((ingredient, idx) => (
           <div key={idx}>
             <label>
@@ -211,7 +244,7 @@ const AllIngredients = () => {
               />
             </label>
           </div>
-        ))} */}
+        ))}*/}
 
         {/*<button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>*/}
         <h2>Select your ingredients</h2>
