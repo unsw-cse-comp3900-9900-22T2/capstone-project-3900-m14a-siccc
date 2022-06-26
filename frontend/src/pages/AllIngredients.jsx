@@ -24,10 +24,11 @@ const AllIngredients = () => {
     try {
       console.log(ingredients);
       const ingredientList = [];
-      const ingredientData = await apiFetch('GET', `ingredients/view`, null);
-
-      // Sets a list of dictionary of ingredients
+      console.log(ingredients.length);
+      
+      // Sets a list of dictionary of ingredients if there is no local storage
       if (ingredients.length === 0) {
+        const ingredientData = await apiFetch('GET', `ingredients/view`, null);
         console.log("list is 0")
         for (const ingredient of ingredientData) {
           const elem = { text: ingredient, check: false };
@@ -95,10 +96,11 @@ const AllIngredients = () => {
         }
       }*/
       
-      // If user clicks search
+      // If user clicks search, save the search into local storage
       if (clicked) {
         setClickedSearch(true);
         localStorage.setItem('categories', JSON.stringify(categories));
+        localStorage.setItem('ingredients', JSON.stringify(ingredients));
         for (const [, ingredients] of Object.entries(categories)) {
           console.log(ingredients)
           for (const ingredient of ingredients) {
@@ -107,6 +109,8 @@ const AllIngredients = () => {
             }
           }
         }
+      // If user didn't click search button, this means they refresh the page
+      // Get categories from local storage and output the recipes
       } else {
         const categoryDict = JSON.parse(localStorage.getItem('categories'));
         console.log(JSON.parse(localStorage.getItem('categories')));
@@ -184,15 +188,19 @@ const AllIngredients = () => {
     //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
     //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
 
-    // Check that there is local storage stored
+    // Check that there is local storage stored, 
+    // if there is local storage set the check lists to display the data
     if (localStorage.getItem('categories') && 
       Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
 
       setCategories(JSON.parse(localStorage.getItem('categories')));
+      setIngredients(JSON.parse(localStorage.getItem('ingredients')));
+      console.log(JSON.parse(localStorage.getItem('ingredients')));
       recipeMatch(false);
       console.log("ssssss")
     } else {
       viewAllIngredientsInCategories();
+      viewAllIngredients();
       console.log("nnnnnn")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -200,7 +208,6 @@ const AllIngredients = () => {
 
   // List for ingredient search bar
   function List(props) {
-    viewAllIngredients();
     const filteredData = ingredients.filter((el) => {
       if (props.input === '') {  
         return null;
@@ -232,7 +239,7 @@ const AllIngredients = () => {
     <>
       <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
         {/* <p>hello</p> */}
-        {/*<button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
+        {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
         {ingredients.map((ingredient, idx) => (
           <div key={idx}>
             <label>
@@ -244,7 +251,7 @@ const AllIngredients = () => {
               />
             </label>
           </div>
-        ))}*/}
+        ))} */}
 
         {/*<button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>*/}
         <h2>Select your ingredients</h2>
