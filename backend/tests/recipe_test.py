@@ -4,7 +4,7 @@ import pytest
 
 def test_simple_match():
     ingredients = ['olive oil', 'bacon', 'eggs']
-    assert len(recipeMatch(ingredients)) > 0
+    assert len(recipeMatch(ingredients)) == 1
     
 def test_no_match():
     ingredients = ['bacon', 'eggs', 'milk']
@@ -15,8 +15,8 @@ def test_minimal_match():
     assert len(recipeMatch(ingredients)) == 0
     
 def test_multiple_match():
-    ingredients = ['bacon', 'eggs']
-    assert len(recipeMatch(ingredients)) == 1
+    ingredients = ['bacon', 'eggs', 'cinnamon', 'flour', 'olive oil']
+    assert len(recipeMatch(ingredients)) == 2
 
 def test_details():
     info = {
