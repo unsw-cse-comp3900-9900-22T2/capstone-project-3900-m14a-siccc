@@ -5,6 +5,7 @@ from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
+from src import config
 
 def defaultHandler(err):
     response = err.get_response()
@@ -44,7 +45,7 @@ def ingredientsCategories():
     return dumps(info)
     
 if __name__ == "__main__":
-    APP.run(port=5005)
+    APP.run(port=config.port)
 
 
 
