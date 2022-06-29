@@ -8,3 +8,14 @@ Added user stories to Jira
 Week 3
 Add storyboard for recipe contributor 
 Start working on Backend code 
+
+Week 4 
+Added viewallIngredients function, added modified version which outputs all categories with their related ingredients
+Tried deploying the website (frontend yarn and backend flask) to CSE
+Added to script for upcoming wk5 demo 
+
+Week 5 
+Presented the recipe functions in the demo
+Agreed on roles, i'm responsbile for documenting meeting minutes
+Improvements involved making clear what everyone does 
+Work more on backend functions 
