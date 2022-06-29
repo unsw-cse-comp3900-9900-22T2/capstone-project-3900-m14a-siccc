@@ -11,3 +11,13 @@ Week 3
 - started first sprint
 - finished storyboard and edited proposal
 - started familiarising myself with frontend (ReactJS)
+
+Week 4
+- prototyped recipe search button, ingredient search box and category view drop down menu
+- integrated ingredient search box with functional home page code
+- did some formatting and styling of recipe details page and home page
+- prepared for demo
+
+Week 5
+- presented demo
+- had retrospective meeting
