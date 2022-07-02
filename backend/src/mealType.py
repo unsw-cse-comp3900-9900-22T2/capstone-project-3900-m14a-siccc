@@ -1,29 +1,25 @@
-"""
-    Select the meal type.
-"""
+from recipe import recipeMatch
 
-def getMealType(db, meal):
-    """ Select the meal type
+
+def getMealType(meal, ingredientsList):
+    """ Select the meal type after the recipe match. 
 
             Parameters:
-                db : database
-                meal: meal type
+                meal: the name of meal type
+                ingredientsList: the list of ingredientsList
         
             Returns:
                 info: list of all recipes ingredients
     """
-    cur = db.cursor()
-    qry = f"""
-    select *
-    from recipes
-    where meal_type = {meal}
-    """
-    cur.execute(qry)
-    info = cur.fetchall()
-    cur.close()
-    if not info:
-        return None
-    else:
-        return info
+    recipeList = recipeMatch(ingredientsList)
+
+    recipeTypeList = []
+
+    for i in recipeList:
+        if i["mealType"] == meal:
+            recipeTypeList.append(i)
+
+    return recipeTypeList
+
 
 
