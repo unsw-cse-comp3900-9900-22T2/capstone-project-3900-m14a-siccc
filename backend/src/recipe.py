@@ -1,6 +1,7 @@
 import json
+from lib2to3.pytree import convert
 import psycopg2
-from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList
+from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
 
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
@@ -75,3 +76,24 @@ def recipeDetails(recipeID):
         "ingredients": info[8]
     }
 
+def calorieCalculation(recipeID):
+    db = psycopg2.connect("host=ec2-34-239-241-121.compute-1.amazonaws.com dbname=dbqkcfh5i7ab0f user=fywiddopknmklg password=a6facfdde8aa1a8ad6a8f549aa7169e811e69a1b01ff042836161893b2fd5abc")
+    info = retrieveRecipe(db, recipeID)
+    _, _, _, _, _, _, _, _, ingredients = info
+    ingredientsList = ingredients.split(',')
+    
+    calories = 0
+    for ingredient in ingredientsList:
+        ing = ingredient.strip()
+        singleIng = ing.split(' ')
+        grams = singleIng[0].rpartition('g')[0]
+        ingredientName = ' '.join(singleIng[1:])
+        if grams == '':
+            pass
+        else:
+            currCalories = getCalories(db, ingredientName)
+            caloriesConverted = convertCalories(int(currCalories), int(grams))
+            calories += caloriesConverted
+    
+    print(calories)
+    return calories
