@@ -14,7 +14,7 @@ def IngredientsViewAll():
                 ingredients (list): list of ingredient strings
     """
     #OLD VERSION / BEFORE 
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect("host=ec2-34-239-241-121.compute-1.amazonaws.com dbname=dbqkcfh5i7ab0f user=fywiddopknmklg password=a6facfdde8aa1a8ad6a8f549aa7169e811e69a1b01ff042836161893b2fd5abc")
     info = retrieveIngredientNames(db)
     list = []
     for ingredient in info: 
@@ -30,7 +30,7 @@ def CategoryViewAll():
             Returns:
                 ingredients (list): list of dictionary key-value pairs {ingredient: ___, category: ___}
     """
-    #db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    #db = psycopg2.connect("host=ec2-34-239-241-121.compute-1.amazonaws.com dbname=dbqkcfh5i7ab0f user=fywiddopknmklg password=a6facfdde8aa1a8ad6a8f549aa7169e811e69a1b01ff042836161893b2fd5abc")
     ListCategories = sortingCategories()
     IngredientsListOfDictionaries = []
     for category in ListCategories: 
