@@ -4,6 +4,15 @@ from src.ingredients_category import sortingCategories, sortingIngredients
 from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList
 
 def IngredientsViewAll():
+    """
+    View all ingredients 
+
+            Parameters:
+                None?
+
+            Returns:
+                ingredients (list): list of ingredient strings
+    """
     #OLD VERSION / BEFORE 
     db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
     info = retrieveIngredientNames(db)
