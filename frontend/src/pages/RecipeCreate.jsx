@@ -51,7 +51,6 @@ const RecipeCreate = () => {
       servings: servings,
       thumbnail: thumbnail,
       cookingTime: cookingTime,
-      },
     }
     /*
     apiFetch('POST', 'recipe/new', null, body)
