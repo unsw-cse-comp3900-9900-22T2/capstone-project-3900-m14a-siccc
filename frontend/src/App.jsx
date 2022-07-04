@@ -10,9 +10,7 @@ import '@fontsource/roboto/700.css';
 
 import AllIngredients from './pages/AllIngredients';
 import RecipeDetails from './pages/RecipeDetails';
-// import RecipeView from './pages/RecipeView';
-
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import RecipeCreate from './pages/RecipeCreate';
 
 function App() {
   return (
@@ -21,8 +19,8 @@ function App() {
         <Routes>
           <Route element ={<AllIngredients />} path ="/">
           </Route>
-          {/*<Route element ={<RecipeView />} path ="/recipe-view/">
-          </Route>*/}
+          <Route element ={<RecipeCreate />} path ="/recipe-create">
+          </Route>
           <Route element ={<RecipeDetails />} path ="/recipe-details/:id">
           </Route>
           <Route element ={<Home />} path ="/test">
