@@ -1,5 +1,6 @@
 import psycopg2
 from src.helper import retrieveRecipeList
+from src.recipe import calorieCalculation
 
 def insertRecipe(recipeDetails):
     """ Inserts recipe into database when receiving details from
@@ -17,9 +18,9 @@ def insertRecipe(recipeDetails):
     timeToCook = recipeDetails['timeToCook']
     mealType = recipeDetails['mealType']
     photo = recipeDetails['photo']
-    calories = recipeDetails['calories']
     cookingSteps = recipeDetails['cookingSteps']
     ingredients = recipeDetails['ingredients']
+    calories = calorieCalculation(ingredients)
     title = recipeDetails['title']
     cur = db.cursor()
     qry = """

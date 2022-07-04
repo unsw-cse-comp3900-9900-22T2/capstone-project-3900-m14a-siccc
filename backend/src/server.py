@@ -6,6 +6,7 @@ from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
 from src import config
+from src.recipeContributor import insertRecipe
 
 def defaultHandler(err):
     response = err.get_response()
@@ -43,6 +44,11 @@ def IngredientsView():
 def ingredientsCategories():
     info = sortIngredientsInCategories()
     return dumps(info)
+
+@APP.route("/insert/recipe", methods=['POST'])
+def insertRecipeFlask():
+    recipeDetails = request.get_json()['recipe']
+    return dumps({insertRecipe(recipeDetails)})
     
 if __name__ == "__main__":
     APP.run(port=config.port)
