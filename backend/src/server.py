@@ -51,7 +51,8 @@ def ingredientsCategories():
 
 @APP.route("/insert/recipe", methods=['POST'])
 def insertRecipeFlask():
-    recipeDetails = request.get_json()['recipe']
+    temp = request.get_json()
+    recipeDetails = temp['recipe']
     return dumps({insertRecipe(recipeDetails)})
 
 @APP.route("/no/recipe/match", methods=['GET'])
