@@ -76,10 +76,18 @@ def recipeDetails(recipeID):
         "ingredients": info[8]
     }
 
-def calorieCalculation(recipeID):
+def calorieCalculation(ingredients):
+    """ Retrieves recipe details given a recipe id
+    
+            Parameters:
+                ingredients (String): String containing ingredients
+                
+            Returns:
+                calories (int): total calories of ingredients
+    """
     db = psycopg2.connect("host=ec2-34-239-241-121.compute-1.amazonaws.com dbname=dbqkcfh5i7ab0f user=fywiddopknmklg password=a6facfdde8aa1a8ad6a8f549aa7169e811e69a1b01ff042836161893b2fd5abc")
-    info = retrieveRecipe(db, recipeID)
-    _, _, _, _, _, _, _, _, ingredients = info
+    # info = retrieveRecipe(db, recipeID)
+    # _, _, _, _, _, _, _, _, ingredients = info
     ingredientsList = ingredients.split(',')
     
     calories = 0
