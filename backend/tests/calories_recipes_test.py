@@ -12,7 +12,6 @@ def test_simple_calories_ingredients_match():
     assert len(getCaloriesRecipesWithIngredients(calories, ingredients)) == 1
     
 def test_no_calories_match():
-    ingredients = ['bacon', 'eggs', 'milk']
     calories = 10
     assert len(getCaloriesRecipes(calories)) == 0
 
@@ -37,4 +36,4 @@ def test_multiple_calories_match():
 def test_multiple_calories_ingredients_match():
     ingredients = ['bacon', 'eggs', 'flour', 'olive oil', 'thyme', 'avocado']
     calories = 100
-    assert len(getCaloriesRecipes(calories)) == 2
+    assert len(getCaloriesRecipesWithIngredients(calories, ingredients)) == 2
