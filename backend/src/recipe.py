@@ -91,8 +91,8 @@ def calorieCalculation(ingredients): #recipeID):
             Returns:
                 calories (int): total calories of ingredients
     """
-    # db = psycopg2.connect(
-    #     f"host={host} dbname={dbname} user={user} password={password}")
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
     # info = retrieveRecipe(db, recipeID)
     # _, _, _, _, _, _, _, _, ingredients = info
     ingredientFixedGrams = getFixedCGrams()
