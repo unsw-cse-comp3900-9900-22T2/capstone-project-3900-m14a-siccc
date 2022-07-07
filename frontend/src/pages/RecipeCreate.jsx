@@ -44,7 +44,7 @@ const RecipeCreate = () => {
     }
   }
 
-  // Add stepsNo and add beds
+  // Add the steps and add the number of steps
   const addStepsNo = () => {
     setStepsNo(stepsNo + 1);
 
@@ -53,7 +53,7 @@ const RecipeCreate = () => {
     setSteps(newSteps);
   }
 
-  // Delete stepsNo and delete beds
+  // Delete the steps and minus the number of steps
   const minusStepsNo = () => {
     stepsNo > 0 ? setStepsNo(stepsNo - 1) : setStepsNo(stepsNo);
 
@@ -184,7 +184,7 @@ const RecipeCreate = () => {
           </label>
         </div>
       ))}
-      
+
       <button name="create" onClick={ createRecipe }>Create</button>
       <button onClick={() => navigate('/')}>Cancel</button>
     </>
