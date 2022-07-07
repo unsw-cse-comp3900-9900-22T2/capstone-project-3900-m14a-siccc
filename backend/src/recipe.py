@@ -1,7 +1,7 @@
 import json
 from lib2to3.pytree import convert
 import psycopg2
-from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
+from src.helper import retrieveIngredients, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
 from src.config import host, user, password, dbname
 
 
@@ -82,7 +82,7 @@ def recipeDetails(recipeID):
     }
 
 
-def calorieCalculation(recipeID):
+def calorieCalculation(ingredients): #recipeID):
     """ Retrieves recipe details given ingredients (recipe id still or nah?)
 
             Parameters:
@@ -91,11 +91,11 @@ def calorieCalculation(recipeID):
             Returns:
                 calories (int): total calories of ingredients
     """
-    db = psycopg2.connect(
-        "host=ec2-34-239-241-121.compute-1.amazonaws.com dbname=dbqkcfh5i7ab0f user=fywiddopknmklg password=a6facfdde8aa1a8ad6a8f549aa7169e811e69a1b01ff042836161893b2fd5abc")
-    info = retrieveRecipe(db, recipeID)
-    _, _, _, _, _, _, _, _, ingredients = info
-    ingredientFixedCalories = getFixedCalories()
+    # db = psycopg2.connect(
+    #     f"host={host} dbname={dbname} user={user} password={password}")
+    # info = retrieveRecipe(db, recipeID)
+    # _, _, _, _, _, _, _, _, ingredients = info
+    ingredientFixedGrams = getFixedCGrams()
 
     ingredientsList = ingredients.split(',')
 
@@ -104,43 +104,44 @@ def calorieCalculation(recipeID):
         ing = ingredient.strip()
         singleIng = ing.split(' ')
         ingredientName = ' '.join(singleIng[1:])
-        grams = ''
-        if singleIng[0].contains('g'):
-            grams = singleIng[0].rpartition('g')[0]
-        else:
-            grams = ingredientFixedCalories[ingredientName]
+        grams = 0
+        if 'g' in singleIng[0]: # if in grams 
+            grams = int(singleIng[0].rpartition('g')[0])
+        else: # if in quantity 
+            quantity = 0
+            if singleIng[0] == 'half': 
+                quantity = 0.5
+            else:
+                quantity = int (singleIng[0])
+            
+            grams = int (ingredientFixedGrams[ingredientName]) * quantity
+            print(quantity)
 
-        if grams == '':
-            pass
-        else:
-            currCalories = getCalories(db, ingredientName)
-            caloriesConverted = convertCalories(int(currCalories), int(grams))
-            calories += caloriesConverted
+        currCalories = getCalories(db, ingredientName)
+        caloriesConverted = convertCalories(int(currCalories), grams)
+        print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
+        
+        calories += caloriesConverted
 
-    print(calories)
-    return calories
+    return int(calories)
 
 
-def getFixedCalories():
-    """ Helper function to get fixed calories for all ingredients
+def getFixedCGrams():
+    """ Helper function to get fixed grams for all ingredients
 
             Parameters:
                 None
 
             Returns:
-                (list<dictionary>): list of dictionaries {ingredient(string): fixed_calorie(int)}
+                (dictionary): dictionary of key-value pairs, ingredient(string): fixed_grams(int)
     """
     db = psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")
-    info = retrieveIngredientNames(db)
-    list = []
+    info = retrieveIngredients(db)
+    dict = {}
     for ingredient in info:
-        dict = {ingredient[0]: ingredient[3]}
-        list.append(dict)
-    return list
+        dict[ingredient[0]] = ingredient[3]
+    return dict
 
 
-def findFixedCalorie(listIngredientFixedCaloriePairs, ingredient):
-    for pair in listIngredientFixedCaloriePairs:
-        if pair[0] == ingredient:
-            return pair[1]
+
