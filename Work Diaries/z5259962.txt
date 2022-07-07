@@ -41,4 +41,16 @@ update all members on what we're working on, struggling with and plan to do next
 
 Week 5
 
-For this week, we had our demo. All functionalities of sprint 1 were implemented to the minimal viable product and therefore we were quite satisfied with the progress. The only changes that were required was to make everything look nicer and more presentable. After the demo, we decided to do our Retrospective A while we were still on call in the lab and completed that in a shared document. We went through what we did well, what didn't go so well and things to try for the next sprint and allocated that to individuals. We also decided what user stories to do for the next sprint and decided on meeting times for the coming weeks to delegate tasks.
+For this week, we had our demo. All functionalities of sprint 1 were implemented to the minimal viable product and
+therefore we were quite satisfied with the progress. The only changes that were required was to make everything look 
+nicer and more presentable. After the demo, we decided to do our Retrospective A while we were still on call in the lab 
+and completed that in a shared document. We went through what we did well, what didn't go so well and things to try for 
+the next sprint and allocated that to individuals. We also decided what user stories to do for the next sprint and 
+decided on meeting times for the coming weeks to delegate tasks.
+
+Week 6
+
+Mainly for week 6, we began working on sprint 2. We delegated tasks on two meetings we had throughout week 6 and gave
+progress updates on what we accomplishes, struggled with and planned to do next. However, for this sprint we tried to
+implement the things outlined in the retrospective A, such as more defined allocation of tasks, implementing meeting
+minutes and such.
