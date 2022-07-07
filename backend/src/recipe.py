@@ -1,6 +1,8 @@
 import json
+from lib2to3.pytree import convert
 import psycopg2
-from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList
+from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
+from src.config import host, user, password, dbname
 
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
@@ -16,7 +18,7 @@ def recipeMatch(ingredientsList):
     # [relevent percetage, recipe information]]
     recipeList = []
     userIngrLen = len(ingredientsList)
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
     for recipe in info:
         ingredientString = recipe[8]
@@ -60,7 +62,7 @@ def recipeDetails(recipeID):
                 cookingSteps (str): cooking steps of recipe
                 ingredients (str): ingredients of recipe
     """
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipe(db, recipeID)
 
     return {
@@ -75,3 +77,24 @@ def recipeDetails(recipeID):
         "ingredients": info[8]
     }
 
+def calorieCalculation(recipeID):
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    info = retrieveRecipe(db, recipeID)
+    _, _, _, _, _, _, _, _, ingredients = info
+    ingredientsList = ingredients.split(',')
+    
+    calories = 0
+    for ingredient in ingredientsList:
+        ing = ingredient.strip()
+        singleIng = ing.split(' ')
+        grams = singleIng[0].rpartition('g')[0]
+        ingredientName = ' '.join(singleIng[1:])
+        if grams == '':
+            pass
+        else:
+            currCalories = getCalories(db, ingredientName)
+            caloriesConverted = convertCalories(int(currCalories), int(grams))
+            calories += caloriesConverted
+    
+    print(calories)
+    return calories

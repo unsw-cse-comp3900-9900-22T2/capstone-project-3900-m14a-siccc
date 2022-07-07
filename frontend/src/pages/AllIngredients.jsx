@@ -272,7 +272,8 @@ const AllIngredients = () => {
           </div>
         ))} */}
 
-        {/*<button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>*/}
+        <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button>
+        
         <h2>Select your ingredients</h2>
         <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
         <List input={inputText}/>

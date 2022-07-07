@@ -1,4 +1,5 @@
 import psycopg2
+from src.config import host, user, password, dbname
 
 """ Sorts list of categories alphabetically and 
     sends data to front end
@@ -11,7 +12,7 @@ def sortingCategories():
             Returns:
                 categories (list): the list of categories after sorting
     """
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
     select * 
@@ -37,7 +38,7 @@ def sortingAllIngredients():
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
     select * 
@@ -66,7 +67,7 @@ def sortingIngredients(cate):
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = f"""
     select * 

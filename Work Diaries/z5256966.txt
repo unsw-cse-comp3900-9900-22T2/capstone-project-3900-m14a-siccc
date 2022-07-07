@@ -18,3 +18,11 @@ Set up the frontend
 Selected basic user stories to work on for the first Demo
 
 Week 4
+Added view details page for viewing detailes of recipes
+Added home page to be able to check which ingredients are needed for recipe
+Fixed up search filter for ingredients view
+Completed frontend functionality for first Demo
+
+Week 5
+Looked at user stories for Sprint 2
+Distributed user stories to do

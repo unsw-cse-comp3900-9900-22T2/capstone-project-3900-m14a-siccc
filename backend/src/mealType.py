@@ -1,4 +1,4 @@
-from recipe import recipeMatch
+from src.recipe import recipeMatch
 
 
 def getMealType(meal, ingredientsList):

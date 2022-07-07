@@ -38,3 +38,7 @@ recipe match, recipe search and ingredient category sorting. Since I finished my
 decided to help out with frontend work doing ingredient categories and sorting. We also decided to have 2 1 hour meetings
 on Wednesday and Friday rather than have a 2 hour meeting on Thursday, which will give us more chances to
 update all members on what we're working on, struggling with and plan to do next.
+
+Week 5
+
+For this week, we had our demo. All functionalities of sprint 1 were implemented to the minimal viable product and therefore we were quite satisfied with the progress. The only changes that were required was to make everything look nicer and more presentable. After the demo, we decided to do our Retrospective A while we were still on call in the lab and completed that in a shared document. We went through what we did well, what didn't go so well and things to try for the next sprint and allocated that to individuals. We also decided what user stories to do for the next sprint and decided on meeting times for the coming weeks to delegate tasks.

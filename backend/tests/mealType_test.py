@@ -18,7 +18,7 @@ def test_minimal_match():
     assert len(getMealType(meal, ingredients)) == 0
     
 def test_multiple_match():
-    ingredients = ['bacon', 'eggs', 'cinnamon', 'flour', 'olive oil']
+    ingredients = ['bacon', 'eggs', 'flour', 'olive oil', 'thyme', 'avocado']
     meal= "breakfast"
     assert len(getMealType(meal, ingredients)) == 2
 
