@@ -63,6 +63,7 @@ def addFrequency(ingredients):
             Parameters:
                 ingredients (list): set of ingredients
     """
+    ingredients = ', '.join(ingredients)
     db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
