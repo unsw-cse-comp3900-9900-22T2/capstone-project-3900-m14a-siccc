@@ -4,6 +4,6 @@ from src.recipe import recipeDetails
 import pytest
 
 def test_frequency():
-    ingredients = 'thyme, eggs'
+    ingredients = ['thyme', 'eggs']
     noMatch = getNoRecipeMatchList()
     assert noMatch[0] == ingredients

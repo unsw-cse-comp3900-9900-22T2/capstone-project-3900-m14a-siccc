@@ -10,6 +10,8 @@ const RecipeCreate = () => {
   const [servings, setServings] = React.useState('');
   const [mealType, setMealType] = React.useState('')
   const [cookingTime, setCookingTime] = React.useState('')
+  const [steps, setSteps] = React.useState([]);
+  const [stepsNo, setStepsNo] = React.useState(0);
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -42,24 +44,67 @@ const RecipeCreate = () => {
     }
   }
 
+  // Add the steps and add the number of steps
+  const addStepsNo = () => {
+    setStepsNo(stepsNo + 1);
+
+    const newSteps = [...steps];
+    newSteps.push(0);
+    setSteps(newSteps);
+  }
+
+  // Delete the steps and minus the number of steps
+  const minusStepsNo = () => {
+    stepsNo > 0 ? setStepsNo(stepsNo - 1) : setStepsNo(stepsNo);
+
+    const newSteps = [...steps];
+    newSteps.pop();
+    setSteps(newSteps);
+  }
+
   // Sends off data of the created recipe to backend
   const createRecipe = () => {
-    
-    const body = {
-      title: title,
-      mealType: mealType,
-      servings: servings,
-      thumbnail: thumbnail,
-      cookingTime: cookingTime,
+    if (cookingTime < 0 || servings < 0) {
+      alert('Invalid Input');
+      return;
     }
-    /*
-    apiFetch('POST', 'recipe/new', null, body)
+
+    if ((title === '' ||
+      mealType === '' ||
+      servings === '' ||
+      thumbnail === '' ||
+      cookingTime === '' ||
+      ingredients.length === 0)) {
+      
+        alert('Empty Input!');
+      return;
+    }
+    const selectedIngredients = [];
+    for (const ingredient in ingredients){ 
+      if (ingredient.check){
+        selectedIngredients.push(ingredient.text);
+      }
+    }
+
+    const body = {
+      recipe: {
+        title: title,
+        mealType: mealType,
+        servings: servings,
+        photo: thumbnail,
+        timeToCook: cookingTime,
+        ingredients: selectedIngredients,
+        cookingSteps: steps,
+      },
+    }
+    
+    apiFetch('POST', 'insert/recipe', null, body)
     .then((data) => {
       navigate('/');
     })
     .catch((err) => {
       alert(err);
-    });*/
+    });
   }
 
   React.useEffect(() => {
@@ -73,6 +118,7 @@ const RecipeCreate = () => {
       Servings&nbsp;
       <input type="number"
       name="servings"
+      min="0"
       value={servings}
       onChange={e => setServings(e.target.value)}
       /> < br/>
@@ -80,6 +126,7 @@ const RecipeCreate = () => {
       Cooking Time&nbsp;
       <input type="number"
       name="servings"
+      min="0"
       value={cookingTime}
       onChange={e => setCookingTime(e.target.value)}
       /> < br/>
@@ -106,7 +153,24 @@ const RecipeCreate = () => {
         ? (<img src={thumbnail} alt="recipe thumbnail photo" height="140px" width="auto"/>)
         : <></>
       }< br/>
-        
+      
+      <p>How many steps does your recipe have?</p>
+      Steps&nbsp;
+      <button name="minus" onClick={minusStepsNo}>&minus;</button>
+      <input type="number" min="0" disabled value={stepsNo} />
+      <button name="plus" onClick={addStepsNo}>+</button> < br/>
+
+      {steps.map((step, idx) => {
+        return (
+          <div key={idx}>
+            <>Step {idx + 1}.</>&nbsp;
+            <textarea id="story" name="story"
+              rows="2" cols="50">
+            </textarea>
+          </div>
+        )
+      })}
+
       <p>Select your ingredients:</p>
       {ingredients.map((ingredient, idx) => (
         <div key={idx}>
@@ -120,11 +184,6 @@ const RecipeCreate = () => {
           </label>
         </div>
       ))}
-
-      <p>Recipe Instructions</p>
-      <input type="text"
-        name="instructions"
-      /> < br/>
 
       <button name="create" onClick={ createRecipe }>Create</button>
       <button onClick={() => navigate('/')}>Cancel</button>
