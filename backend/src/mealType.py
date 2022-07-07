@@ -9,15 +9,15 @@ def getMealType(meal, ingredientsList):
                 ingredientsList: the list of ingredientsList
         
             Returns:
-                info: list of all recipes ingredients
+                recipleTypeList: list of all recipes ingredients
     """
     recipeList = recipeMatch(ingredientsList)
 
     recipeTypeList = []
 
-    for i in recipeList:
-        if i["mealType"] == meal:
-            recipeTypeList.append(i)
+    for recipe in recipeList:
+        if recipe["mealType"] == meal:
+            recipeTypeList.append(recipe)
 
     return recipeTypeList
 
