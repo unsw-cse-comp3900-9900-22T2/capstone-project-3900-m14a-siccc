@@ -10,6 +10,7 @@ const RecipeCreate = () => {
   const [servings, setServings] = React.useState('');
   const [mealType, setMealType] = React.useState('')
   const [cookingTime, setCookingTime] = React.useState('')
+  const [freqIngredients, setFreqIngredients] = React.useState([]);
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -62,14 +63,32 @@ const RecipeCreate = () => {
     });*/
   }
 
+  const viewFrequentIngredients = async () => {
+    try {
+      const freqIngredientList = [];
+      const freqIngredientData = await apiFetch('GET', `no/recipe/match`, null);
+      const count = 0;
+      for (const ingredient of freqIngredientData) {
+        if(count < 5) {
+          freqIngredientList.push(ingredient);
+        }
+        count = count + 1
+      }
+      setFreqIngredients(freqIngredientList);
+    } catch (err) {
+      alert(err.message);
+    }
+    console.log(freqIngredients)
+  }
+
   React.useEffect(() => {
     viewAllIngredients();
+    viewFrequentIngredients();
   }, []);
   return (
     <>   
-      <h1>Create Recipe</h1>
+      <h1>Create Recipe</h1>       
       Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
-
       Servings&nbsp;
       <input type="number"
       name="servings"
@@ -83,7 +102,14 @@ const RecipeCreate = () => {
       value={cookingTime}
       onChange={e => setCookingTime(e.target.value)}
       /> < br/>
-
+      <h3 style={{textAlign: "center"}}>Frequently Searched Ingredients</h3>
+      {freqIngredients.map((ingredients, idx) => (
+        <div key={idx}>
+          <p style = {{textAlign:"center"}}>
+            {ingredients}
+          </p>
+        </div>
+      ))}
       <p>What kind of meal is your recipe?</p>
       <select name="mealType" value={mealType} onChange={e => setMealType(e.target.value)}>
         <option name="empty" value="">Select one</option>
