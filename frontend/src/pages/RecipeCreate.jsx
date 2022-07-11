@@ -112,12 +112,12 @@ const RecipeCreate = () => {
     try {
       const freqIngredientList = [];
       const freqIngredientData = await apiFetch('GET', `no/recipe/match`, null);
-      const count = 0;
+      var counter = 0
       for (const ingredient of freqIngredientData) {
-        if(count < 5) {
+        if(counter < 6) {
           freqIngredientList.push(ingredient);
         }
-        count = count + 1
+        counter = counter + 1
       }
       setFreqIngredients(freqIngredientList);
     } catch (err) {
@@ -131,7 +131,7 @@ const RecipeCreate = () => {
     viewFrequentIngredients();
   }, []);
   return (
-    <>   
+    <>
       <h1>Create Recipe</h1>       
       Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
       Servings&nbsp;
@@ -141,7 +141,6 @@ const RecipeCreate = () => {
       value={servings}
       onChange={e => setServings(e.target.value)}
       /> < br/>
-
       Cooking Time&nbsp;
       <input type="number"
       name="servings"
@@ -149,14 +148,6 @@ const RecipeCreate = () => {
       value={cookingTime}
       onChange={e => setCookingTime(e.target.value)}
       /> < br/>
-      <h3 style={{textAlign: "center"}}>Frequently Searched Ingredients</h3>
-      {freqIngredients.map((ingredients, idx) => (
-        <div key={idx}>
-          <p style = {{textAlign:"center"}}>
-            {ingredients}
-          </p>
-        </div>
-      ))}
       <p>What kind of meal is your recipe?</p>
       <select name="mealType" value={mealType} onChange={e => setMealType(e.target.value)}>
         <option name="empty" value="">Select one</option>
@@ -213,6 +204,14 @@ const RecipeCreate = () => {
 
       <button name="create" onClick={ createRecipe }>Create</button>
       <button onClick={() => navigate('/')}>Cancel</button>
+      <h3 style={{textAlign: "center"}}>Frequently Searched Ingredients</h3>
+      {freqIngredients.map((ingredients, idx) => (
+        <div key={idx}>
+          <p style = {{textAlign: 'center'}}>
+            {ingredients}
+          </p>
+        </div>
+      ))}
     </>
   );
 }

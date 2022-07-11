@@ -22,13 +22,22 @@ def insertRecipe(recipeDetails):
     cookingSteps = recipeDetails['cookingSteps']
     ingredients = recipeDetails['ingredients']
     calories = calorieCalculation(ingredients)
+    ing = ''
+    count = 0
+    lengthDict = len(ingredients)
+    for entry in ingredients.items():
+        ingred, grams = entry
+        ing = ing + str(grams) + ' ' + ingred
+        if count != lengthDict - 1:
+            ing = ing + ', '
+        count += 1
     title = recipeDetails['title']
     cur = db.cursor()
     qry = """
     insert into recipes
     values (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    cur.execute(qry, [recipeID, servings, timeToCook, mealType, photo, calories, cookingSteps, title, ingredients])
+    cur.execute(qry, [recipeID, servings, timeToCook, mealType, photo, calories, cookingSteps, title, ing])
     db.commit()
     info = cur.rowcount
     cur.close()
