@@ -52,7 +52,7 @@ def getCaloriesRecipesWithIngredients(calories, ingredientsList):
     recipeList = []
     info = recipeMatch(ingredientsList)
     for recipe in info:
-        if recipe["calories"] <= calories:
+        if int(recipe["calories"]) <= calories:
             recipeList.append(recipe)
 
     return recipeList
