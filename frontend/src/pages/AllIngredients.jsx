@@ -11,7 +11,6 @@ const AllIngredients = () => {
   const [ingredients, setIngredients] = React.useState([]);
   const [recipes, setRecipes] =  React.useState([]);
   const [categories, setCategories] = React.useState({});
-<<<<<<< HEAD
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
 
@@ -19,8 +18,6 @@ const AllIngredients = () => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
-=======
->>>>>>> parent of 09880a5 (Fixed no ingredient display conditions)
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -189,17 +186,12 @@ const AllIngredients = () => {
     
     console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
     //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-<<<<<<< HEAD
 
     // Check that there is local storage stored, 
     // if there is local storage set the check lists to display the data
     if (localStorage.getItem('categories') && 
       Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
 
-=======
-    const dicLen = Object.keys(JSON.parse(localStorage.getItem('categories'))).length;
-    if (localStorage.getItem('categories') && dicLen !== 0) {
->>>>>>> parent of 09880a5 (Fixed no ingredient display conditions)
       setCategories(JSON.parse(localStorage.getItem('categories')));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
       console.log(JSON.parse(localStorage.getItem('ingredients')));
@@ -242,7 +234,6 @@ const AllIngredients = () => {
     )
   }
 
-<<<<<<< HEAD
   React.useEffect(() => {
     
     //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
@@ -332,52 +323,6 @@ const AllIngredients = () => {
             : <></>
         }
       </Box>
-=======
-      {/*<button name="categoryView" onClick={viewAllIngredientsInCategories}>Category View</button>*/}
-      <h2>Select your ingredients</h2>
-      {
-        Object.keys(categories).map((category, idx) => {
-          return(
-            <div key = {idx}>
-              <h1>
-                {category}
-              </h1>
-            {
-              categories[category].map((ingredient, idx2) => {
-                return(
-                  <div key = {idx2}>
-                    <label>
-                      {ingredient.text}
-                      <input
-                        onChange={() => toggleCategoryIngredients(category, idx2)}
-                        type="checkbox"
-                        checked={ingredient.check}
-                      />
-                    </label>
-                  </div>
-                )
-              })
-            }
-            </div>
-          )
-        })
-      }
-      <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search</button>
-      {recipes.length !== 0
-        ? <div>{recipes.map((recipe, idx) => {
-          return (
-            <div key={idx}>
-              <div>{recipe.photo}</div>
-              <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
-              <p>ingredients: {recipe.ingredients}</p>
-              <hr></hr>
-            </div>
-          )
-        }) }</div>
-        : <h1>No Available Recipes</h1>
-      }
-      
->>>>>>> parent of 09880a5 (Fixed no ingredient display conditions)
     </>
   );
 }
