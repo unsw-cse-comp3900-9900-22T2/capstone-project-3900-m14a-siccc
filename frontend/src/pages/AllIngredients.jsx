@@ -13,9 +13,13 @@ const AllIngredients = () => {
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
-  const localCalories = parseInt(localStorage.getItem('calories'));
+  var localCalories = localStorage.getItem('calories');
+  if(isNaN(localCalories)) {
+    localCalories = 0;
+  } else {
+    localCalories = parseInt(localCalories);
+  }
   const [calorieLimit, setCalorieLimit] = React.useState(localCalories);
-
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
@@ -26,10 +30,11 @@ const AllIngredients = () => {
     number = parseInt(number);
     if(Number.isInteger(number) == false) {
       setCalorieLimit('')
+      localStorage.setItem('calories', JSON.stringify(''));
     } else {
       setCalorieLimit(number);
+      localStorage.setItem('calories', JSON.stringify(number));
     }
-    // localStorage.setItem('calories', JSON.stringify(calorieLimit));
   }
 
   // Displays all Ingredients
