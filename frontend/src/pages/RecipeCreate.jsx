@@ -10,8 +10,10 @@ const RecipeCreate = () => {
   const [servings, setServings] = React.useState('');
   const [mealType, setMealType] = React.useState('')
   const [cookingTime, setCookingTime] = React.useState('')
+  const [freqIngredients, setFreqIngredients] = React.useState([]);
   const [steps, setSteps] = React.useState([]);
   const [stepsNo, setStepsNo] = React.useState(0);
+  const [ingredientsGram, setIngredientsGram] = React.useState({});
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -32,6 +34,20 @@ const RecipeCreate = () => {
     const newIngredient = [...ingredients];
     newIngredient[index].check = !ingredients[index].check;
     setIngredients(newIngredient);
+
+    // deletes the grams value for the ingredient if unchecked
+    if(!newIngredient[index].check) {
+      console.log(newIngredient[index].text)
+      delete ingredientsGram[newIngredient[index].text];
+    }
+  }
+
+  function updateIngredientGram (event, ingredientName) {
+    event.target.value = Math.abs(event.target.value)
+    const newIngredientsGram = {...ingredientsGram};
+    newIngredientsGram[ingredientName] = parseInt(event.target.value);
+    setIngredientsGram(newIngredientsGram);
+    console.log(newIngredientsGram);
   }
 
   // Set the thumbnail of listing
@@ -42,6 +58,14 @@ const RecipeCreate = () => {
     } else {
       setThumbnail('');
     }
+  }
+
+  // Sets the list of steps for listing
+  const updateSteps = (event, index) => {
+    const newSteps = [...steps];
+    newSteps[index] = event.target.value;
+    setSteps(newSteps);
+    console.log(newSteps);
   }
 
   // Add the steps and add the number of steps
@@ -93,7 +117,7 @@ const RecipeCreate = () => {
         servings: servings,
         photo: thumbnail,
         timeToCook: cookingTime,
-        ingredients: selectedIngredients,
+        ingredients: ingredientsGram,
         cookingSteps: steps,
       },
     }
@@ -107,14 +131,34 @@ const RecipeCreate = () => {
     });
   }
 
+  const viewFrequentIngredients = async () => {
+    try {
+      const freqIngredientList = [];
+      const freqIngredientData = await apiFetch('GET', `no/recipe/match`, null);
+      var counter = 0
+      for (const ingredient of freqIngredientData) {
+        if(counter < 6) {
+          freqIngredientList.push(ingredient);
+        }
+        counter = counter + 1
+      }
+      setFreqIngredients(freqIngredientList);
+    } catch (err) {
+      alert(err.message);
+    }
+    console.log(freqIngredients)
+  }
+
   React.useEffect(() => {
     viewAllIngredients();
+    viewFrequentIngredients();
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <>   
-      <h1>Create Recipe</h1>
+    <>
+      <h1>Create Recipe</h1>       
       Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
-
       Servings&nbsp;
       <input type="number"
       name="servings"
@@ -122,7 +166,6 @@ const RecipeCreate = () => {
       value={servings}
       onChange={e => setServings(e.target.value)}
       /> < br/>
-
       Cooking Time&nbsp;
       <input type="number"
       name="servings"
@@ -130,7 +173,6 @@ const RecipeCreate = () => {
       value={cookingTime}
       onChange={e => setCookingTime(e.target.value)}
       /> < br/>
-
       <p>What kind of meal is your recipe?</p>
       <select name="mealType" value={mealType} onChange={e => setMealType(e.target.value)}>
         <option name="empty" value="">Select one</option>
@@ -150,7 +192,7 @@ const RecipeCreate = () => {
       /> < br/>
 
       {thumbnail !== ''
-        ? (<img src={thumbnail} alt="recipe thumbnail photo" height="140px" width="auto"/>)
+        ? (<img src={thumbnail} alt="recipe thumbnail" height="140px" width="auto"/>)
         : <></>
       }< br/>
       
@@ -164,8 +206,8 @@ const RecipeCreate = () => {
         return (
           <div key={idx}>
             <>Step {idx + 1}.</>&nbsp;
-            <textarea id="story" name="story"
-              rows="2" cols="50">
+            <textarea rows="2" cols="50"
+            onChange={e => updateSteps(e, idx)}>
             </textarea>
           </div>
         )
@@ -182,11 +224,31 @@ const RecipeCreate = () => {
               checked={ingredient.check}
             />
           </label>
+
+          {/* If ingredient is checked */}
+          {ingredient.check
+            ? (<input type="number" 
+                name="grams" 
+                min="0"
+                placeholder='Enter in grams'
+                onChange={e => updateIngredientGram(e, ingredient.text)}
+              />)
+            : <></>
+          }
+
         </div>
       ))}
 
       <button name="create" onClick={ createRecipe }>Create</button>
       <button onClick={() => navigate('/')}>Cancel</button>
+      <h3 style={{textAlign: "center"}}>Frequently Searched Ingredients</h3>
+      {freqIngredients.map((ingredients, idx) => (
+        <div key={idx}>
+          <p style = {{textAlign: 'center'}}>
+            {ingredients}
+          </p>
+        </div>
+      ))}
     </>
   );
 }
