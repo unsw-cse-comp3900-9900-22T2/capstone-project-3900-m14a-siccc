@@ -72,7 +72,7 @@ def sortingIngredients(cate):
     qry = f"""
     select * 
     from ingredients
-    where category = %s
+    where categories = %s
     order by name;
     """
     cur.execute(qry, [cate])
@@ -81,7 +81,7 @@ def sortingIngredients(cate):
     
     result = []
     for ing in info:
-        veg, _, _ = ing 
+        veg, _, _, _ = ing 
         result.append(veg)
     
     return result
