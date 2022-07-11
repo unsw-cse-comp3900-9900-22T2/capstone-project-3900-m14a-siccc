@@ -82,11 +82,11 @@ def recipeDetails(recipeID):
     }
 
 
-def calorieCalculation(ingredients): #recipeID):
+def calorieCalculation(ingredientsDict):
     """ Retrieves recipe details given ingredients (recipe id still or nah?)
 
             Parameters:
-                ingredients (String): String containing ingredients
+                ingredients (Dictionary): Dictionary containing ingredients
 
             Returns:
                 calories (int): total calories of ingredients
@@ -97,33 +97,72 @@ def calorieCalculation(ingredients): #recipeID):
     # _, _, _, _, _, _, _, _, ingredients = info
     ingredientFixedGrams = getFixedCGrams()
 
-    ingredientsList = ingredients.split(',')
-
     calories = 0
-    for ingredient in ingredientsList:
-        ing = ingredient.strip()
-        singleIng = ing.split(' ')
-        ingredientName = ' '.join(singleIng[1:])
+    for ingredientName, amount in ingredientsDict:
         grams = 0
-        if 'g' in singleIng[0]: # if in grams 
-            grams = int(singleIng[0].rpartition('g')[0])
-        else: # if in quantity 
+        if 'g' in amount:  # if in grams
+            grams = int(amount.rpartition('g')[0])
+        else:  # if in quantity
             quantity = 0
-            if singleIng[0] == 'half': 
+            if amount == 'half':
                 quantity = 0.5
             else:
-                quantity = int (singleIng[0])
-            
-            grams = int (ingredientFixedGrams[ingredientName]) * quantity
-            print(quantity)
+                quantity = int(amount)
+
+            grams = int(ingredientFixedGrams[ingredientName]) * quantity
+            # print(quantity)
 
         currCalories = getCalories(db, ingredientName)
         caloriesConverted = convertCalories(int(currCalories), grams)
-        print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
-        
+        # print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
+
         calories += caloriesConverted
 
     return int(calories)
+
+# Old, Taking in string of ingredients
+# def calorieCalculation(ingredients): #recipeID):
+#     """ Retrieves recipe details given ingredients (recipe id still or nah?)
+
+#             Parameters:
+#                 ingredients (String): String containing ingredients
+
+#             Returns:
+#                 calories (int): total calories of ingredients
+#     """
+#     db = psycopg2.connect(
+#         f"host={host} dbname={dbname} user={user} password={password}")
+#     # info = retrieveRecipe(db, recipeID)
+#     # _, _, _, _, _, _, _, _, ingredients = info
+#     ingredientFixedGrams = getFixedCGrams()
+
+#     ingredientsList = ingredients.split(',')
+
+#     calories = 0
+#     for ingredient in ingredientsList:
+#         ing = ingredient.strip()
+#         singleIng = ing.split(' ')
+#         ingredientName = ' '.join(singleIng[1:])
+#         grams = 0
+#         if 'g' in singleIng[0]: # if in grams
+#             grams = int(singleIng[0].rpartition('g')[0])
+#         else: # if in quantity
+#             quantity = 0
+#             if singleIng[0] == 'half':
+#                 quantity = 0.5
+#             else:
+#                 quantity = int (singleIng[0])
+
+#             grams = int (ingredientFixedGrams[ingredientName]) * quantity
+#             print(quantity)
+
+#         currCalories = getCalories(db, ingredientName)
+#         caloriesConverted = convertCalories(int(currCalories), grams)
+#         print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
+
+#         calories += caloriesConverted
+
+#     return int(calories)
 
 
 def getFixedCGrams():
@@ -142,6 +181,3 @@ def getFixedCGrams():
     for ingredient in info:
         dict[ingredient[0]] = ingredient[3]
     return dict
-
-
-

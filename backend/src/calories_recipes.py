@@ -40,7 +40,7 @@ def getCaloriesRecipes(calories):
 def getCaloriesRecipesWithIngredients(calories, ingredientsList):
     """ Input the number of calories and ingtredients, so that return the recipes 
         if the calories of this recipe is less than or equal to the input calories
-         and the ingredients are also mathcing.
+         and the ingredients are also matching.
 
             Parameters:
                 calories: input calories
