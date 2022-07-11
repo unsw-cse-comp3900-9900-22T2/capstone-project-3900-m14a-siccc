@@ -150,10 +150,10 @@ const AllIngredients = () => {
         ingredients: selectedIngredients,
         calories: calorieLimit,
       }
-      if(calorieLimit == 0 || calorieLimit == "") {
+      if(calorieLimit == 0 || calorieLimit == null || isNaN(calorieLimit)) {
         const recipeData = await apiFetch('POST', `recipe/view`, null, body);
         setRecipes(recipeData.recipes);
-      } else if (calorieLimit != 0 && calorieLimit != "") {
+      } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
