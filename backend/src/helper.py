@@ -1,3 +1,6 @@
+from re import L
+
+
 def getIngredient(db, name):
     """ Helper function to retrieve row of ingredient by name
 
@@ -46,31 +49,6 @@ def findIngredientsCategory(db, name):
         return None
     else:
         return category
-
-def getCalories(db, name):
-    """ Helper function to retrieve ingredient calories by name
-
-            Parameters
-                db : database
-                name (str): name of ingredient
-            
-            Returns
-                calories (int): calories of ingredient per 100g
-    """
-    cur = db.cursor()
-    qry = """
-    select calories
-    from ingredients
-    where name = %s
-    """
-    cur.execute(qry, [name])
-    info = cur.fetchone()
-    cur.close()
-    calories, = info
-    if not info:
-        return None
-    else:
-        return calories
 
 def retrieveCategories(db):
     """ Helper function to retrieve list of categories
@@ -184,7 +162,8 @@ def retrieveRecipeList(db):
         return None
     else:
         return info
-    
+
+
 def retrieveRecipeIngredientsList(db):
     """ Helper function to retrieve list of recipe ingredients
 
@@ -207,6 +186,31 @@ def retrieveRecipeIngredientsList(db):
     else:
         return info
 
+def getCalories(db, name):
+    """ Helper function to retrieve ingredient calories by name
+
+            Parameters
+                db : database
+                name (str): name of ingredient
+            
+            Returns
+                calories (int): calories of ingredient per 100g
+    """
+    cur = db.cursor()
+    qry = """
+    select calories
+    from ingredients
+    where name = %s
+    """
+    cur.execute(qry, [name])
+    info = cur.fetchone()
+    cur.close()
+    calories, = info
+    if not info:
+        return None
+    else:
+        return calories
+
 def convertCalories(currCalories, gramToConvert):
     """ Helper function to convert the calories of the ingredients
         to any specified number of grams
@@ -218,4 +222,6 @@ def convertCalories(currCalories, gramToConvert):
             Returns:
                 (int): the new calorie value
     """
-    return (gramToConvert/100)*currCalories
+    return int ((gramToConvert/100)*currCalories)
+
+

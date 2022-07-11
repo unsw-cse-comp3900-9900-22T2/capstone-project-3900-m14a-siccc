@@ -1,8 +1,9 @@
 import json
 from lib2to3.pytree import convert
 import psycopg2
-from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
+from src.helper import retrieveIngredients, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
 from src.config import host, user, password, dbname
+
 
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
@@ -10,15 +11,16 @@ def recipeMatch(ingredientsList):
 
         Parameters:
             ingredientsList (str): list of ingredients user selected
-        
+
         Return:
             recipeList (list): list of recipes id's satisfying the ingredients
     """
-    # [[relevent percetage, recipe information], ..., 
+    # [[relevent percetage, recipe information], ...,
     # [relevent percetage, recipe information]]
     recipeList = []
     userIngrLen = len(ingredientsList)
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
     for recipe in info:
         ingredientString = recipe[8]
@@ -42,15 +44,16 @@ def recipeMatch(ingredientsList):
                 "ingredients": recipe[8]
             }
             recipeList.append(ingDict)
-            
+
     return recipeList
+
 
 def recipeDetails(recipeID):
     """ Retrieves recipe details given a recipe id
-    
+
             Parameters:
                 recipeID (int): recipe id as an integer
-                
+
             Returns:
                 recipeID (int): id of recipe
                 title (str): title of recipe
@@ -62,7 +65,8 @@ def recipeDetails(recipeID):
                 cookingSteps (str): cooking steps of recipe
                 ingredients (str): ingredients of recipe
     """
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipe(db, recipeID)
 
     return {
@@ -77,24 +81,103 @@ def recipeDetails(recipeID):
         "ingredients": info[8]
     }
 
-def calorieCalculation(recipeID):
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
-    info = retrieveRecipe(db, recipeID)
-    _, _, _, _, _, _, _, _, ingredients = info
-    ingredientsList = ingredients.split(',')
-    
+
+def calorieCalculation(ingredientsDict):
+    """ Retrieves recipe details given ingredients (recipe id still or nah?)
+
+            Parameters:
+                ingredients (Dictionary): Dictionary containing ingredients
+
+            Returns:
+                calories (int): total calories of ingredients
+    """
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
+    # info = retrieveRecipe(db, recipeID)
+    # _, _, _, _, _, _, _, _, ingredients = info
+    ingredientFixedGrams = getFixedCGrams()
+
     calories = 0
-    for ingredient in ingredientsList:
-        ing = ingredient.strip()
-        singleIng = ing.split(' ')
-        grams = singleIng[0].rpartition('g')[0]
-        ingredientName = ' '.join(singleIng[1:])
-        if grams == '':
-            pass
-        else:
-            currCalories = getCalories(db, ingredientName)
-            caloriesConverted = convertCalories(int(currCalories), int(grams))
-            calories += caloriesConverted
-    
-    print(calories)
-    return calories
+    for ingredientName, amount in ingredientsDict:
+        grams = 0
+        if 'g' in amount:  # if in grams
+            grams = int(amount.rpartition('g')[0])
+        else:  # if in quantity
+            quantity = 0
+            if amount == 'half':
+                quantity = 0.5
+            else:
+                quantity = int(amount)
+
+            grams = int(ingredientFixedGrams[ingredientName]) * quantity
+            # print(quantity)
+
+        currCalories = getCalories(db, ingredientName)
+        caloriesConverted = convertCalories(int(currCalories), grams)
+        # print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
+
+        calories += caloriesConverted
+
+    return int(calories)
+
+# Old, Taking in string of ingredients
+# def calorieCalculation(ingredients): #recipeID):
+#     """ Retrieves recipe details given ingredients (recipe id still or nah?)
+
+#             Parameters:
+#                 ingredients (String): String containing ingredients
+
+#             Returns:
+#                 calories (int): total calories of ingredients
+#     """
+#     db = psycopg2.connect(
+#         f"host={host} dbname={dbname} user={user} password={password}")
+#     # info = retrieveRecipe(db, recipeID)
+#     # _, _, _, _, _, _, _, _, ingredients = info
+#     ingredientFixedGrams = getFixedCGrams()
+
+#     ingredientsList = ingredients.split(',')
+
+#     calories = 0
+#     for ingredient in ingredientsList:
+#         ing = ingredient.strip()
+#         singleIng = ing.split(' ')
+#         ingredientName = ' '.join(singleIng[1:])
+#         grams = 0
+#         if 'g' in singleIng[0]: # if in grams
+#             grams = int(singleIng[0].rpartition('g')[0])
+#         else: # if in quantity
+#             quantity = 0
+#             if singleIng[0] == 'half':
+#                 quantity = 0.5
+#             else:
+#                 quantity = int (singleIng[0])
+
+#             grams = int (ingredientFixedGrams[ingredientName]) * quantity
+#             print(quantity)
+
+#         currCalories = getCalories(db, ingredientName)
+#         caloriesConverted = convertCalories(int(currCalories), grams)
+#         print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
+
+#         calories += caloriesConverted
+
+#     return int(calories)
+
+
+def getFixedCGrams():
+    """ Helper function to get fixed grams for all ingredients
+
+            Parameters:
+                None
+
+            Returns:
+                (dictionary): dictionary of key-value pairs, ingredient(string): fixed_grams(int)
+    """
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
+    info = retrieveIngredients(db)
+    dict = {}
+    for ingredient in info:
+        dict[ingredient[0]] = ingredient[3]
+    return dict

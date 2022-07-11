@@ -19,3 +19,11 @@ Presented the recipe functions in the demo
 Agreed on roles, i'm responsbile for documenting meeting minutes
 Improvements involved making clear what everyone does 
 Work more on backend functions 
+
+Week6
+Made calorie calculation function to also take in ingredients specified by quanitity, not just grams  
+Made all ingredients be plural case 
+
+Week 7 
+Change calorie calculation to take in a dictionary, instead of ingredients string
+Change ingredients back to single case

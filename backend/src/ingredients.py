@@ -5,6 +5,15 @@ from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeLi
 from src.config import host, user, password, dbname
 
 def IngredientsViewAll():
+    """
+    View all ingredients 
+
+            Parameters:
+                None?
+
+            Returns:
+                ingredients (list): list of ingredient strings
+    """
     #OLD VERSION / BEFORE 
     db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveIngredientNames(db)
