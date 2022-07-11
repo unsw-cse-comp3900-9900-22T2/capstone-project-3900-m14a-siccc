@@ -12,6 +12,7 @@ const RecipeCreate = () => {
   const [cookingTime, setCookingTime] = React.useState('')
   const [steps, setSteps] = React.useState([]);
   const [stepsNo, setStepsNo] = React.useState(0);
+  const [ingredientsGram, setIngredientsGram] = React.useState({});
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -34,6 +35,12 @@ const RecipeCreate = () => {
     setIngredients(newIngredient);
   }
 
+  function updateIngredientGram (index) {
+    /*const newIngredient = [...ingredients];
+    newIngredient[index].check = !ingredients[index].check;
+    setIngredientsGram(newIngredient);*/
+  }
+
   // Set the thumbnail of listing
   const thumbnailUpdate = async (event) => {
     if (event.target.files[0]) {
@@ -42,6 +49,14 @@ const RecipeCreate = () => {
     } else {
       setThumbnail('');
     }
+  }
+
+  // Sets the list of steps for listing
+  const updateSteps = (event, index) => {
+    const newSteps = [...steps];
+    newSteps[index] = event.target.value;
+    setSteps(newSteps);
+    console.log(newSteps);
   }
 
   // Add the steps and add the number of steps
@@ -93,7 +108,7 @@ const RecipeCreate = () => {
         servings: servings,
         photo: thumbnail,
         timeToCook: cookingTime,
-        ingredients: selectedIngredients,
+        ingredients: ['tomatoes 100g', 'bacon 10g'],
         cookingSteps: steps,
       },
     }
@@ -164,8 +179,8 @@ const RecipeCreate = () => {
         return (
           <div key={idx}>
             <>Step {idx + 1}.</>&nbsp;
-            <textarea id="story" name="story"
-              rows="2" cols="50">
+            <textarea rows="2" cols="50"
+            onChange={e => updateSteps(e, idx)}>
             </textarea>
           </div>
         )
@@ -182,6 +197,17 @@ const RecipeCreate = () => {
               checked={ingredient.check}
             />
           </label>
+
+          {/* If ingredient is checked */}
+          {ingredient.check
+            ? (<input type="number" 
+                name="grams" 
+                min="0"
+                onChange={() => updateIngredientGram(ingredient.text)}
+              />)
+            : <></>
+          }
+
         </div>
       ))}
 
