@@ -2,6 +2,7 @@ import json
 import psycopg2
 from src.helper import retrieveRecipeList
 from src.recipe import recipeMatch
+from src.config import host, user, password, dbname
 
 def getCaloriesRecipes(calories):
     """ Input the number of calories and return the recipes if the 
@@ -15,7 +16,7 @@ def getCaloriesRecipes(calories):
     """
     
     recipeList = []
-    db = psycopg2.connect("host=database-1.c0xbbloavtwb.ap-southeast-2.rds.amazonaws.com dbname=comp3900db user=postgres password=hello123")
+    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
     for recipe in info:
         if recipe[5] <= calories:

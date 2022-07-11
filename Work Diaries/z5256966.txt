@@ -26,3 +26,7 @@ Completed frontend functionality for first Demo
 Week 5
 Looked at user stories for Sprint 2
 Distributed user stories to do
+
+Week 6
+Started on creating a recipe form
+Did some frontend work
