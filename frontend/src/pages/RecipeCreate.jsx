@@ -34,12 +34,20 @@ const RecipeCreate = () => {
     const newIngredient = [...ingredients];
     newIngredient[index].check = !ingredients[index].check;
     setIngredients(newIngredient);
+
+    // deletes the grams value for the ingredient if unchecked
+    if(!newIngredient[index].check) {
+      console.log(newIngredient[index].text)
+      delete ingredientsGram[newIngredient[index].text];
+    }
   }
 
-  function updateIngredientGram (index) {
-    /*const newIngredient = [...ingredients];
-    newIngredient[index].check = !ingredients[index].check;
-    setIngredientsGram(newIngredient);*/
+  function updateIngredientGram (event, ingredientName) {
+    event.target.value = Math.abs(event.target.value)
+    const newIngredientsGram = {...ingredientsGram};
+    newIngredientsGram[ingredientName] = parseInt(event.target.value);
+    setIngredientsGram(newIngredientsGram);
+    console.log(newIngredientsGram);
   }
 
   // Set the thumbnail of listing
@@ -109,7 +117,7 @@ const RecipeCreate = () => {
         servings: servings,
         photo: thumbnail,
         timeToCook: cookingTime,
-        ingredients: ['tomatoes 100g', 'bacon 10g'],
+        ingredients: ingredientsGram,
         cookingSteps: steps,
       },
     }
@@ -144,6 +152,8 @@ const RecipeCreate = () => {
   React.useEffect(() => {
     viewAllIngredients();
     viewFrequentIngredients();
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -182,7 +192,7 @@ const RecipeCreate = () => {
       /> < br/>
 
       {thumbnail !== ''
-        ? (<img src={thumbnail} alt="recipe thumbnail photo" height="140px" width="auto"/>)
+        ? (<img src={thumbnail} alt="recipe thumbnail" height="140px" width="auto"/>)
         : <></>
       }< br/>
       
@@ -220,7 +230,8 @@ const RecipeCreate = () => {
             ? (<input type="number" 
                 name="grams" 
                 min="0"
-                onChange={() => updateIngredientGram(ingredient.text)}
+                placeholder='Enter in grams'
+                onChange={e => updateIngredientGram(e, ingredient.text)}
               />)
             : <></>
           }
