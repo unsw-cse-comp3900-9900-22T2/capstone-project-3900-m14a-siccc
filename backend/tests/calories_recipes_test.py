@@ -39,5 +39,5 @@ def test_multiple_calories_ingredients_match():
     assert len(getCaloriesRecipesWithIngredients(calories, ingredients)) == 2
 
 def test_calorieCalc_normal():
-    ingredientsDict = {"olive oil": "3g",  "bacon": "100g", "egg": "2"}
+    ingredientsDict = {"olive oil": "3g",  "bacon": "100g", "egg": 2}
     assert calorieCalculation(ingredientsDict) == 660

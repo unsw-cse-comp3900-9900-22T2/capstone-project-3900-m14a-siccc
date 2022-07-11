@@ -75,9 +75,10 @@ def calorieCalculation(ingredientsDict):
     calories = 0
     for ingredientName, amount in ingredientsDict.items():
         grams = 0
-        if 'g' in amount:  # if in grams
-            grams = int(amount.rpartition('g')[0])
-        else:  # if in quantity
+        if isinstance(amount, str): 
+            if 'g' in amount:  # if in grams, amount is string
+                grams = int(amount.rpartition('g')[0])
+        else:  # if in quantity, amount is integer
             quantity = 0
             if amount == 'half':
                 quantity = 0.5
@@ -85,11 +86,11 @@ def calorieCalculation(ingredientsDict):
                 quantity = int(amount)
 
             grams = int(ingredientFixedGrams[ingredientName]) * quantity
-            # print(quantity)
+            #print(quantity)
 
         currCalories = getCalories(db, ingredientName)
         caloriesConverted = convertCalories(int(currCalories), grams)
-        # print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
+        #print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
 
         calories += caloriesConverted
 
