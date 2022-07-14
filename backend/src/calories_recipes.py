@@ -1,5 +1,6 @@
 import json
 import psycopg2
+from src.mealType import getMealType
 from src.helper import retrieveRecipeList, retrieveIngredients, getCalories, convertCalories
 from src.recipe import recipeMatch
 from src.config import host, user, password, dbname
@@ -52,7 +53,29 @@ def getCaloriesRecipesWithIngredients(calories, ingredientsList):
     recipeList = []
     info = recipeMatch(ingredientsList)
     for recipe in info:
-        if recipe["calories"] <= calories:
+        if int(recipe["calories"]) <= calories:
+            recipeList.append(recipe)
+
+    return recipeList
+
+
+def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealType):
+    """ Input the number of calories, ingtredients and meal type, so that return the recipes 
+        if the calories of this recipe is less than or equal to the input calories,
+        meal type and the ingredients are also matching.
+
+            Parameters:
+                calories: input calories
+                ingredientsList: input ingredients
+                mealType: meal type
+        
+            Returns:
+                recipeList: list of all recipes if the recipes are matching the requirements
+    """
+    recipeList = []
+    info = getMealType(mealType, ingredientsList)
+    for recipe in info:
+        if int(recipe["calories"]) <= calories:
             recipeList.append(recipe)
 
     return recipeList
