@@ -1,6 +1,6 @@
 import psycopg2
 from src.helper import retrieveRecipeList
-from src.recipe import calorieCalculation
+from src.calories_recipes import calorieCalculation
 from src.config import host, user, password, dbname
 
 def insertRecipe(recipeDetails):

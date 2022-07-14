@@ -1,7 +1,7 @@
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-from matplotlib.pyplot import get
+#from matplotlib.pyplot import get
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
