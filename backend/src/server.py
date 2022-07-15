@@ -9,6 +9,7 @@ from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
 from src import config
 from src.recipeContributor import insertRecipe, getNoRecipeMatchList, addFrequency
+from src.mealType import getMealType
 
 def defaultHandler(err):
     response = err.get_response()
@@ -67,6 +68,16 @@ def recipeMatchCategoryFlask():
     ingredients = temp['ingredients']
     calories = temp['calories']
     info = getCaloriesRecipesWithIngredients(calories, ingredients)
+    return dumps({
+        'recipes': info
+    })
+    
+@APP.route("/recipe/mealtype/view", methods = ['POST'])
+def recipeMatchMealTypeFlask():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    mealType = temp['mealType']
+    info = getMealType(mealType, ingredients)
     return dumps({
         'recipes': info
     })
