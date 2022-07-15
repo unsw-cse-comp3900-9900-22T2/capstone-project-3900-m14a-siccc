@@ -67,8 +67,6 @@ def recipeMatchCategoryFlask():
     ingredients = temp['ingredients']
     calories = temp['calories']
     info = getCaloriesRecipesWithIngredients(calories, ingredients)
-    if len(info) == 0:
-        addFrequency(ingredients)
     return dumps({
         'recipes': info
     })
