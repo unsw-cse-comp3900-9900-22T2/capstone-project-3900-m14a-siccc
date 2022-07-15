@@ -15,11 +15,19 @@ const AllIngredients = () => {
   const [inputText, setInputText] = useState("");
   var localCalories = localStorage.getItem('calories');
   if(isNaN(localCalories)) {
-    localCalories = 0;
+    localCalories = '';
   } else {
     localCalories = parseInt(localCalories);
   }
   const [calorieLimit, setCalorieLimit] = React.useState(localCalories);
+  var localMealType = localStorage.getItem('mealType')
+  if(localMealType == null) {
+    localMealType = ""
+  } else {
+    localMealType = JSON.parse(localMealType)
+  }
+  const [mealType, setMealType] = React.useState(localMealType);
+
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
@@ -35,6 +43,11 @@ const AllIngredients = () => {
       setCalorieLimit(number);
       localStorage.setItem('calories', JSON.stringify(number));
     }
+  }
+
+  let mealTypeHandler = (e) => {
+    setMealType(e.target.value);
+    localStorage.setItem('mealType', JSON.stringify(e.target.value));
   }
 
   // Displays all Ingredients
@@ -120,6 +133,7 @@ const AllIngredients = () => {
         localStorage.setItem('categories', JSON.stringify(categories));
         localStorage.setItem('ingredients', JSON.stringify(ingredients));
         localStorage.setItem('calories', JSON.stringify(calorieLimit));
+        localStorage.setItem('mealType', JSON.stringify(mealType));
         for (const [, ingredients] of Object.entries(categories)) {
           console.log(ingredients)
           for (const ingredient of ingredients) {
@@ -141,23 +155,33 @@ const AllIngredients = () => {
             }
           }
         }
-        
       }
 
       console.log(calorieLimit)
+      console.log(mealType)
       // Matches recipe to selected ingredients
       const body = {
         ingredients: selectedIngredients,
         calories: calorieLimit,
+        mealType: mealType,
       }
-      if(calorieLimit == 0 || calorieLimit == null || isNaN(calorieLimit)) {
-        const recipeData = await apiFetch('POST', `recipe/view`, null, body);
-        setRecipes(recipeData.recipes);
+      if(calorieLimit != 0 && calorieLimit != null && 
+        !isNaN(calorieLimit) && mealType != "") {
+        // Meal type and calorie limit are selected
       } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
-      } // TODO: calorie limit != 0 && mealType != ''
+      } else if (mealType != "") {
+        // Meal type is selected but not calorie limit
+        const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
+        console.log(recipeData.recipes);
+        setRecipes(recipeData.recipes);
+      } else {
+        // Meal type and calorie limit are not selected
+        const recipeData = await apiFetch('POST', `recipe/view`, null, body);
+        setRecipes(recipeData.recipes);
+      }
 
     } catch (err) {
       alert(err.message);
@@ -209,7 +233,6 @@ const AllIngredients = () => {
   }
 
   React.useEffect(() => {
-    
     //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
     //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
 
@@ -220,7 +243,12 @@ const AllIngredients = () => {
 
       setCategories(JSON.parse(localStorage.getItem('categories')));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
-      setCalorieLimit(JSON.parse(localStorage.getItem('calories')));
+      if(localStorage.getItem('calories')) {
+        setCalorieLimit(localStorage.getItem('calories'));
+      }
+      if(localStorage.getItem('mealType')) {
+        setMealType(JSON.parse(localStorage.getItem('mealType')))
+      }
       console.log(JSON.parse(localStorage.getItem('ingredients')));
       recipeMatch(false);
       console.log("ssssss")
@@ -283,8 +311,18 @@ const AllIngredients = () => {
         < br/>
         <p>Filter by calories</p>
         <Input variant="outline" placeholder='Input Calorie Limit' type="number" onChange={calorieInputHandler} value = {calorieLimit}/>
-        
+
         < br/>
+        <p>What kind of meal is your recipe?</p>
+        <select name="mealType" value={mealType} onChange={mealTypeHandler}>
+          <option name="empty" value="">Select one</option>
+          <option name="breakfast" value="Breakfast">Breakfast</option>
+          <option name="lunch" value="Lunch">Lunch</option>
+          <option name="dinner" value="Dinner">Dinner</option>
+          <option name="entree" value="Entree">Entrée</option>
+          <option name="main" value="Main">Main</option>
+          <option name="dessert" value="Dessert">Dessert</option>
+        </select> < br/>
 
         <h2>Select your ingredients</h2>
         <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
