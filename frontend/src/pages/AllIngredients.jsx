@@ -14,7 +14,7 @@ const AllIngredients = () => {
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
   var localCalories = localStorage.getItem('calories');
-  if(isNaN(localCalories)) {
+  if(isNaN(localCalories) || localCalories == null) {
     localCalories = '';
   } else {
     localCalories = parseInt(localCalories);
@@ -168,6 +168,8 @@ const AllIngredients = () => {
       if(calorieLimit != 0 && calorieLimit != null && 
         !isNaN(calorieLimit) && mealType != "") {
         // Meal type and calorie limit are selected
+        const recipeData = await apiFetch('POST', 'recipe/calorie/mealtype/view', null, body)
+        setRecipes(recipeData.recipes);
       } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
