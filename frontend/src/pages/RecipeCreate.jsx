@@ -61,11 +61,18 @@ const RecipeCreate = () => {
   function updateIngredientMeasurement (event, ingredientName) {
     console.log(event.target.value);
     const newIngredientsGram = {...ingredientsGram};
-    const newValue = newIngredientsGram[ingredientName];
+    var newValue = '0g';
+
+    // if the ingredient value does exist set value
+    if (newIngredientsGram[ingredientName]) {
+      console.log(newIngredientsGram[ingredientName]);
+      newValue = newIngredientsGram[ingredientName];
+    }
+
     if (event.target.value === 'g'){
       newIngredientsGram[ingredientName] = newValue + "g";
       console.log(true)
-    } else if (event.target.value === 'q'){
+    } else if (event.target.value === 'q' && newValue.includes("g")){
       newIngredientsGram[ingredientName] = newValue.replace("g", "");
     }
 
@@ -111,6 +118,7 @@ const RecipeCreate = () => {
 
   // Sends off data of the created recipe to backend
   const createRecipe = () => {
+    console.log(ingredientsGram);
     if (cookingTime < 0 || servings < 0) {
       alert('Invalid Input');
       return;
@@ -121,17 +129,25 @@ const RecipeCreate = () => {
       servings === '' ||
       thumbnail === '' ||
       cookingTime === '' ||
-      ingredients.length === 0)) {
-      
+      ingredients.length === 0 ||
+      steps.length === 0)) {
+        
         alert('Empty Input!');
-      return;
-    }
-    const selectedIngredients = [];
-    for (const ingredient in ingredients){ 
-      if (ingredient.check){
-        selectedIngredients.push(ingredient.text);
+        return;
       }
-    }
+      
+      // Removed any 0 values in dictionary
+      const newIngredientGram = {...ingredientsGram}
+      for (const [key, value] of Object.entries(newIngredientGram)) {
+        if (value === '0' || value === '0g') {
+          delete newIngredientGram[key];
+        }
+      }
+      // Check if dictionary is empty
+      if (Object.keys(newIngredientGram).length === 0) {
+        alert('Add values for ingredient!');
+        return;
+      }
 
     const body = {
       recipe: {
@@ -140,7 +156,7 @@ const RecipeCreate = () => {
         servings: servings,
         photo: thumbnail,
         timeToCook: cookingTime,
-        ingredients: ingredientsGram,
+        ingredients: newIngredientGram,
         cookingSteps: steps,
       },
     }
