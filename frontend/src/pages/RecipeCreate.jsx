@@ -210,54 +210,12 @@ const RecipeCreate = () => {
     console.log(newCategory)
   }
 
-  // React.useEffect(() => {
-  //   viewAllIngredients();
-  // }, []);
-
-  // React.useEffect(() => {
-  //   viewAllIngredientsInCategories();
-  // }, []);
-  
   React.useEffect(() => {
-    
-    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
-    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-
-    // Check that there is local storage stored, 
-    // if there is local storage set the check lists to display the data
-    if (localStorage.getItem('categories') && 
-      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
-
-      setCategories(JSON.parse(localStorage.getItem('categories')));
-      setIngredients(JSON.parse(localStorage.getItem('ingredients')));
-      console.log(JSON.parse(localStorage.getItem('ingredients')));
-      // recipeMatch(false);
-      console.log("ssssss")
-    } else {
-      viewAllIngredientsInCategories();
-      viewAllIngredients();
-      console.log("nnnnnn")
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    viewAllIngredients();
   }, []);
-  
+
   React.useEffect(() => {
-    
-    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
-    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-
-    // Check that there is local storage stored
-    if (localStorage.getItem('categories') && 
-      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
-
-      setCategories(JSON.parse(localStorage.getItem('categories')));
-      // recipeMatch(false);
-      console.log("ssssss")
-    } else {
-      viewAllIngredientsInCategories();
-      console.log("nnnnnn")
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    viewAllIngredientsInCategories();
   }, []);
 
   return (
