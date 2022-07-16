@@ -42,10 +42,33 @@ const RecipeCreate = () => {
     }
   }
 
-  function updateIngredientGram (event, ingredientName) {
+  // Set the value of ingredients and adds g to value
+  function updateIngredientValue (event, ingredientName) {
     event.target.value = Math.abs(event.target.value)
     const newIngredientsGram = {...ingredientsGram};
-    newIngredientsGram[ingredientName] = parseInt(event.target.value);
+    if (newIngredientsGram[ingredientName] && newIngredientsGram[ingredientName].includes("g")) {
+      newIngredientsGram[ingredientName] = String(event.target.value) + "g";
+    } else if (newIngredientsGram[ingredientName]) {
+      newIngredientsGram[ingredientName] = String(event.target.value);
+    } else {
+      newIngredientsGram[ingredientName] = String(event.target.value) + "g";
+    }
+    setIngredientsGram(newIngredientsGram);
+    console.log(newIngredientsGram);
+  }
+
+  // Updates dictionary to grams or in quantities
+  function updateIngredientMeasurement (event, ingredientName) {
+    console.log(event.target.value);
+    const newIngredientsGram = {...ingredientsGram};
+    const newValue = newIngredientsGram[ingredientName];
+    if (event.target.value === 'g'){
+      newIngredientsGram[ingredientName] = newValue + "g";
+      console.log(true)
+    } else if (event.target.value === 'q'){
+      newIngredientsGram[ingredientName] = newValue.replace("g", "");
+    }
+
     setIngredientsGram(newIngredientsGram);
     console.log(newIngredientsGram);
   }
@@ -171,6 +194,7 @@ const RecipeCreate = () => {
       name="servings"
       min="0"
       value={cookingTime}
+      placeholder="minutes"
       onChange={e => setCookingTime(e.target.value)}
       /> < br/>
       <p>What kind of meal is your recipe?</p>
@@ -227,14 +251,23 @@ const RecipeCreate = () => {
 
           {/* If ingredient is checked */}
           {ingredient.check
-            ? (<input type="number" 
-                name="grams" 
-                min="0"
-                placeholder='Enter in grams'
-                onChange={e => updateIngredientGram(e, ingredient.text)}
-              />)
+            ? (<span>
+                <input type="number" 
+                  name="grams" 
+                  min="0"
+                  placeholder='Enter values'
+                  onChange={e => updateIngredientValue(e, ingredient.text)}/>
+
+                <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                  <option name="grams" value="g">grams</option>
+                  <option name="quantities" value="q">quantities</option>
+                </select> < br/>
+                
+              </span>)
+              
             : <></>
           }
+
 
         </div>
       ))}
