@@ -2,7 +2,7 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from matplotlib.pyplot import get
-from src.calories_recipes import getCaloriesRecipesWithIngredients
+from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
@@ -63,7 +63,7 @@ def getNoRecipeMatchFlask():
     return dumps(getNoRecipeMatchList())
 
 @APP.route("/recipe/calorie/view", methods = ['POST'])
-def recipeMatchCategoryFlask():
+def recipeMatchCalorieFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
     calories = temp['calories']
@@ -78,6 +78,17 @@ def recipeMatchMealTypeFlask():
     ingredients = temp['ingredients']
     mealType = temp['mealType']
     info = getMealType(mealType, ingredients)
+    return dumps({
+        'recipes': info
+    })
+    
+@APP.route("/recipe/calorie/mealtype/view", methods = ['POST'])
+def recipeMatchMealTypeCalorieFlask():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    mealType = temp['mealType']
+    calories = temp['calories']
+    info = getRecipesWithCaloriesIngredientsMealType(calories, ingredients, mealType)
     return dumps({
         'recipes': info
     })
