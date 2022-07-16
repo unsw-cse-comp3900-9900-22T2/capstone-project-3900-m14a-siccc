@@ -10,9 +10,11 @@ const RecipeCreate = () => {
   const [servings, setServings] = React.useState('');
   const [mealType, setMealType] = React.useState('')
   const [cookingTime, setCookingTime] = React.useState('')
+  const [freqIngredients, setFreqIngredients] = React.useState([]);
   const [steps, setSteps] = React.useState([]);
   const [stepsNo, setStepsNo] = React.useState(0);
   const [categories, setCategories] = React.useState({});
+  const [ingredientsGram, setIngredientsGram] = React.useState({});
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -51,10 +53,15 @@ const RecipeCreate = () => {
     newIngredient[index].check = !ingredients[index].check;
     setIngredients(newIngredient);
 
+    if(!newIngredient[index].check) {
+      console.log(newIngredient[index].text)
+      delete ingredientsGram[newIngredient[index].text];
+    }
 
     const newCategory = {...categories};
     //console.log(newCategory[category][index].text)
     //console.log(ingredients[index].text);
+    
 
     // Shows selected ingredient on categories view
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
@@ -73,6 +80,37 @@ const RecipeCreate = () => {
     setCategories(newCategory);
   }
 
+    // Set the value of ingredients and adds g to value
+  function updateIngredientValue (event, ingredientName) {
+    event.target.value = Math.abs(event.target.value)
+    const newIngredientsGram = {...ingredientsGram};
+    if (newIngredientsGram[ingredientName] && newIngredientsGram[ingredientName].includes("g")) {
+      newIngredientsGram[ingredientName] = String(event.target.value) + "g";
+    } else if (newIngredientsGram[ingredientName]) {
+      newIngredientsGram[ingredientName] = String(event.target.value);
+    } else {
+      newIngredientsGram[ingredientName] = String(event.target.value) + "g";
+    }
+    setIngredientsGram(newIngredientsGram);
+    console.log(newIngredientsGram);
+  }
+
+  // Updates dictionary to grams or in quantities
+  function updateIngredientMeasurement (event, ingredientName) {
+    console.log(event.target.value);
+    const newIngredientsGram = {...ingredientsGram};
+    const newValue = newIngredientsGram[ingredientName];
+    if (event.target.value === 'g'){
+      newIngredientsGram[ingredientName] = newValue + "g";
+      console.log(true)
+    } else if (event.target.value === 'q'){
+      newIngredientsGram[ingredientName] = newValue.replace("g", "");
+    }
+
+    setIngredientsGram(newIngredientsGram);
+    console.log(newIngredientsGram);
+  }
+
   // Set the thumbnail of listing
   const thumbnailUpdate = async (event) => {
     if (event.target.files[0]) {
@@ -81,6 +119,14 @@ const RecipeCreate = () => {
     } else {
       setThumbnail('');
     }
+  }
+
+  // Sets the list of steps for listing
+  const updateSteps = (event, index) => {
+    const newSteps = [...steps];
+    newSteps[index] = event.target.value;
+    setSteps(newSteps);
+    console.log(newSteps);
   }
 
   // Add the steps and add the number of steps
@@ -144,6 +190,24 @@ const RecipeCreate = () => {
     .catch((err) => {
       alert(err);
     });
+  }
+
+  const viewFrequentIngredients = async () => {
+    try {
+      const freqIngredientList = [];
+      const freqIngredientData = await apiFetch('GET', `no/recipe/match`, null);
+      var counter = 0
+      for (const ingredient of freqIngredientData) {
+        if(counter < 5) {
+          freqIngredientList.push(ingredient);
+        }
+        counter = counter + 1
+      }
+      setFreqIngredients(freqIngredientList);
+    } catch (err) {
+      alert(err.message);
+    }
+    console.log(freqIngredients)
   }
 
   function CatSuggestion () {
@@ -210,12 +274,20 @@ const RecipeCreate = () => {
     console.log(newCategory)
   }
 
-  React.useEffect(() => {
-    viewAllIngredients();
-  }, []);
+//   React.useEffect(() => {
+//     viewAllIngredients();
+//   }, []);
+
+//   React.useEffect(() => {
+//     viewAllIngredientsInCategories();
+//   }, []);
 
   React.useEffect(() => {
+    viewAllIngredients();
+    viewFrequentIngredients();
     viewAllIngredientsInCategories();
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -292,11 +364,38 @@ const RecipeCreate = () => {
               checked={ingredient.check}
             />
           </label>
+
+          {/* If ingredient is checked */}
+          {ingredient.check
+            ? (<span>
+                <input type="number" 
+                  name="grams" 
+                  min="0"
+                  placeholder='Enter values'
+                  onChange={e => updateIngredientValue(e, ingredient.text)}/>
+
+                <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                  <option name="grams" value="g">grams</option>
+                  <option name="quantities" value="q">quantities</option>
+                </select> < br/>
+                
+              </span>)
+              
+            : <></>
+          }
         </div>
       ))}
 
       <button name="create" onClick={ createRecipe }>Create</button>
       <button onClick={() => navigate('/')}>Cancel</button>
+      <h3 style={{textAlign: "center"}}>Frequently Searched Ingredients</h3>
+      {freqIngredients.map((ingredients, idx) => (
+        <div key={idx}>
+          <p style = {{textAlign: 'center'}}>
+            {ingredients}
+          </p>
+        </div>
+      ))}
     </>
   );
 }

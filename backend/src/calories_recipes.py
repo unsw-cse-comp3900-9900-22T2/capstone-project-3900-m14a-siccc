@@ -75,7 +75,7 @@ def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealTyp
     recipeList = []
     info = getMealType(mealType, ingredientsList)
     for recipe in info:
-        if int(recipe["calories"]) <= calories:
+        if int(recipe["calories"]) <= int(calories):
             recipeList.append(recipe)
 
     return recipeList
