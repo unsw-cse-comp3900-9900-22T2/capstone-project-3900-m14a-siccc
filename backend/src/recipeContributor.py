@@ -19,7 +19,7 @@ def insertRecipe(recipeDetails):
     timeToCook = recipeDetails['timeToCook']
     mealType = recipeDetails['mealType']
     photo = recipeDetails['photo']
-    cookingSteps = recipeDetails['cookingSteps']
+    cookingSteps = formatSteps(recipeDetails['cookingSteps'])
     ingredients = recipeDetails['ingredients']
     calories = calorieCalculation(ingredients)
     ing = ''
@@ -72,35 +72,53 @@ def addFrequency(ingredients):
             Parameters:
                 ingredients (list): set of ingredients
     """
-    ingredients = ', '.join(ingredients)
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
-    cur = db.cursor()
-    qry = """
-    select count
-    from frequency
-    where ingredients = %s
-    """
-    cur.execute(qry, [ingredients])
-    currCount = cur.fetchone()
-    if currCount is None:
-        # Does not exist in the database add an entry
+    if len(ingredients) != 0:
+        ingredients = ', '.join(ingredients)
+        db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+        cur = db.cursor()
         qry = """
-        insert into frequency
-        values (%s, 1) 
-        """
-        cur.execute(qry,[ingredients])
-        db.commit()
-    else:
-        # Exists in the database, increment count by 1
-        currCount, = currCount
-        currCount = int(currCount)
-        currCount += 1
-        qry = """
-        update frequency
-        set count = %s
+        select count
+        from frequency
         where ingredients = %s
         """
-        cur.execute(qry, [currCount, ingredients])
-        db.commit()
-    cur.close()
+        cur.execute(qry, [ingredients])
+        currCount = cur.fetchone()
+        if currCount is None:
+            # Does not exist in the database add an entry
+            qry = """
+            insert into frequency
+            values (%s, 1) 
+            """
+            cur.execute(qry,[ingredients])
+            db.commit()
+        else:
+            # Exists in the database, increment count by 1
+            currCount, = currCount
+            currCount = int(currCount)
+            currCount += 1
+            qry = """
+            update frequency
+            set count = %s
+            where ingredients = %s
+            """
+            cur.execute(qry, [currCount, ingredients])
+            db.commit()
+        cur.close()
     
+def formatSteps(cookingSteps):
+    """ cookingSteps
+
+            Parameters:
+                cookingSteps (list): list of all the cooking steps
+                
+            Returns:
+                result (str): string of all the steps
+    """
+    result = ''
+    counter = 1
+    while counter <= len(cookingSteps):
+        result = result + f"Step {counter}: {cookingSteps[counter-1]}"
+        if counter != len(cookingSteps):
+            result = result + '\n'
+        counter += 1 
+    return result   

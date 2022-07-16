@@ -28,7 +28,7 @@ const RecipeDetails = () => {
         <Box >
           {/* <>recipe{params.id}</> */}
           <h1>{recipe.title}</h1>
-          <p>{recipe.photo}</p>
+          <img src={recipe.photo} alt="recipe thumbnail" height="140px" width="auto"/>
           <p>Meal Type: {recipe.mealType}</p>
           <p>{recipe.servings} servings</p>
           <p>{recipe.timeToCook} minutes</p>
