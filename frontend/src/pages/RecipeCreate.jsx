@@ -160,7 +160,7 @@ const RecipeCreate = () => {
       const freqIngredientData = await apiFetch('GET', `no/recipe/match`, null);
       var counter = 0
       for (const ingredient of freqIngredientData) {
-        if(counter < 6) {
+        if(counter < 5) {
           freqIngredientList.push(ingredient);
         }
         counter = counter + 1
