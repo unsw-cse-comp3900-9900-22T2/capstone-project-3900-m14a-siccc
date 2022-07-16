@@ -46,6 +46,13 @@ const AllIngredients = () => {
     }
   }
 
+  // function toggleIngredients (index) {
+  //   const newIngredient = [...ingredients];
+  //   newIngredient[index].check = !ingredients[index].check;
+  //   setIngredients(newIngredient);
+  // }
+
+
   // Function to set ingrdients selected
   function toggleIngredients (index, ingredientName) {
 
@@ -235,6 +242,40 @@ const AllIngredients = () => {
     )
   }
 
+  // chosen ingredients
+  function ChosenIngredients() {
+    const filteredData = ingredients.filter((el) => {
+      if (el.check) {
+        return el
+      }
+    })
+
+    return(
+      <div>
+      {filteredData.map((ingredient, idx) => (
+        <div key={idx}>
+          <label>
+            {ingredient.text}
+            <input
+              onChange={() => toggleIngredients(idx, ingredient.text)}
+              type="checkbox"
+              checked={ingredient.check}
+            />
+          </label>
+        </div>
+      ))}
+      </div>
+    )
+  }
+
+  const clearAll = async (clicked) => {
+    for (const ingredient of ingredients) {
+      if (ingredient.check) {
+        toggleIngredients(1, ingredient.text)
+      }
+    }
+  }
+
   React.useEffect(() => {
     
     //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
@@ -272,6 +313,7 @@ const AllIngredients = () => {
           </div>
         ))} */}
 
+
         <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button>
         
         <h2>Select your ingredients</h2>
@@ -306,6 +348,10 @@ const AllIngredients = () => {
           })
         }
         
+        <h2>Your chosen ingredients:</h2>
+        <ChosenIngredients/>
+        <button name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</button>
+
         <br/><br/>
         <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</button>
         {recipes.length !== 0

@@ -21,3 +21,11 @@ Week 4
 Week 5
 - presented demo
 - had retrospective meeting
+- decided on user stories for next sprint
+- assigned some user stories for next sprint (stories related to functionality 1)
+- started second sprint
+
+Week 6 + 7
+- completed user stories for functionality 1 
+(chosen ingredient list, deselect ingredients, clear all ingredients)
+- completed ingredient category suggestion for contributor 

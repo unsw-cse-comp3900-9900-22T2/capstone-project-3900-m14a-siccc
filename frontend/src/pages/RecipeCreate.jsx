@@ -12,6 +12,7 @@ const RecipeCreate = () => {
   const [cookingTime, setCookingTime] = React.useState('')
   const [steps, setSteps] = React.useState([]);
   const [stepsNo, setStepsNo] = React.useState(0);
+  const [categories, setCategories] = React.useState({});
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -28,10 +29,48 @@ const RecipeCreate = () => {
     }
   }
 
-  function toggleIngredients (index) {
+  // function toggleIngredients (index) {
+  //   const newIngredient = [...ingredients];
+  //   newIngredient[index].check = !ingredients[index].check;
+  //   setIngredients(newIngredient);
+  // }
+
+    // Function to set ingrdients selected
+  function toggleIngredients (index, ingredientName) {
+
+    // Executes this code since the index changes for filtered list
+    if (ingredientName) {
+      for (const ingredient of ingredients) {
+        if (ingredient.text === ingredientName) {
+          index = ingredients.indexOf(ingredient);
+        }
+      }
+    }
+
     const newIngredient = [...ingredients];
     newIngredient[index].check = !ingredients[index].check;
     setIngredients(newIngredient);
+
+
+    const newCategory = {...categories};
+    //console.log(newCategory[category][index].text)
+    //console.log(ingredients[index].text);
+
+    // Shows selected ingredient on categories view
+    for (const [categoryName, ingredientsList] of Object.entries(categories)) {
+      for (const ingredientDict of ingredientsList) {
+        if(ingredientDict.text === newIngredient[index].text) {
+          const matchIdx = categories[categoryName].indexOf(ingredientDict);
+          newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
+          /*console.log(newIngredient[index].text);
+          console.log(matchIdx);
+          console.log(categoryName);*/
+          break;
+        }
+        console.log(ingredientDict.text);
+      }
+    }
+    setCategories(newCategory);
   }
 
   // Set the thumbnail of listing
@@ -107,9 +146,120 @@ const RecipeCreate = () => {
     });
   }
 
+  function CatSuggestion () {
+    let catSuggestions = []
+    for (const [categoryName, ingredientsList] of Object.entries(categories)) {
+      var flag = 0
+      for (const ingredientDict of ingredientsList) {
+        if(ingredientDict.check === true) {
+          flag = 1
+        }
+      }
+      if (flag === 0) {
+        catSuggestions.push(<div>{categoryName}</div>)
+      }
+    }
+    return(
+      <div>
+          <h4>Suggested categories of ingredients:</h4>
+          {catSuggestions}
+      </div>
+    )
+  }
+
+  const viewAllIngredientsInCategories = async () => {
+    try {
+      const ingredientsInCategoriesDict = {};
+      
+      if (Object.keys(categories).length === 0) {
+        const ingredientsInCategoriesData = await apiFetch('GET', 'ingredients/categories', null);
+        for (const [category, ingredients] of Object.entries(ingredientsInCategoriesData)) {
+          const ingredientList = [];
+          for (const ingredient of ingredients) {
+            const elem = { text: ingredient, check: false };
+            ingredientList.push(elem);
+          }
+          ingredientsInCategoriesDict[category] = ingredientList
+        }
+        setCategories(ingredientsInCategoriesDict)
+      }
+      console.log(categories)
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  function toggleCategoryIngredients (category, index) {
+    const newCategory = {...categories};
+    newCategory[category][index].check = !categories[category][index].check;
+    setCategories(newCategory);
+
+    // Shows selected ingredient on all ingredients view
+    const newIngredient = [...ingredients];
+    console.log(newCategory[category][index].text)
+    for (const ingredient of ingredients) {
+      if (newCategory[category][index].text === ingredient.text){
+        const allIngreIdx = ingredients.indexOf(ingredient);
+        newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
+        break;
+
+      }
+    }
+    setIngredients(newIngredient);
+    console.log(ingredients)
+    console.log(newCategory)
+  }
+
+  // React.useEffect(() => {
+  //   viewAllIngredients();
+  // }, []);
+
+  // React.useEffect(() => {
+  //   viewAllIngredientsInCategories();
+  // }, []);
+  
   React.useEffect(() => {
-    viewAllIngredients();
+    
+    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
+    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
+
+    // Check that there is local storage stored, 
+    // if there is local storage set the check lists to display the data
+    if (localStorage.getItem('categories') && 
+      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
+
+      setCategories(JSON.parse(localStorage.getItem('categories')));
+      setIngredients(JSON.parse(localStorage.getItem('ingredients')));
+      console.log(JSON.parse(localStorage.getItem('ingredients')));
+      // recipeMatch(false);
+      console.log("ssssss")
+    } else {
+      viewAllIngredientsInCategories();
+      viewAllIngredients();
+      console.log("nnnnnn")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  React.useEffect(() => {
+    
+    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
+    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
+
+    // Check that there is local storage stored
+    if (localStorage.getItem('categories') && 
+      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
+
+      setCategories(JSON.parse(localStorage.getItem('categories')));
+      // recipeMatch(false);
+      console.log("ssssss")
+    } else {
+      viewAllIngredientsInCategories();
+      console.log("nnnnnn")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>   
       <h1>Create Recipe</h1>
@@ -171,13 +321,15 @@ const RecipeCreate = () => {
         )
       })}
 
-      <p>Select your ingredients:</p>
+      <CatSuggestion/>
+
+      <h4>Select your ingredients:</h4>
       {ingredients.map((ingredient, idx) => (
         <div key={idx}>
           <label>
             {ingredient.text}
             <input
-              onChange={() => toggleIngredients(idx)}
+              onChange={() => toggleIngredients(idx, ingredient.text)}
               type="checkbox"
               checked={ingredient.check}
             />
