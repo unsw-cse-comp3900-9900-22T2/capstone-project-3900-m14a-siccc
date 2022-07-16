@@ -158,7 +158,7 @@ const AllIngredients = () => {
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
       } // TODO: calorie limit != 0 && mealType != ''
-
+      
     } catch (err) {
       alert(err.message);
     }
