@@ -1,8 +1,9 @@
 import json
 from lib2to3.pytree import convert
 import psycopg2
-from src.helper import retrieveIngredientNames, retrieveRecipe, retrieveRecipeList, convertCalories, getCalories
+from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
+
 
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
@@ -10,15 +11,16 @@ def recipeMatch(ingredientsList):
 
         Parameters:
             ingredientsList (str): list of ingredients user selected
-        
+
         Return:
             recipeList (list): list of recipes id's satisfying the ingredients
     """
-    # [[relevent percetage, recipe information], ..., 
+    # [[relevent percetage, recipe information], ...,
     # [relevent percetage, recipe information]]
     recipeList = []
     userIngrLen = len(ingredientsList)
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
     for recipe in info:
         ingredientString = recipe[8]
@@ -42,15 +44,16 @@ def recipeMatch(ingredientsList):
                 "ingredients": recipe[8]
             }
             recipeList.append(ingDict)
-            
+
     return recipeList
+
 
 def recipeDetails(recipeID):
     """ Retrieves recipe details given a recipe id
-    
+
             Parameters:
                 recipeID (int): recipe id as an integer
-                
+
             Returns:
                 recipeID (int): id of recipe
                 title (str): title of recipe
@@ -62,7 +65,8 @@ def recipeDetails(recipeID):
                 cookingSteps (str): cooking steps of recipe
                 ingredients (str): ingredients of recipe
     """
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipe(db, recipeID)
 
     return {
@@ -77,24 +81,5 @@ def recipeDetails(recipeID):
         "ingredients": info[8]
     }
 
-def calorieCalculation(recipeID):
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
-    info = retrieveRecipe(db, recipeID)
-    _, _, _, _, _, _, _, _, ingredients = info
-    ingredientsList = ingredients.split(',')
-    
-    calories = 0
-    for ingredient in ingredientsList:
-        ing = ingredient.strip()
-        singleIng = ing.split(' ')
-        grams = singleIng[0].rpartition('g')[0]
-        ingredientName = ' '.join(singleIng[1:])
-        if grams == '':
-            pass
-        else:
-            currCalories = getCalories(db, ingredientName)
-            caloriesConverted = convertCalories(int(currCalories), int(grams))
-            calories += caloriesConverted
-    
-    print(calories)
-    return calories
+
+

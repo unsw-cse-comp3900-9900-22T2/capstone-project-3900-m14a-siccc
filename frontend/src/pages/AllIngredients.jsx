@@ -13,11 +13,29 @@ const AllIngredients = () => {
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
-
+  var localCalories = localStorage.getItem('calories');
+  if(isNaN(localCalories)) {
+    localCalories = 0;
+  } else {
+    localCalories = parseInt(localCalories);
+  }
+  const [calorieLimit, setCalorieLimit] = React.useState(localCalories);
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
+
+  let calorieInputHandler = (e) => {
+    var number = e.target.value.replace(/[^0-9]/gi, '');
+    number = parseInt(number);
+    if(Number.isInteger(number) == false) {
+      setCalorieLimit('')
+      localStorage.setItem('calories', JSON.stringify(''));
+    } else {
+      setCalorieLimit(number);
+      localStorage.setItem('calories', JSON.stringify(number));
+    }
+  }
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -108,6 +126,7 @@ const AllIngredients = () => {
         setClickedSearch(true);
         localStorage.setItem('categories', JSON.stringify(categories));
         localStorage.setItem('ingredients', JSON.stringify(ingredients));
+        localStorage.setItem('calories', JSON.stringify(calorieLimit));
         for (const [, ingredients] of Object.entries(categories)) {
           console.log(ingredients)
           for (const ingredient of ingredients) {
@@ -129,17 +148,23 @@ const AllIngredients = () => {
             }
           }
         }
+        
       }
 
+      console.log(calorieLimit)
       // Matches recipe to selected ingredients
       const body = {
         ingredients: selectedIngredients,
+        calories: calorieLimit,
       }
-      const recipeData = await apiFetch('POST', `recipe/view`, null, body);
-      setRecipes(recipeData.recipes);
-      console.log(recipeData.recipes);
-    
-      console.log('here');
+      if(calorieLimit == 0 || calorieLimit == null || isNaN(calorieLimit)) {
+        const recipeData = await apiFetch('POST', `recipe/view`, null, body);
+        setRecipes(recipeData.recipes);
+      } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
+        // Calorie limit is selected but not meal type
+        const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
+        setRecipes(recipeData.recipes);
+      } // TODO: calorie limit != 0 && mealType != ''
 
     } catch (err) {
       alert(err.message);
@@ -202,6 +227,7 @@ const AllIngredients = () => {
 
       setCategories(JSON.parse(localStorage.getItem('categories')));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
+      setCalorieLimit(JSON.parse(localStorage.getItem('calories')));
       console.log(JSON.parse(localStorage.getItem('ingredients')));
       recipeMatch(false);
       console.log("ssssss")
@@ -315,7 +341,12 @@ const AllIngredients = () => {
 
 
         <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button>
+        < br/>
+        <p>Filter by calories</p>
+        <Input variant="outline" placeholder='Input Calorie Limit' type="number" onChange={calorieInputHandler} value = {calorieLimit}/>
         
+        < br/>
+
         <h2>Select your ingredients</h2>
         <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
         <List input={inputText}/>
@@ -358,8 +389,8 @@ const AllIngredients = () => {
           ? <div>{recipes.map((recipe, idx) => {
             return (
               <div key={idx}>
-                <div>{recipe.photo}</div>
                 <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
+                <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
                 <p>ingredients: {recipe.ingredients}</p>
                 <hr></hr>
               </div>

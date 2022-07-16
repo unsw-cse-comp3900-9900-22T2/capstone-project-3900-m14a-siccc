@@ -1,6 +1,6 @@
 import psycopg2
 from src.helper import retrieveRecipeList
-from src.recipe import calorieCalculation
+from src.calories_recipes import calorieCalculation
 from src.config import host, user, password, dbname
 
 def insertRecipe(recipeDetails):
@@ -19,16 +19,25 @@ def insertRecipe(recipeDetails):
     timeToCook = recipeDetails['timeToCook']
     mealType = recipeDetails['mealType']
     photo = recipeDetails['photo']
-    cookingSteps = recipeDetails['cookingSteps']
+    cookingSteps = formatSteps(recipeDetails['cookingSteps'])
     ingredients = recipeDetails['ingredients']
     calories = calorieCalculation(ingredients)
+    ing = ''
+    count = 0
+    lengthDict = len(ingredients)
+    for entry in ingredients.items():
+        ingred, grams = entry
+        ing = ing + str(grams) + ' ' + ingred
+        if count != lengthDict - 1:
+            ing = ing + ', '
+        count += 1
     title = recipeDetails['title']
     cur = db.cursor()
     qry = """
     insert into recipes
     values (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    cur.execute(qry, [recipeID, servings, timeToCook, mealType, photo, calories, cookingSteps, title, ingredients])
+    cur.execute(qry, [recipeID, servings, timeToCook, mealType, photo, calories, cookingSteps, title, ing])
     db.commit()
     info = cur.rowcount
     cur.close()
@@ -95,3 +104,20 @@ def addFrequency(ingredients):
         db.commit()
     cur.close()
     
+def formatSteps(cookingSteps):
+    """ cookingSteps
+
+            Parameters:
+                cookingSteps (list): list of all the cooking steps
+                
+            Returns:
+                result (str): string of all the steps
+    """
+    result = ''
+    counter = 1
+    while counter <= len(cookingSteps):
+        result = result + f"Step {counter}: {cookingSteps[counter-1]}"
+        if counter != len(cookingSteps):
+            result = result + '\n'
+        counter += 1 
+    return result   

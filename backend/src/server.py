@@ -2,6 +2,7 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 from matplotlib.pyplot import get
+from src.calories_recipes import getCaloriesRecipesWithIngredients
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
@@ -53,11 +54,22 @@ def ingredientsCategories():
 def insertRecipeFlask():
     temp = request.get_json()
     recipeDetails = temp['recipe']
-    return dumps({insertRecipe(recipeDetails)})
+    insertRecipe(recipeDetails)
+    return dumps(1)
 
 @APP.route("/no/recipe/match", methods=['GET'])
 def getNoRecipeMatchFlask():
     return dumps(getNoRecipeMatchList())
+
+@APP.route("/recipe/calorie/view", methods = ['POST'])
+def recipeMatchCategoryFlask():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    calories = temp['calories']
+    info = getCaloriesRecipesWithIngredients(calories, ingredients)
+    return dumps({
+        'recipes': info
+    })
     
 if __name__ == "__main__":
     APP.run(port=config.port)
