@@ -344,8 +344,8 @@ const RecipeCreate = () => {
         return (
           <div key={idx}>
             <>Step {idx + 1}.</>&nbsp;
-            <textarea id="story" name="story"
-              rows="2" cols="50">
+            <textarea rows="2" cols="50"
+            onChange={e => updateSteps(e, idx)}>
             </textarea>
           </div>
         )
