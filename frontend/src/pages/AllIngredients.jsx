@@ -364,8 +364,8 @@ const AllIngredients = () => {
           ? <div>{recipes.map((recipe, idx) => {
             return (
               <div key={idx}>
-                <div>{recipe.photo}</div>
                 <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
+                <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
                 <p>ingredients: {recipe.ingredients}</p>
                 <hr></hr>
               </div>
