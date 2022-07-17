@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useState } from "react";
+import { Grid } from '@mui/material';
 
 
 const AllIngredients = () => {
@@ -353,94 +354,101 @@ const AllIngredients = () => {
 
   return (
     <>
-      <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-        {/* <p>hello</p> */}
-        {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
-        {ingredients.map((ingredient, idx) => (
-          <div key={idx}>
-            <label>
-              {ingredient.text}
-              <input
-                onChange={() => toggleIngredients(idx)}
-                type="checkbox"
-                checked={ingredient.check}
-              />
-            </label>
-          </div>
-        ))} */}
+      <Grid container>
+        <Grid item>
+          <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+            <p>Filter by calories</p>
+            <Input variant="outline" placeholder='Input Calorie Limit' type="number" onChange={calorieInputHandler} value = {calorieLimit}/>
 
+            < br/>
+            <p>What kind of meal is your recipe?</p>
+            <select name="mealType" value={mealType} onChange={mealTypeHandler}>
+              <option name="empty" value="">Select one</option>
+              <option name="breakfast" value="Breakfast">Breakfast</option>
+              <option name="lunch" value="Lunch">Lunch</option>
+              <option name="dinner" value="Dinner">Dinner</option>
+              <option name="entree" value="Entree">Entrée</option>
+              <option name="main" value="Main">Main</option>
+              <option name="dessert" value="Dessert">Dessert</option>
+            </select> < br/>
 
-        <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button>
-        < br/>
-        <p>Filter by calories</p>
-        <Input variant="outline" placeholder='Input Calorie Limit' type="number" onChange={calorieInputHandler} value = {calorieLimit}/>
+            <h2>Select your ingredients</h2>
+            <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
+            <List input={inputText}/>
 
-        < br/>
-        <p>What kind of meal is your recipe?</p>
-        <select name="mealType" value={mealType} onChange={mealTypeHandler}>
-          <option name="empty" value="">Select one</option>
-          <option name="breakfast" value="Breakfast">Breakfast</option>
-          <option name="lunch" value="Lunch">Lunch</option>
-          <option name="dinner" value="Dinner">Dinner</option>
-          <option name="entree" value="Entree">Entrée</option>
-          <option name="main" value="Main">Main</option>
-          <option name="dessert" value="Dessert">Dessert</option>
-        </select> < br/>
+            {
+              Object.keys(categories).map((category, idx) => {
+                return(
+                  <div key = {idx}>
+                    <h3>
+                      {category}
+                    </h3>
+                  {
+                    categories[category].map((ingredient, idx2) => {
+                      return(
+                        <div key = {idx2}>
+                          <label>
+                            {ingredient.text}
+                            <input
+                              onChange={() => toggleCategoryIngredients(category, idx2)}
+                              type="checkbox"
+                              checked={ingredient.check}
+                            />
+                          </label>
+                        </div>
+                      )
+                    })
+                  }
+                  </div>
+                )
+              })
+            }
+            
+            <h2>Your chosen ingredients:</h2>
+            <ChosenIngredients/>
+            <button name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</button>
 
-        <h2>Select your ingredients</h2>
-        <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
-        <List input={inputText}/>
-
-        {
-          Object.keys(categories).map((category, idx) => {
-            return(
-              <div key = {idx}>
-                <h3>
-                  {category}
-                </h3>
-              {
-                categories[category].map((ingredient, idx2) => {
-                  return(
-                    <div key = {idx2}>
-                      <label>
-                        {ingredient.text}
-                        <input
-                          onChange={() => toggleCategoryIngredients(category, idx2)}
-                          type="checkbox"
-                          checked={ingredient.check}
-                        />
-                      </label>
-                    </div>
-                  )
-                })
-              }
-              </div>
-            )
-          })
-        }
-        
-        <h2>Your chosen ingredients:</h2>
-        <ChosenIngredients/>
-        <button name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</button>
-
-        <br/><br/>
-        <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</button>
-        {recipes.length !== 0
-          ? <div>{recipes.map((recipe, idx) => {
-            return (
-              <div key={idx}>
-                <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
-                <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
-                <p>ingredients: {recipe.ingredients}</p>
-                <hr></hr>
-              </div>
-            )
-          }) }</div>
-          : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
-            ? <h1>No Available Recipes</h1>
-            : <></>
-        }
-      </Box>
+            <br/><br/>
+            <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</button>
+            {recipes.length !== 0
+              ? <div>{recipes.map((recipe, idx) => {
+                return (
+                  <div key={idx}>
+                    <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
+                    <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
+                    <p>ingredients: {recipe.ingredients}</p>
+                    <hr></hr>
+                  </div>
+                )
+              }) }</div>
+              : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
+                ? <h1>No Available Recipes</h1>
+                : <></>
+            }
+          </Box>
+        </Grid>
+        <Grid item xs>
+          <Grid container direction="row-reverse">
+            <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+              {/* <p>hello</p> */}
+              {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
+              {ingredients.map((ingredient, idx) => (
+                <div key={idx}>
+                  <label>
+                    {ingredient.text}
+                    <input
+                      onChange={() => toggleIngredients(idx)}
+                      type="checkbox"
+                      checked={ingredient.check}
+                    />
+                  </label>
+                </div>
+              ))} */}
+              <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button>  
+            </Box>
+          </Grid>
+        </Grid>
+      </Grid>
     </>
   );
 }
