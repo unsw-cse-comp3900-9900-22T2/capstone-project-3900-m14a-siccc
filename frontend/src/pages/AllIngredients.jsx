@@ -35,15 +35,10 @@ const AllIngredients = () => {
   };
 
   let calorieInputHandler = (e) => {
-    var number = e.target.value.replace(/[^0-9]/gi, '');
-    number = parseInt(number);
-    if(Number.isInteger(number) == false) {
-      setCalorieLimit('')
-      localStorage.setItem('calories', JSON.stringify(''));
-    } else {
-      setCalorieLimit(number);
-      localStorage.setItem('calories', JSON.stringify(number));
-    }
+    const number = Math.abs(e.target.value);
+    e.target.value = Math.abs(e.target.value);
+    setCalorieLimit(number);
+    localStorage.setItem('calories', JSON.stringify(number));
   }
 
   let mealTypeHandler = (e) => {
@@ -358,7 +353,7 @@ const AllIngredients = () => {
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
             <p>Filter by calories</p>
-            <Input variant="outline" placeholder='Input Calorie Limit' type="number" onChange={calorieInputHandler} value = {calorieLimit}/>
+            <Input variant="outline" placeholder='Input Calorie Limit' type = "number" onChange={calorieInputHandler} value = {calorieLimit}/>
 
             < br/>
             <p>What kind of meal is your recipe?</p>
