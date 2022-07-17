@@ -249,7 +249,7 @@ const AllIngredients = () => {
       setCategories(JSON.parse(localStorage.getItem('categories')));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
       if(localStorage.getItem('calories')) {
-        setCalorieLimit(localStorage.getItem('calories'));
+        setCalorieLimit(JSON.parse(localStorage.getItem('calories')));
       }
       if(localStorage.getItem('mealType')) {
         setMealType(JSON.parse(localStorage.getItem('mealType')))
