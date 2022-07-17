@@ -328,25 +328,6 @@ const AllIngredients = () => {
     }
   }
 
-  React.useEffect(() => {
-    
-    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
-    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-
-    // Check that there is local storage stored
-    if (localStorage.getItem('categories') && 
-      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
-
-      setCategories(JSON.parse(localStorage.getItem('categories')));
-      recipeMatch(false);
-      console.log("ssssss")
-    } else {
-      viewAllIngredientsInCategories();
-      console.log("nnnnnn")
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <Grid container>
