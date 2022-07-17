@@ -271,35 +271,6 @@ const RecipeCreate = () => {
     }
   }
 
-  function toggleCategoryIngredients (category, index) {
-    const newCategory = {...categories};
-    newCategory[category][index].check = !categories[category][index].check;
-    setCategories(newCategory);
-
-    // Shows selected ingredient on all ingredients view
-    const newIngredient = [...ingredients];
-    console.log(newCategory[category][index].text)
-    for (const ingredient of ingredients) {
-      if (newCategory[category][index].text === ingredient.text){
-        const allIngreIdx = ingredients.indexOf(ingredient);
-        newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
-        break;
-
-      }
-    }
-    setIngredients(newIngredient);
-    console.log(ingredients)
-    console.log(newCategory)
-  }
-
-//   React.useEffect(() => {
-//     viewAllIngredients();
-//   }, []);
-
-//   React.useEffect(() => {
-//     viewAllIngredientsInCategories();
-//   }, []);
-
   React.useEffect(() => {
     viewAllIngredients();
     viewFrequentIngredients();
@@ -351,7 +322,7 @@ const RecipeCreate = () => {
             /> < br/>
 
             {thumbnail !== ''
-              ? (<img src={thumbnail} alt="recipe thumbnail photo" height="140px" width="auto"/>)
+              ? (<img src={thumbnail} alt="recipe thumbnail" height="140px" width="auto"/>)
               : <></>
             }< br/>
             
