@@ -77,6 +77,13 @@ const AllIngredients = () => {
     }
   }
 
+  // function toggleIngredients (index) {
+  //   const newIngredient = [...ingredients];
+  //   newIngredient[index].check = !ingredients[index].check;
+  //   setIngredients(newIngredient);
+  // }
+
+
   // Function to set ingrdients selected
   function toggleIngredients (index, ingredientName) {
 
@@ -291,6 +298,59 @@ const AllIngredients = () => {
     )
   }
 
+  // chosen ingredients
+  function ChosenIngredients() {
+    const filteredData = ingredients.filter((el) => {
+      if (el.check) {
+        return el
+      }
+    })
+
+    return(
+      <div>
+      {filteredData.map((ingredient, idx) => (
+        <div key={idx}>
+          <label>
+            {ingredient.text}
+            <input
+              onChange={() => toggleIngredients(idx, ingredient.text)}
+              type="checkbox"
+              checked={ingredient.check}
+            />
+          </label>
+        </div>
+      ))}
+      </div>
+    )
+  }
+
+  const clearAll = async (clicked) => {
+    for (const ingredient of ingredients) {
+      if (ingredient.check) {
+        toggleIngredients(1, ingredient.text)
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    
+    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
+    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
+
+    // Check that there is local storage stored
+    if (localStorage.getItem('categories') && 
+      Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
+
+      setCategories(JSON.parse(localStorage.getItem('categories')));
+      recipeMatch(false);
+      console.log("ssssss")
+    } else {
+      viewAllIngredientsInCategories();
+      console.log("nnnnnn")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
@@ -308,6 +368,7 @@ const AllIngredients = () => {
             </label>
           </div>
         ))} */}
+
 
         <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button>
         < br/>
@@ -358,6 +419,10 @@ const AllIngredients = () => {
           })
         }
         
+        <h2>Your chosen ingredients:</h2>
+        <ChosenIngredients/>
+        <button name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</button>
+
         <br/><br/>
         <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</button>
         {recipes.length !== 0
