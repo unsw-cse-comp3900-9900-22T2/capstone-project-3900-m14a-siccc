@@ -33,7 +33,7 @@ const RecipeDetails = () => {
           <p><b>Serving Size:</b> {recipe.servings} servings</p>
           <p><b>Time To Cook:</b> {recipe.timeToCook} minutes</p>
           <p><b>Total Calories:</b> {recipe.calories} calories</p>
-          <p><b>Ingredients: </b>{String(recipe.ingredients).split(", ").map((ingredient, idx) => {
+          <span><b>Ingredients: </b>{String(recipe.ingredients).split(", ").map((ingredient, idx) => {
             return (
               <div key = {idx}>
                 <label>
@@ -41,9 +41,9 @@ const RecipeDetails = () => {
                 </label>
               </div>
             )
-          })}</p>
+          })}</span>
           <h3>Cooking Steps</h3>
-          <p>{String(recipe.cookingSteps).split("Step ").slice(1).map((step, idx) => {
+          <span>{String(recipe.cookingSteps).split("Step ").slice(1).map((step, idx) => {
             return (
               <div key = {idx}>
                 <label>
@@ -51,7 +51,7 @@ const RecipeDetails = () => {
                 </label>
               </div>
             )
-          })}</p>
+          })}</span>
           <button onClick={() => navigate(`/`)}>Back</button>
         </Box>  
       </Box>
