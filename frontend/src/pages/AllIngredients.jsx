@@ -354,7 +354,7 @@ const AllIngredients = () => {
 
   return (
     <>
-      <Grid container>
+      <Grid container justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
             <p>Filter by calories</p>
@@ -410,25 +410,31 @@ const AllIngredients = () => {
 
             <br/><br/>
             <button name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</button>
-            {recipes.length !== 0
-              ? <div>{recipes.map((recipe, idx) => {
-                return (
-                  <div key={idx}>
-                    <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
-                    <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
-                    <p>ingredients: {recipe.ingredients}</p>
-                    <hr></hr>
-                  </div>
-                )
-              }) }</div>
-              : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
-                ? <h1>No Available Recipes</h1>
-                : <></>
-            }
           </Box>
         </Grid>
-        <Grid item xs>
-          <Grid container direction="row-reverse">
+        <Grid item xs = {5}>
+          <Grid item>
+            <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+              {recipes.length !== 0
+                  ? <div>{recipes.map((recipe, idx) => {
+                    return (
+                      <div key={idx}>
+                        <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
+                        <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
+                        <p>ingredients: {recipe.ingredients}</p>
+                        <hr></hr>
+                      </div>
+                    )
+                }) }</div>
+                : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
+                  ? <h1>No Available Recipes</h1>
+                  : <></>
+              }
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid item xs = {2}>
+          <Grid item>
             <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
               {/* <p>hello</p> */}
               {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
