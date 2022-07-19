@@ -1,9 +1,9 @@
 port=5005
 
-host="ec2-34-233-115-14.compute-1.amazonaws.com"
+host="34.116.94.155"
 
-user="ijwcvfaaorgfmw"
+user="postgres"
 
-password="65aeefcacadf4a5955254c826a85eab500527fbe930649d323cc6afc592f8982"
+password="hello123"
 
-dbname="d9vj8pt6nakn82"
+dbname="postgres"
