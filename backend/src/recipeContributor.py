@@ -121,4 +121,4 @@ def formatSteps(cookingSteps):
         if counter != len(cookingSteps):
             result = result + '\n'
         counter += 1 
-    return result   
+    return result  
