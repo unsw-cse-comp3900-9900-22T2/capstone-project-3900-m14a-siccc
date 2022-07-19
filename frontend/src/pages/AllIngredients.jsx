@@ -421,6 +421,7 @@ const AllIngredients = () => {
                       <div key={idx}>
                         <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
                         <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
+                        {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
                         <p>ingredients: {recipe.ingredients}</p>
                         <hr></hr>
                       </div>
