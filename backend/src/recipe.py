@@ -5,12 +5,13 @@ from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
 
 
-def recipeMatch(ingredientsList):
+def recipeMatch(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
         Parameters:
             ingredientsList (str): list of ingredients user selected
+            blacklist (str): list of blacklisted ingredients user selected
 
         Return:
             recipeList (list): list of recipes id's satisfying the ingredients
@@ -24,32 +25,25 @@ def recipeMatch(ingredientsList):
     info = retrieveRecipeList(db)
     for recipe in info:
         ingredientString = recipe[8]
-        ingredients = ingredientString.split(', ')
-        missingIngList = ingredients.copy()
+        ingredients = ingredientString.split(',')
         matching = 0
-        for i in ingredientsList:
-            for j in ingredients:
-                if i in j:
-                    matching += 1
-                    missingIngList.remove(j)
-        if matching == len(ingredients) or matching == len(ingredients) - 1:
-            missingIng = ''
-            if matching == len(ingredients) - 1:
-                ing = missingIngList.pop()
-                ing = ing.split(' ')
-                ing.pop(0)
-                missingIng = " ".join(ing)
+        for i in ingredientsList: # i is ingredient user selected 
+            for j in ingredients:   # j is ingredient in recipe  
+                for k in blacklist: # k is ingredient in blacklist 
+                    if i in j and k not in j:
+                        matching += 1
+                        continue
+        if matching == len(ingredients):
             ingDict = {
-                    "recipeID": recipe[0],
-                    "title": recipe[7],
-                    "servings": recipe[1],
-                    "timeToCook": recipe[2],
-                    "mealType": recipe[3],
-                    "photo": recipe[4],
-                    "calories": recipe[5],
-                    "cookingSteps": recipe[6],
-                    "ingredients": recipe[8],
-                    "missingIngredient": missingIng,
+                "recipeID": recipe[0],
+                "title": recipe[7],
+                "servings": recipe[1],
+                "timeToCook": recipe[2],
+                "mealType": recipe[3],
+                "photo": recipe[4],
+                "calories": recipe[5],
+                "cookingSteps": recipe[6],
+                "ingredients": recipe[8]
             }
             recipeList.append(ingDict)
 
