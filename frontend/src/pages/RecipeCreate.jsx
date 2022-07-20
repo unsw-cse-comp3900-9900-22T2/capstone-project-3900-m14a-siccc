@@ -1,6 +1,8 @@
+import { Grid } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch, fileToDataUrl } from '../helpers.jsx';
+import { Box } from '@chakra-ui/react'
 
 const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -99,11 +101,18 @@ const RecipeCreate = () => {
   function updateIngredientMeasurement (event, ingredientName) {
     console.log(event.target.value);
     const newIngredientsGram = {...ingredientsGram};
-    const newValue = newIngredientsGram[ingredientName];
+    var newValue = '0g';
+
+    // if the ingredient value does exist set value
+    if (newIngredientsGram[ingredientName]) {
+      console.log(newIngredientsGram[ingredientName]);
+      newValue = newIngredientsGram[ingredientName];
+    }
+
     if (event.target.value === 'g'){
       newIngredientsGram[ingredientName] = newValue + "g";
       console.log(true)
-    } else if (event.target.value === 'q'){
+    } else if (event.target.value === 'q' && newValue.includes("g")){
       newIngredientsGram[ingredientName] = newValue.replace("g", "");
     }
 
@@ -149,6 +158,7 @@ const RecipeCreate = () => {
 
   // Sends off data of the created recipe to backend
   const createRecipe = () => {
+    console.log(ingredientsGram);
     if (cookingTime < 0 || servings < 0) {
       alert('Invalid Input');
       return;
@@ -159,17 +169,25 @@ const RecipeCreate = () => {
       servings === '' ||
       thumbnail === '' ||
       cookingTime === '' ||
-      ingredients.length === 0)) {
-      
+      ingredients.length === 0 ||
+      steps.length === 0)) {
+        
         alert('Empty Input!');
-      return;
-    }
-    const selectedIngredients = [];
-    for (const ingredient in ingredients){ 
-      if (ingredient.check){
-        selectedIngredients.push(ingredient.text);
+        return;
       }
-    }
+      
+      // Removed any 0 values in dictionary
+      const newIngredientGram = {...ingredientsGram}
+      for (const [key, value] of Object.entries(newIngredientGram)) {
+        if (value === '0' || value === '0g') {
+          delete newIngredientGram[key];
+        }
+      }
+      // Check if dictionary is empty
+      if (Object.keys(newIngredientGram).length === 0) {
+        alert('Add values for ingredient!');
+        return;
+      }
 
     const body = {
       recipe: {
@@ -178,7 +196,7 @@ const RecipeCreate = () => {
         servings: servings,
         photo: thumbnail,
         timeToCook: cookingTime,
-        ingredients: selectedIngredients,
+        ingredients: newIngredientGram,
         cookingSteps: steps,
       },
     }
@@ -225,7 +243,7 @@ const RecipeCreate = () => {
     }
     return(
       <div>
-          <h4>Suggested categories of ingredients:</h4>
+          <h3>Suggested categories of ingredients:</h3>
           {catSuggestions}
       </div>
     )
@@ -253,35 +271,6 @@ const RecipeCreate = () => {
     }
   }
 
-  function toggleCategoryIngredients (category, index) {
-    const newCategory = {...categories};
-    newCategory[category][index].check = !categories[category][index].check;
-    setCategories(newCategory);
-
-    // Shows selected ingredient on all ingredients view
-    const newIngredient = [...ingredients];
-    console.log(newCategory[category][index].text)
-    for (const ingredient of ingredients) {
-      if (newCategory[category][index].text === ingredient.text){
-        const allIngreIdx = ingredients.indexOf(ingredient);
-        newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
-        break;
-
-      }
-    }
-    setIngredients(newIngredient);
-    console.log(ingredients)
-    console.log(newCategory)
-  }
-
-//   React.useEffect(() => {
-//     viewAllIngredients();
-//   }, []);
-
-//   React.useEffect(() => {
-//     viewAllIngredientsInCategories();
-//   }, []);
-
   React.useEffect(() => {
     viewAllIngredients();
     viewFrequentIngredients();
@@ -291,111 +280,123 @@ const RecipeCreate = () => {
   }, []);
 
   return (
-    <>   
-      <h1>Create Recipe</h1>
-      Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
+    <>
+      <Grid container direction="row" justifyContent="space-between">
+        <Grid item>
+          <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+            <h2>Create Recipe</h2>
+            Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
 
-      Servings&nbsp;
-      <input type="number"
-      name="servings"
-      min="0"
-      value={servings}
-      onChange={e => setServings(e.target.value)}
-      /> < br/>
+            Servings&nbsp;
+            <input type="number"
+            name="servings"
+            min="0"
+            value={servings}
+            onChange={e => setServings(e.target.value)}
+            /> < br/>
 
-      Cooking Time&nbsp;
-      <input type="number"
-      name="servings"
-      min="0"
-      value={cookingTime}
-      onChange={e => setCookingTime(e.target.value)}
-      /> < br/>
+            Cooking Time&nbsp;
+            <input type="number"
+            name="servings"
+            min="0"
+            value={cookingTime}
+            onChange={e => setCookingTime(e.target.value)}
+            /> < br/>
 
-      <p>What kind of meal is your recipe?</p>
-      <select name="mealType" value={mealType} onChange={e => setMealType(e.target.value)}>
-        <option name="empty" value="">Select one</option>
-        <option name="breakfast" value="Breakfast">Breakfast</option>
-        <option name="lunch" value="Lunch">Lunch</option>
-        <option name="dinner" value="Dinner">Dinner</option>
-        <option name="entree" value="Entree">Entrée</option>
-        <option name="main" value="Main">Main</option>
-        <option name="dessert" value="Dessert">Dessert</option>
-      </select> < br/>
+            <p>What kind of meal is your recipe?</p>
+            <select name="mealType" value={mealType} onChange={e => setMealType(e.target.value)}>
+              <option name="empty" value="">Select one</option>
+              <option name="breakfast" value="Breakfast">Breakfast</option>
+              <option name="lunch" value="Lunch">Lunch</option>
+              <option name="dinner" value="Dinner">Dinner</option>
+              <option name="entree" value="Entree">Entrée</option>
+              <option name="main" value="Main">Main</option>
+              <option name="dessert" value="Dessert">Dessert</option>
+            </select> < br/>
 
-      <p>Select your recipe photo:</p>
-      <input type="file"
-      name="thumbnail"
-      accept="image/png, image/jpg, image/jpeg"
-      onChange={thumbnailUpdate}
-      /> < br/>
+            <p>Select your recipe photo:</p>
+            <input type="file"
+            name="thumbnail"
+            accept="image/png, image/jpg, image/jpeg"
+            onChange={thumbnailUpdate}
+            /> < br/>
 
-      {thumbnail !== ''
-        ? (<img src={thumbnail} alt="recipe thumbnail photo" height="140px" width="auto"/>)
-        : <></>
-      }< br/>
-      
-      <p>How many steps does your recipe have?</p>
-      Steps&nbsp;
-      <button name="minus" onClick={minusStepsNo}>&minus;</button>
-      <input type="number" min="0" disabled value={stepsNo} />
-      <button name="plus" onClick={addStepsNo}>+</button> < br/>
+            {thumbnail !== ''
+              ? (<img src={thumbnail} alt="recipe thumbnail" height="140px" width="auto"/>)
+              : <></>
+            }< br/>
+            
+            <p>How many steps does your recipe have?</p>
+            Steps&nbsp;
+            <button name="minus" onClick={minusStepsNo}>&minus;</button>
+            <input type="number" min="0" disabled value={stepsNo} />
+            <button name="plus" onClick={addStepsNo}>+</button> < br/>
 
-      {steps.map((step, idx) => {
-        return (
-          <div key={idx}>
-            <>Step {idx + 1}.</>&nbsp;
-            <textarea rows="2" cols="50"
-            onChange={e => updateSteps(e, idx)}>
-            </textarea>
-          </div>
-        )
-      })}
+            {steps.map((step, idx) => {
+              return (
+                <div key={idx}>
+                  <>Step {idx + 1}.</>&nbsp;
+                  <textarea rows="2" cols="50"
+                  onChange={e => updateSteps(e, idx)}>
+                  </textarea>
+                </div>
+              )
+            })}
 
-      <CatSuggestion/>
+            <CatSuggestion/>
 
-      <h4>Select your ingredients:</h4>
-      {ingredients.map((ingredient, idx) => (
-        <div key={idx}>
-          <label>
-            {ingredient.text}
-            <input
-              onChange={() => toggleIngredients(idx, ingredient.text)}
-              type="checkbox"
-              checked={ingredient.check}
-            />
-          </label>
+            <h3>Select your ingredients:</h3>
+            {ingredients.map((ingredient, idx) => (
+              <div key={idx}>
+                <label>
+                  {ingredient.text}
+                  <input
+                    onChange={() => toggleIngredients(idx, ingredient.text)}
+                    type="checkbox"
+                    checked={ingredient.check}
+                  />
+                </label>
 
-          {/* If ingredient is checked */}
-          {ingredient.check
-            ? (<span>
-                <input type="number" 
-                  name="grams" 
-                  min="0"
-                  placeholder='Enter values'
-                  onChange={e => updateIngredientValue(e, ingredient.text)}/>
+                {/* If ingredient is checked */}
+                {ingredient.check
+                  ? (<span>
+                      <input type="number" 
+                        name="grams" 
+                        min="0"
+                        placeholder='Enter values'
+                        onChange={e => updateIngredientValue(e, ingredient.text)}/>
 
-                <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
-                  <option name="grams" value="g">grams</option>
-                  <option name="quantities" value="q">quantities</option>
-                </select> < br/>
-                
-              </span>)
-              
-            : <></>
-          }
-        </div>
-      ))}
+                      <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                        <option name="grams" value="g">grams</option>
+                        <option name="quantities" value="q">quantities</option>
+                      </select> < br/>
+                      
+                    </span>)
+                    
+                  : <></>
+                }
+              </div>
+            ))}
 
-      <button name="create" onClick={ createRecipe }>Create</button>
-      <button onClick={() => navigate('/')}>Cancel</button>
-      <h3 style={{textAlign: "center"}}>Frequently Searched Ingredients</h3>
-      {freqIngredients.map((ingredients, idx) => (
-        <div key={idx}>
-          <p style = {{textAlign: 'center'}}>
-            {ingredients}
-          </p>
-        </div>
-      ))}
+            <button name="create" onClick={ createRecipe }>Create</button>
+            <button onClick={() => navigate('/')}>Cancel</button>
+          </Box>
+        </Grid>
+        <Grid item xs = {7}>
+          <Grid item padding='20px'>
+            <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+              <h3>Frequently Searched Ingredients</h3>
+              {freqIngredients.map((ingredients, idx) => (
+                <div key={idx}>
+                  <p>
+                    {ingredients}
+                  </p>
+                </div>
+              ))}
+              </Box>
+          </Grid>
+        </Grid>
+      </Grid>  
     </>
   );
 }

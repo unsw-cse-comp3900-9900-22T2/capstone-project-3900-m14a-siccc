@@ -27,3 +27,4 @@ Made all ingredients be plural case
 Week 7 
 Change calorie calculation to take in a dictionary, instead of ingredients string
 Change ingredients back to single case
+Wrote demo script for upcoming wk8 one

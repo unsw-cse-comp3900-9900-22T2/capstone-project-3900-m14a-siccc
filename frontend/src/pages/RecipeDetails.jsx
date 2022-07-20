@@ -29,18 +29,31 @@ const RecipeDetails = () => {
           {/* <>recipe{params.id}</> */}
           <h1>{recipe.title}</h1>
           <img src={recipe.photo} alt="recipe thumbnail" height="140px" width="auto"/>
-          <p>Meal Type: {recipe.mealType}</p>
-          <p>{recipe.servings} servings</p>
-          <p>{recipe.timeToCook} minutes</p>
-          <p>{recipe.calories} calories</p>
-          <Box p='6' borderWidth='3px' borderBottomColor='black' padding='10px'>
-            <Box >
-              <p>Ingredients: {recipe.ingredients}</p>
-              <p>{recipe.cookingSteps}</p>
-            </Box>
-          </Box>
+          <p><b>Meal Type:</b> {recipe.mealType}</p>
+          <p><b>Serving Size:</b> {recipe.servings} servings</p>
+          <p><b>Time To Cook:</b> {recipe.timeToCook} minutes</p>
+          <p><b>Total Calories:</b> {recipe.calories} calories</p>
+          <span><b>Ingredients: </b>{String(recipe.ingredients).split(", ").map((ingredient, idx) => {
+            return (
+              <div key = {idx}>
+                <label>
+                  {ingredient}
+                </label>
+              </div>
+            )
+          })}</span>
+          <h3>Cooking Steps</h3>
+          <span>{String(recipe.cookingSteps).split("Step ").slice(1).map((step, idx) => {
+            return (
+              <div key = {idx}>
+                <label>
+                  Step {step}
+                </label>
+              </div>
+            )
+          })}</span>
           <button onClick={() => navigate(`/`)}>Back</button>
-          </Box>  
+        </Box>  
       </Box>
     </>
   );
