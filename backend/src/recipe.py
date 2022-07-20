@@ -91,3 +91,92 @@ def recipeDetails(recipeID):
 
 
 
+def ingredientsSuggestions(ingredientsList):
+    """ Sends front end a list of ingredients that satisfy the list 
+        of ingredients that the user selected by top five ingredients
+        in specific conditions.
+
+        1. The most frequency ingredients in all recipes which do not include
+           the ingredients in the user's selection ingredients list.
+        2. If the selection ingredients are match as much as in the recipes 
+           (matching rate), the diselect ingredients would be priority.
+        3. If the previous conditions are both match and get the same result,
+           the ingredients will be ordered by alphabetical. 
+
+        Parameters:
+            ingredientsList (str): list of ingredients user selected
+
+        Return:
+            ingredientsSuggestions (list): list of ingredients are satisfying the ingredients
+    """
+    ingredientsSuggestions = []
+    ingredients_matching_rate = []
+    ingredients_matching_recipes_num = []
+    recipeLists = recipeMatch(ingredientsList)
+
+    for recipe in recipeLists:
+        ingredients = recipe["ingredients"]
+        tmp_ingredients = []
+        tmp_matching = 0
+        for igd in ingredients:
+            if igd not in ingredientsList:
+                if ingredients_matching_recipes_num[igd] is None:
+                    ingredients_matching_recipes_num.append({igd: 1})
+                else:
+                    tmp_num = ingredients_matching_recipes_num[igd]
+                    ingredients_matching_recipes_num[igd] = tmp_num + 1
+                tmp_ingredients.append(igd)
+            else:
+                tmp_matching += 1
+        tmp_matching_rate = tmp_matching / len(ingredients)
+        for item in tmp_ingredients:
+            if ingredients_matching_rate[item] is not None:
+                tmp_rate = ingredients_matching_rate[item]
+                if tmp_rate < tmp_matching_rate:
+                    ingredients_matching_rate[item] = tmp_matching_rate
+            else:
+                tmp_matching_dict = {item: tmp_matching_rate}
+                ingredients_matching_rate.append(tmp_matching_dict)
+    
+    if len(ingredients_matching_recipes_num) == 0:
+        return ingredientsSuggestions
+
+    ingredients_matching_recipes_num = sorted(ingredients_matching_recipes_num.items(), key=lambda kv: kv[1], reverse=True)
+    tmp_same_num_igd = []
+    for key, value in ingredients_matching_recipes_num:
+        if len(tmp_ingredients) != 0:
+            if ingredients_matching_recipes_num(tmp_same_num_igd[len(tmp_same_num_igd) - 1]) == value:
+                tmp_ingredients.append(key)
+                continue
+            else:
+                i = 0
+                while i < len(tmp_ingredients):
+                    for j in range(i+1, len(tmp_ingredients)):
+                        tmp_matching_rate = ingredients_matching_rate[tmp_ingredients[i]]    
+                        tmp_cmp_rate = ingredients_matching_rate[tmp_ingredients[j]]
+                        tmp_igd = tmp_ingredients[j]
+                        if tmp_matching_rate > tmp_cmp_rate:
+                            tmp_ingredients[j] = tmp_ingredients[i]
+                            tmp_ingredients[i] = tmp_igd
+                        elif tmp_matching_rate == tmp_cmp_rate:
+                            if tmp_igd > tmp_ingredients[i]:
+                                tmp_ingredients[j] = tmp_ingredients[i]
+                                tmp_ingredients[i] = tmp_igd    
+                    i += 1
+                for item in tmp_ingredients:
+                    ingredientsSuggestions.append(item)
+                tmp_ingredients = []
+
+        if len(ingredientsSuggestions) == 0:
+            ingredientsSuggestions.append(key)
+        elif ingredients_matching_recipes_num(ingredientsSuggestions[len(ingredientsSuggestions) - 1]) == value:
+            tmp_ingredients.append(ingredientsSuggestions[len(ingredientsSuggestions) - 1])
+            tmp_ingredients.append(key)
+            ingredientsSuggestions.pop()
+        else:
+            ingredientsSuggestions.append(key)
+
+
+    if len(ingredientsSuggestions) > 5:
+        return ingredientsSuggestions[0:5]
+    return ingredientsSuggestions
