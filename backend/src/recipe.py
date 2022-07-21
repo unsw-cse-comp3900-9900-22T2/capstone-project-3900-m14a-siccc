@@ -109,6 +109,8 @@ def ingredientsSuggestions(ingredientsList):
         Return:
             ingredientsSuggestions (list): list of ingredients are satisfying the ingredients
     """
+    if len(ingredientsList) <= 1:
+        return []
     ingredientsSuggestions = []
     ingredients_matching_rate = []
     ingredients_matching_recipes_num = []
@@ -116,11 +118,13 @@ def ingredientsSuggestions(ingredientsList):
 
     for recipe in recipeLists:
         ingredients = recipe["ingredients"]
+        if len(ingredients) < 1:
+            continue
         tmp_ingredients = []
         tmp_matching = 0
         for igd in ingredients:
             if igd not in ingredientsList:
-                if ingredients_matching_recipes_num[igd] is None:
+                if len(ingredients_matching_recipes_num) == 0 or ingredients_matching_recipes_num[igd] is None:
                     ingredients_matching_recipes_num.append({igd: 1})
                 else:
                     tmp_num = ingredients_matching_recipes_num[igd]
@@ -130,7 +134,9 @@ def ingredientsSuggestions(ingredientsList):
                 tmp_matching += 1
         tmp_matching_rate = tmp_matching / len(ingredients)
         for item in tmp_ingredients:
-            if ingredients_matching_rate[item] is not None:
+            if len(ingredients_matching_rate) > 0:
+                ingredients_matching_rate[item] = tmp_matching_rate
+            elif ingredients_matching_rate[item] is not None:
                 tmp_rate = ingredients_matching_rate[item]
                 if tmp_rate < tmp_matching_rate:
                     ingredients_matching_rate[item] = tmp_matching_rate
@@ -141,7 +147,10 @@ def ingredientsSuggestions(ingredientsList):
     if len(ingredients_matching_recipes_num) == 0:
         return ingredientsSuggestions
 
-    ingredients_matching_recipes_num = sorted(ingredients_matching_recipes_num.items(), key=lambda kv: kv[1], reverse=True)
+    ingredients_matching_recipes_num = sorted(
+                        ingredients_matching_recipes_num.items(), 
+                        key=lambda kv: kv[1], 
+                        reverse=True)
     tmp_same_num_igd = []
     for key, value in ingredients_matching_recipes_num:
         if len(tmp_ingredients) != 0:
@@ -175,7 +184,6 @@ def ingredientsSuggestions(ingredientsList):
             ingredientsSuggestions.pop()
         else:
             ingredientsSuggestions.append(key)
-
 
     if len(ingredientsSuggestions) > 5:
         return ingredientsSuggestions[0:5]
