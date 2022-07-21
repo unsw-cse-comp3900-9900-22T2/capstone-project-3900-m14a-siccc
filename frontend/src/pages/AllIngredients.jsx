@@ -14,6 +14,7 @@ const AllIngredients = () => {
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
+  const [inputCat, setInputCat] = useState("");
   var localCalories = localStorage.getItem('calories');
   if(isNaN(localCalories) || localCalories == null) {
     localCalories = '';
@@ -33,7 +34,7 @@ const AllIngredients = () => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
-
+  
   let calorieInputHandler = (e) => {
     const number = Math.abs(e.target.value);
     e.target.value = Math.abs(e.target.value);
@@ -72,6 +73,10 @@ const AllIngredients = () => {
       alert(err.message);
     }
   }
+
+  function categoryHandler(e) {
+    setInputCat(e.target.value);
+  };
 
   // function toggleIngredients (index) {
   //   const newIngredient = [...ingredients];
@@ -328,6 +333,30 @@ const AllIngredients = () => {
     }
   }
 
+  function ViewCategory(props) {
+    if (props.input === "") {
+      return
+    }
+      else {
+      return(
+        categories[props.input].map((ingredient, idx2) => {
+          return(
+            <div key={idx2}>
+              <label>
+                {ingredient.text}
+                <input
+                  onChange={() => toggleCategoryIngredients(props.input, idx2)}
+                  type="checkbox"
+                  checked={ingredient.check}
+                />
+              </label>
+            </div>
+          )
+        })
+      )
+    }
+  }
+
   return (
     <>
       <Grid container justifyContent="space-between">
@@ -346,15 +375,27 @@ const AllIngredients = () => {
               <option name="entree" value="Entree">Entrée</option>
               <option name="main" value="Main">Main</option>
               <option name="dessert" value="Dessert">Dessert</option>
-            </select> < br/>
+            </select> <br/>
 
             <h2>Select your ingredients</h2>
             <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
             <List input={inputText}/>
+            <br/>
 
-            {
+            <select name="categories" value={categories} onChange={categoryHandler}>
+              <option name="empty" value="">View ingredient categories</option>
+              {Object.keys(categories).map((category) => (
+                <option name={category} value={category}>{category}</option>
+              ))}
+            </select>
+            <h4>{inputCat}</h4>
+            <ViewCategory input={inputCat}/>
+
+            {/* {
               Object.keys(categories).map((category, idx) => {
                 return(
+
+
                   <div key = {idx}>
                     <h3>
                       {category}
@@ -378,7 +419,7 @@ const AllIngredients = () => {
                   </div>
                 )
               })
-            }
+            } */}
             
             <h2>Your chosen ingredients:</h2>
             <ChosenIngredients/>
