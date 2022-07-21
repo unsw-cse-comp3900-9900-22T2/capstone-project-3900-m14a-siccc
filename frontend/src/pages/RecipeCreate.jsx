@@ -290,7 +290,7 @@ const RecipeCreate = () => {
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
              
-            <h2> style="font-size:40pt"; Create Recipe</h2>
+            <h2 style="font-size:40pt">  Create Recipe</h2>
             Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
 
             Servings&nbsp;
