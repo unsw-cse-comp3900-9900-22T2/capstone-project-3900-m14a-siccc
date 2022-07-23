@@ -1,6 +1,6 @@
 #from backend.src.helper import retrieveRecipeList
 import psycopg2
-from backend.src.helper import retrieveRecipeList
+#from backend.src.helper import retrieveRecipeList
 from src.recipe import ingredientsSuggestions
 from src.recipeContributor import insertRecipe
 from src.config import host, user, password, dbname

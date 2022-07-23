@@ -281,11 +281,6 @@ const RecipeCreate = () => {
 
   return (
     <>
-      <head>  
-        <title>
-          reeeeee
-        </title>
-      </head>
       <Grid container direction="row" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
