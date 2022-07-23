@@ -4,6 +4,6 @@ host="34.116.94.155"
 
 user="postgres"
 
-password="hello123"
+password="comp3900SICCC"
 
 dbname="postgres"

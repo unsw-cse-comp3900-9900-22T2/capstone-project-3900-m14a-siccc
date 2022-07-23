@@ -29,3 +29,6 @@ Week 6 + 7
 - completed user stories for functionality 1 
 (chosen ingredient list, deselect ingredients, clear all ingredients)
 - completed ingredient category suggestion for contributor 
+
+Week 8
+- modified category view of ingredients to drop down to match storyboard
