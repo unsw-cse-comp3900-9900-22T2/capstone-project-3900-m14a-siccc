@@ -282,7 +282,7 @@ const RecipeCreate = () => {
   return (
     <>
       <Grid container direction="row" justifyContent="space-between">
-        <Grid item>
+        <Grid item xs = {6  }>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
             <h2>Create Recipe</h2>
             Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
@@ -382,7 +382,7 @@ const RecipeCreate = () => {
             <button onClick={() => navigate('/')}>Cancel</button>
           </Box>
         </Grid>
-        <Grid item xs = {7}>
+        <Grid item xs = {3}>
           <Grid item padding='20px'>
             <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
               <h3>Frequently Searched Ingredients</h3>
