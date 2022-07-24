@@ -94,22 +94,80 @@ def recipeDetails(recipeID):
 def ingredientsSuggestions(ingredientsList):
     """ Sends front end a list of ingredients that satisfy the list 
         of ingredients that the user selected by top five ingredients
-        in specific conditions.
+        in specific conditions. If the user did not select any ingredients,
+        the system will not return any ingredients.
 
         1. The most frequency ingredients in all recipes which do not include
            the ingredients in the user's selection ingredients list.
-        2. If the selection ingredients are match as much as in the recipes 
-           (matching rate), the diselect ingredients would be priority.
-        3. If the previous conditions are both match and get the same result,
-           the ingredients will be ordered by alphabetical. 
+        2. If the previous condition is matched and get the same frequency for
+           some ingredients, the ingredients will be ordered by alphabetical. 
 
         Parameters:
             ingredientsList (str): list of ingredients user selected
 
         Return:
-            ingredientsSuggestions (list): list of ingredients are satisfying the ingredients
+            igdsSuggestions (list): list of ingredients are satisfying the ingredients
     """
-    if len(ingredientsList) <= 1:
+    num_select = len(ingredientsList)
+    if num_select < 1:
+        return []
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
+    info = retrieveRecipeList(db)
+    igdsSuggestions = []
+    igds_frequency = {}
+    for recipe in info:
+        ingredients = recipe[8].split(', ')
+        match = 0
+        missing_igds = []
+        for igd in ingredients:
+            if igd in ingredientsList:
+                match += 1
+            else:
+                missing_igds.append(igd)
+        if match == num_select:
+            for miss in missing_igds:
+                if len(igds_frequency) > 0:
+                    if igds_frequency[igd] is not None:
+                        new_frequency = igds_frequency[miss] + 1
+                        igds_frequency[miss] = new_frequency
+                    else:
+                        igds_frequency[miss] = 1
+                else:
+                    igds_frequency[miss] = 1
+    
+    if len(igds_frequency) <= 5:
+        igdsSuggestions = sorted(igds_frequency.keys())
+    else:
+        igds_frequency_sort = sorted(igds_frequency.items(), 
+                        key=lambda kv: kv[1], reverse=True)
+        tmp_igds = []  
+        pre_frequency = len(info)
+        full = False      
+        for igds, fqy in igds_frequency_sort:
+            if full or len(igdsSuggestions) >= 5:
+                break
+            if len(tmp_igds) == 0:
+                tmp_igds.append(igds)
+                pre_frequency = fqy 
+            else:
+                if pre_frequency == fqy:
+                    tmp_igds.append(igds)
+                else:
+                    tmp_igds_sort = sorted(tmp_igds)
+                    for item in tmp_igds_sort:
+                        if len(igdsSuggestions) < 5 and full is False:
+                            igdsSuggestions.append(item)
+                        else:
+                            full = True
+                            break
+                    tmp_igds = [igds]
+                    pre_frequency = fqy
+
+    return igdsSuggestions
+
+    """
+    if len(ingredientsList) < 1:
         return []
     ingredientsSuggestions = []
     ingredients_matching_rate = []
@@ -188,3 +246,4 @@ def ingredientsSuggestions(ingredientsList):
     if len(ingredientsSuggestions) > 5:
         return ingredientsSuggestions[0:5]
     return ingredientsSuggestions
+    """
