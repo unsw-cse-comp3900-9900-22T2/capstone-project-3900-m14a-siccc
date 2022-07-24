@@ -3,6 +3,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch, fileToDataUrl } from '../helpers.jsx';
 import { Box } from '@chakra-ui/react'
+import { Input } from '@chakra-ui/react'
+import { useState } from "react";
 
 const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -17,6 +19,12 @@ const RecipeCreate = () => {
   const [stepsNo, setStepsNo] = React.useState(0);
   const [categories, setCategories] = React.useState({});
   const [ingredientsGram, setIngredientsGram] = React.useState({});
+  const [inputText, setInputText] = useState("");
+
+  let inputHandler = (e) => {
+    var lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
 
   // Displays all Ingredients
   const viewAllIngredients = async () => {
@@ -292,6 +300,35 @@ const RecipeCreate = () => {
     console.log(newCategory)
   }
 
+  // List for ingredient search bar
+  function List(props) {
+    const filteredData = ingredients.filter((el) => {
+      if (props.input === '') {  
+        return null;
+      }
+      else {
+          return el.text.includes(props.input)
+      }
+    })
+
+    return(
+      <div>
+      {filteredData.map((ingredient, idx) => (
+        <div key={idx}>
+          <label>
+            {ingredient.text}
+            <input
+              onChange={() => toggleIngredients(idx, ingredient.text)}
+              type="checkbox"
+              checked={ingredient.check}
+            />
+          </label>
+        </div>
+      ))}
+      </div>
+    )
+  }
+
 //   React.useEffect(() => {
 //     viewAllIngredients();
 //   }, []);
@@ -375,7 +412,54 @@ const RecipeCreate = () => {
             <CatSuggestion/>
 
             <h3>Select your ingredients:</h3>
-            {ingredients.map((ingredient, idx) => (
+            <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
+            <List input={inputText}/>
+            {
+              Object.keys(categories).map((category, idx) => {
+                return(
+                  <div key = {idx}>
+                    <h3>
+                      {category}
+                    </h3>
+                  {
+                    categories[category].map((ingredient, idx2) => {
+                      return(
+                        <div key = {idx2}>
+                          <label>
+                            {ingredient.text}
+                            <input
+                              onChange={() => toggleCategoryIngredients(category, idx2)}
+                              type="checkbox"
+                              checked={ingredient.check}
+                            />
+                          </label>
+                          {/* If ingredient is checked */}
+                          {ingredient.check
+                            ? (<span>
+                                <input type="number" 
+                                  name="grams" 
+                                  min="0"
+                                  placeholder='Enter values'
+                                  onChange={e => updateIngredientValue(e, ingredient.text)}/>
+
+                                <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                                  <option name="grams" value="g">grams</option>
+                                  <option name="quantities" value="q">quantities</option>
+                                </select> < br/>
+                                
+                              </span>)
+                              
+                            : <></>
+                          }
+                        </div>
+                      )
+                    })
+                  }
+                  </div>
+                )
+              })
+            }
+            {/* {ingredients.map((ingredient, idx) => (
               <div key={idx}>
                 <label>
                   {ingredient.text}
@@ -384,10 +468,10 @@ const RecipeCreate = () => {
                     type="checkbox"
                     checked={ingredient.check}
                   />
-                </label>
+                </label> */}
 
                 {/* If ingredient is checked */}
-                {ingredient.check
+                {/* {ingredient.check
                   ? (<span>
                       <input type="number" 
                         name="grams" 
@@ -405,7 +489,7 @@ const RecipeCreate = () => {
                   : <></>
                 }
               </div>
-            ))}
+            ))} */}
 
             <button name="create" onClick={ createRecipe }>Create</button>
             <button onClick={() => navigate('/')}>Cancel</button>
