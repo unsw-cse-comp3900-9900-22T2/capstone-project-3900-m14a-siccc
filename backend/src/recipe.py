@@ -5,12 +5,13 @@ from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
 
 
-def recipeMatch(ingredientsList):
+def recipeMatch(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
         Parameters:
             ingredientsList (str): list of ingredients user selected
+            blacklist (list): list of blacklisted ingredients user selected
 
         Return:
             recipeList (list): list of recipes id's satisfying the ingredients
@@ -19,41 +20,74 @@ def recipeMatch(ingredientsList):
     # [relevent percetage, recipe information]]
     recipeList = []
     userIngrLen = len(ingredientsList)
+
     db = psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
-    for recipe in info:
+    filteredRecipeList = getFilteredRecipes(info)
+
+    for recipe in filteredRecipeList:
         ingredientString = recipe[8]
-        ingredients = ingredientString.split(', ')
-        missingIngList = ingredients.copy()
+        ingredients = ingredientString.split(',')
         matching = 0
-        for i in ingredientsList:
-            for j in ingredients:
-                if i in j:
-                    matching += 1
-                    missingIngList.remove(j)
-        if matching == len(ingredients) or matching == len(ingredients) - 1:
-            missingIng = ''
-            if matching == len(ingredients) - 1:
-                ing = missingIngList.pop()
-                ing = ing.split(' ')
-                ing.pop(0)
-                missingIng = " ".join(ing)
+        for i in ingredientsList:  # i is ingredient user selected
+            for j in ingredients:   # j is ingredient in recipe
+                for k in blacklist:  # k is ingredient in blacklist
+                    if i in j and k not in j:
+                        matching += 1
+                        continue
+        if matching == len(ingredients):
             ingDict = {
-                    "recipeID": recipe[0],
-                    "title": recipe[7],
-                    "servings": recipe[1],
-                    "timeToCook": recipe[2],
-                    "mealType": recipe[3],
-                    "photo": recipe[4],
-                    "calories": recipe[5],
-                    "cookingSteps": recipe[6],
-                    "ingredients": recipe[8],
-                    "missingIngredient": missingIng,
+                "recipeID": recipe[0],
+                "title": recipe[7],
+                "servings": recipe[1],
+                "timeToCook": recipe[2],
+                "mealType": recipe[3],
+                "photo": recipe[4],
+                "calories": recipe[5],
+                "cookingSteps": recipe[6],
+                "ingredients": recipe[8]
             }
             recipeList.append(ingDict)
 
     return recipeList
+
+
+def getFilteredRecipes(recipes, blacklist):
+    """ Helper function for recipeMatch 
+
+    Parameters:
+        recipes(list): list of all existing recipes 
+        blacklist (list): list of blacklisted ingredients user selected
+
+    Return:
+        recipeList (list): list of recipes without ingredients from blacklist
+"""
+    filteredRecipeList = []
+    for recipe in recipes:
+        ingredientString = recipe[8]
+        ingredients = ingredientString.split(',')
+        if RecipeHasBlacklist(ingredients, blacklist) is False:
+            filteredRecipeList.append(recipe)
+    return filteredRecipeList
+
+
+def RecipeHasBlacklist(recipe, blacklist):
+    """
+    Helper function for getFilteredRecipes
+
+    Parameters:
+        recipe(list): list of ingredients in recipe 
+        blacklist (list): list of blacklisted ingredients user selected
+
+    Return:
+        recipeList (boolean): true if recipe contains any blacklisted ingredient, false otherwise 
+    """
+    for ingredient in recipe:
+        for unwanted in blacklist:
+            if unwanted in ingredient:
+                return True
+    return False
 
 
 def recipeDetails(recipeID):
@@ -88,6 +122,3 @@ def recipeDetails(recipeID):
         "cookingSteps": info[6],
         "ingredients": info[8]
     }
-
-
-
