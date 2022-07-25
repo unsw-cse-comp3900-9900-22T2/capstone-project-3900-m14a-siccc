@@ -105,9 +105,8 @@ def recipeMatchMealTypeCalorieFlask():
         'recipes': info
     })
 
-
 @APP.route("/recipe/blacklistView", methods=['POST'])
-def recipeMatchFlask():
+def recipeMatchwithBlacklist():
     temp = request.get_json()
     ingredients = temp['ingredients']
     blacklist = temp['blacklist']
@@ -117,18 +116,6 @@ def recipeMatchFlask():
     return dumps({
         'recipes': info
     })
-
-@APP.route("/recipe/view", methods=['POST'])
-def recipeMatchFlask():
-    temp = request.get_json()
-    ingredients = temp['ingredients']
-    info = recipeMatch(ingredients)
-    if len(info) == 0:
-        addFrequency(ingredients)
-    return dumps({
-        'recipes': info
-    })
-
 
 if __name__ == "__main__":
     APP.run(port=config.port)
