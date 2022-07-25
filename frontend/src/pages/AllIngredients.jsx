@@ -10,6 +10,7 @@ import { Grid } from '@mui/material';
 const AllIngredients = () => {
   const navigate = useNavigate();
   const [ingredients, setIngredients] = React.useState([]);
+  const [blacklist, setBlacklist] = React.useState([]);
   const [recipes, setRecipes] =  React.useState([]);
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
@@ -48,10 +49,32 @@ const AllIngredients = () => {
   }
 
   // Displays all Ingredients
+  const viewAllBlacklist = async () => {
+    try {
+
+      const newBlacklist = [];
+      console.log(ingredients.length);
+      
+      // Sets a list of dictionary of ingredients if there is no local storage
+      if (blacklist.length === 0) {
+        const ingredientData = await apiFetch('GET', `ingredients/view`, null);
+        for (const ingredient of ingredientData) {
+          const elem = { text: ingredient, check: false };
+          newBlacklist.push(elem);
+        }
+        setBlacklist(newBlacklist);
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  // Displays all Ingredients
   const viewAllIngredients = async () => {
     try {
       console.log(ingredients);
       const ingredientList = [];
+      //const newBlacklist = [];
       console.log(ingredients.length);
       
       // Sets a list of dictionary of ingredients if there is no local storage
@@ -61,8 +84,10 @@ const AllIngredients = () => {
         for (const ingredient of ingredientData) {
           const elem = { text: ingredient, check: false };
           ingredientList.push(elem);
+          //newBlacklist.push(elem);
         }
         setIngredients(ingredientList);
+        //setBlacklist(newBlacklist);
       }
 
       console.log(ingredients)
@@ -84,6 +109,14 @@ const AllIngredients = () => {
   //   setIngredients(newIngredient);
   // }
 
+  function toggleBlacklist (index) {
+    const newBlacklist = [...blacklist];
+    newBlacklist[index].check = !blacklist[index].check;
+    setBlacklist(newBlacklist);
+    console.log(blacklist);
+    console.log(newBlacklist);
+    console.log(ingredients);
+  }
 
   // Function to set ingrdients selected
   function toggleIngredients (index, ingredientName) {
@@ -117,16 +150,17 @@ const AllIngredients = () => {
           console.log(categoryName);*/
           break;
         }
-        console.log(ingredientDict.text);
       }
     }
     setCategories(newCategory);
+    console.log(blacklist);
   }
 
   // Displays all recipes that match
   const recipeMatch = async (clicked) => {
     try {
       const selectedIngredients = [];
+      const selectedBlacklist = [];
       console.log(clicked);
       // Checks if the ingredients are selected and pushes to list
       /*for (const ingredient of ingredients) {
@@ -142,12 +176,18 @@ const AllIngredients = () => {
         localStorage.setItem('ingredients', JSON.stringify(ingredients));
         localStorage.setItem('calories', JSON.stringify(calorieLimit));
         localStorage.setItem('mealType', JSON.stringify(mealType));
+        localStorage.setItem('blacklist', JSON.stringify(blacklist));
         for (const [, ingredients] of Object.entries(categories)) {
           console.log(ingredients)
           for (const ingredient of ingredients) {
             if (ingredient.check){
               selectedIngredients.push(ingredient.text);
             }
+          }
+        }
+        for (const i of blacklist) {
+          if (i.check){
+            selectedBlacklist.push(i.text);
           }
         }
       // If user didn't click search button, this means they refresh the page
@@ -172,6 +212,7 @@ const AllIngredients = () => {
         ingredients: selectedIngredients,
         calories: calorieLimit,
         mealType: mealType,
+        blacklist: selectedBlacklist,
       }
       if(calorieLimit != 0 && calorieLimit != null && 
         !isNaN(calorieLimit) && mealType != "") {
@@ -187,7 +228,10 @@ const AllIngredients = () => {
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
         console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
-      } else {
+      } else if (selectedBlacklist.length !== 0) {
+        const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
+      }
+      else {
         // Meal type and calorie limit are not selected
         const recipeData = await apiFetch('POST', `recipe/view`, null, body);
         setRecipes(recipeData.recipes);
@@ -250,7 +294,7 @@ const AllIngredients = () => {
     // if there is local storage set the check lists to display the data
     if (localStorage.getItem('categories') && 
       Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
-
+      setBlacklist(JSON.parse(localStorage.getItem('blacklist')));
       setCategories(JSON.parse(localStorage.getItem('categories')));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
       if(localStorage.getItem('calories')) {
@@ -264,6 +308,7 @@ const AllIngredients = () => {
       console.log("ssssss")
     } else {
       viewAllIngredientsInCategories();
+      viewAllBlacklist();
       viewAllIngredients();
       console.log("nnnnnn")
     }
@@ -390,7 +435,22 @@ const AllIngredients = () => {
             </select>
             <h4>{inputCat}</h4>
             <ViewCategory input={inputCat}/>
-
+            
+            <h2>Blacklist your ingredients</h2>
+            <small>These ingredients will not appear in your list</small>
+            {blacklist.map((name, idx) => (
+                <div key={idx}>
+                  <label>
+                    {name.text}
+                    <input
+                      onChange={() => toggleBlacklist(idx)}
+                      type="checkbox"
+                      checked={name.check}
+                    />
+                  </label>
+                </div>
+            ))}
+            
             {/* {
               Object.keys(categories).map((category, idx) => {
                 return(
