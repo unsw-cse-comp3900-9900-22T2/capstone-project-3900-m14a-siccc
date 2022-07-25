@@ -281,10 +281,16 @@ const RecipeCreate = () => {
 
   return (
     <>
+      <head>  
+        <title>
+          reeeeee
+        </title>
+      </head>
       <Grid container direction="row" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-            <h2>Create Recipe</h2>
+             
+            <h2> style="font-size:40pt"; Create Recipe</h2>
             Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
 
             Servings&nbsp;
@@ -303,7 +309,7 @@ const RecipeCreate = () => {
             onChange={e => setCookingTime(e.target.value)}
             /> < br/>
 
-            <p>What kind of meal is your recipe?</p>
+            <p> What kind of meal is your recipe?</p>
             <select name="mealType" value={mealType} onChange={e => setMealType(e.target.value)}>
               <option name="empty" value="">Select one</option>
               <option name="breakfast" value="Breakfast">Breakfast</option>
@@ -336,7 +342,7 @@ const RecipeCreate = () => {
               return (
                 <div key={idx}>
                   <>Step {idx + 1}.</>&nbsp;
-                  <textarea rows="2" cols="50"
+                  <textarea rows="2" cols="50" placeholder='write here'
                   onChange={e => updateSteps(e, idx)}>
                   </textarea>
                 </div>
@@ -380,6 +386,7 @@ const RecipeCreate = () => {
 
             <button name="create" onClick={ createRecipe }>Create</button>
             <button onClick={() => navigate('/')}>Cancel</button>
+            
           </Box>
         </Grid>
         <Grid item xs = {7}>
