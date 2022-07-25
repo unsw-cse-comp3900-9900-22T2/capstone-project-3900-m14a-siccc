@@ -71,7 +71,7 @@ def recipeMatchwithBlacklist(ingredientsList, blacklist):
     db = psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
-    filteredRecipeList = getFilteredRecipes(info)
+    filteredRecipeList = getFilteredRecipes(info, blacklist)
     for recipe in filteredRecipeList:
         ingredientString = recipe[8]
         ingredients = ingredientString.split(', ')
