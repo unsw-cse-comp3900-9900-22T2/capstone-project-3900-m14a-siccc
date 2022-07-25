@@ -12,7 +12,7 @@ def insertRecipe(recipeDetails):
     """
     
     db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
-    recipeList = retrieveRecipeList(db);
+    recipeList = retrieveRecipeList(db)
     noOfRecipes = len(recipeList)
     recipeID = noOfRecipes + 1
     servings = recipeDetails['servings']
