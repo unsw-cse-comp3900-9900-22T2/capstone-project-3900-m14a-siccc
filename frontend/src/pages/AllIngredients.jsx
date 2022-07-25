@@ -230,6 +230,7 @@ const AllIngredients = () => {
         setRecipes(recipeData.recipes);
       } else if (selectedBlacklist.length !== 0) {
         const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
+        setRecipes(recipeData.recipes);
       }
       else {
         // Meal type and calorie limit are not selected
