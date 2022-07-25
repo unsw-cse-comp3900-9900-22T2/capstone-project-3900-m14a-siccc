@@ -4,7 +4,7 @@ from flask_cors import CORS
 #from matplotlib.pyplot import get
 from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
 from src.error import InputError
-from src.recipe import recipeMatch, recipeDetails
+from src.recipe import recipeMatch, recipeDetails, recipeMatchwithBlacklist
 from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
 from src import config
@@ -92,7 +92,20 @@ def recipeMatchMealTypeCalorieFlask():
     return dumps({
         'recipes': info
     })
-    
+
+@APP.route("/recipe/blacklistView", methods=['POST'])
+def recipeMatchwithBlacklistFlask():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    blacklist = temp['blacklist']
+    info = recipeMatchwithBlacklist(ingredients, blacklist)
+    if len(info) == 0:
+        addFrequency(ingredients)
+    return dumps({
+        'recipes': info
+    })
+
+
 if __name__ == "__main__":
     APP.run(port=config.port)
 
