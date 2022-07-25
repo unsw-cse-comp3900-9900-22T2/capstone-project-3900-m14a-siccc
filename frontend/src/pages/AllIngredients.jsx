@@ -382,7 +382,7 @@ const AllIngredients = () => {
             <List input={inputText}/>
             <br/>
 
-            <select name="categories" value={categories} onChange={categoryHandler}>
+            <select name="categories" value={inputCat} onChange={categoryHandler}>
               <option name="empty" value="">View ingredient categories</option>
               {Object.keys(categories).map((category) => (
                 <option name={category} value={category}>{category}</option>
