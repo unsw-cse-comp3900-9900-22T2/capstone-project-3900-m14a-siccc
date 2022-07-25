@@ -388,7 +388,7 @@ const RecipeCreate = () => {
             /> < br/>
 
             {thumbnail !== ''
-              ? (<img src={thumbnail} alt="recipe thumbnail photo" height="140px" width="auto"/>)
+              ? (<img src={thumbnail} alt="recipe thumbnail" height="140px" width="auto"/>)
               : <></>
             }< br/>
             
