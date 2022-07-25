@@ -120,7 +120,9 @@ def ingredientsSuggestions(ingredientsList):
         ingredients = recipe[8].split(', ')
         match = 0
         missing_igds = []
+        print(ingredientsList)
         for igd in ingredients:
+            print(igd)
             if igd in ingredientsList:
                 match += 1
             else:
