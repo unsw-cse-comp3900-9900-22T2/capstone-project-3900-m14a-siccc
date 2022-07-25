@@ -4,7 +4,7 @@ from flask_cors import CORS
 from matplotlib.pyplot import get
 from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
 from src.error import InputError
-from src.recipe import recipeMatch, recipeDetails
+from src.recipe import ingredientsSuggestions, recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
 from src import config
@@ -96,6 +96,15 @@ def recipeMatchMealTypeCalorieFlask():
     info = getRecipesWithCaloriesIngredientsMealType(calories, ingredients, mealType)
     return dumps({
         'recipes': info
+    })
+    
+@APP.route("/recipe/ingredient/suggestions", methods = ['POST'])
+def recipeIngredientSuggestionsFlask():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    info = ingredientsSuggestions(ingredients)
+    return dumps({
+        'ingredients': info
     })
     
 if __name__ == "__main__":

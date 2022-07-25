@@ -33,6 +33,7 @@ const AllIngredients = () => {
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
   const [inputCat, setInputCat] = useState("");
+  const [ingredientSuggestions, setIngredientSuggestions] = React.useState([]);
   var localCalories = localStorage.getItem('calories');
   if(isNaN(localCalories) || localCalories == null) {
     localCalories = '';
@@ -141,7 +142,7 @@ const AllIngredients = () => {
     setCategories(newCategory);
     
     //TODO: Send information of ingredients to backend for ingredient suggestions
-    
+    getIngredientSuggestions();
   }
 
   // Displays all recipes that match
@@ -245,6 +246,31 @@ const AllIngredients = () => {
     }
   }
 
+  const getIngredientSuggestions = async () => {
+    try {
+      const suggestionList = [];
+      for(const ingred of ingredients) {
+        if(ingred.check == true) {
+          suggestionList.push(ingred);
+        }
+      }
+      const suggestionIngredients = [];
+      for(const ingred of suggestionList) {
+        suggestionIngredients.push(ingred.text);
+      }
+      const body = {
+        'ingredients': suggestionIngredients,
+      }
+      console.log(body)
+      console.log("here")
+      const ingredientSug = await apiFetch('POST', 'recipe/ingredient/suggestions', null, body);
+      console.log(ingredientSug)
+      setIngredientSuggestions(ingredientSug);
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
   function toggleCategoryIngredients (category, index) {
     const newCategory = {...categories};
     newCategory[category][index].check = !categories[category][index].check;
@@ -262,8 +288,8 @@ const AllIngredients = () => {
       }
     }
     setIngredients(newIngredient);
-    console.log(ingredients)
-    console.log(newCategory)
+
+    getIngredientSuggestions()
   }
 
   React.useEffect(() => {
@@ -499,7 +525,18 @@ const AllIngredients = () => {
                 )
               })
             } */}
-            
+            <h2>Ingredient Suggestions</h2>
+            {
+              ingredientSuggestions.map((suggestion, idx) => {
+                {console.log("here")}
+                <div key = {idx}>
+                  <label>
+                    {console.log(suggestion)}
+                  </label>
+                </div>
+              })
+            }
+
             <h2>Your chosen ingredients:</h2>
             <ChosenIngredients/>
             {/* <button name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</button> */}
