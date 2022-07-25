@@ -4,8 +4,56 @@ import psycopg2
 from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
 
+def recipeMatch(ingredientsList):
+    """ Sends front end a list of recipes that satisfy the list 
+        of ingredients that the user selected by alphabetically.
+        Parameters:
+            ingredientsList (str): list of ingredients user selected
+        Return:
+            recipeList (list): list of recipes id's satisfying the ingredients
+    """
+    # [[relevent percetage, recipe information], ...,
+    # [relevent percetage, recipe information]]
+    recipeList = []
+    userIngrLen = len(ingredientsList)
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
+    info = retrieveRecipeList(db)
+    for recipe in info:
+        ingredientString = recipe[8]
+        ingredients = ingredientString.split(', ')
+        missingIngList = ingredients.copy()
+        matching = 0
+        for i in ingredientsList:
+            for j in ingredients:
+                if i in j:
+                    matching += 1
+                    missingIngList.remove(j)
+        if matching == len(ingredients) or matching == len(ingredients) - 1:
+            missingIng = ''
+            if matching == len(ingredients) - 1:
+                ing = missingIngList.pop()
+                ing = ing.split(' ')
+                ing.pop(0)
+                missingIng = " ".join(ing)
+            ingDict = {
+                    "recipeID": recipe[0],
+                    "title": recipe[7],
+                    "servings": recipe[1],
+                    "timeToCook": recipe[2],
+                    "mealType": recipe[3],
+                    "photo": recipe[4],
+                    "calories": recipe[5],
+                    "cookingSteps": recipe[6],
+                    "ingredients": recipe[8],
+                    "missingIngredient": missingIng,
+            }
+            recipeList.append(ingDict)
 
-def recipeMatch(ingredientsList, blacklist):
+    return recipeList
+
+    
+def recipeMatchwithBlacklist(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
