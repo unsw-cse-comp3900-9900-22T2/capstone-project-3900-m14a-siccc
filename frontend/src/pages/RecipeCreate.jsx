@@ -5,6 +5,9 @@ import { apiFetch, fileToDataUrl } from '../helpers.jsx';
 import { Box } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useState } from "react";
+import TextField from '@mui/material/TextField';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Checkbox } from '@mui/material';
 
 const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -351,10 +354,14 @@ const RecipeCreate = () => {
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
             <h2>Create Recipe</h2>
-            Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
+            Title
+            <br></br>
+            <TextField type="text" variant="outlined" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
 
             Servings&nbsp;
-            <input type="number"
+            <br></br>
+            <TextField type="number"
+            variant="outlined"
             name="servings"
             min="0"
             value={servings}
@@ -362,9 +369,11 @@ const RecipeCreate = () => {
             /> < br/>
 
             Cooking Time&nbsp;
-            <input type="number"
+            <br></br>
+            <TextField type="number"
             name="servings"
             min="0"
+            variant="outlined"
             value={cookingTime}
             onChange={e => setCookingTime(e.target.value)}
             /> < br/>
@@ -412,7 +421,7 @@ const RecipeCreate = () => {
             <CatSuggestion/>
 
             <h3>Select your ingredients:</h3>
-            <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
+            <TextField variant="outlined" placeholder='Search ingredients' onChange={inputHandler}/>
             <List input={inputText}/>
             {
               Object.keys(categories).map((category, idx) => {
@@ -426,12 +435,12 @@ const RecipeCreate = () => {
                       return(
                         <div key = {idx2}>
                           <label>
-                            {ingredient.text}
-                            <input
+                            <Checkbox
                               onChange={() => toggleCategoryIngredients(category, idx2)}
                               type="checkbox"
                               checked={ingredient.check}
                             />
+                            {ingredient.text}
                           </label>
                           {/* If ingredient is checked */}
                           {ingredient.check

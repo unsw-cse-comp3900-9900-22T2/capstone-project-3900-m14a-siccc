@@ -139,6 +139,9 @@ const AllIngredients = () => {
       }
     }
     setCategories(newCategory);
+    
+    //TODO: Send information of ingredients to backend for ingredient suggestions
+    
   }
 
   // Displays all recipes that match
