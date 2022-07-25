@@ -28,3 +28,11 @@ Week 7
 Change calorie calculation to take in a dictionary, instead of ingredients string
 Change ingredients back to single case
 Wrote demo script for upcoming wk8 one
+
+Week 8 
+Changed tests for calorie calculation 
+Added styling to recipe details 
+
+Week 9 
+Adding route for blacklist function 
+Started writing on report 
