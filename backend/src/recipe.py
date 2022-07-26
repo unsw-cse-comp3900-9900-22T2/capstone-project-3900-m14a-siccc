@@ -118,28 +118,30 @@ def ingredientsSuggestions(ingredientsList):
     igdsSuggestions = []
     igds_frequency = {}
     for recipe in info:
-        ingredients = [i.split(' ')[1] for i in recipe[8].split(', ')]
+        ingredients = [i.split(' ', 1)[1] for i in recipe[8].split(', ')]
         match = 0
         missing_igds = []
-        for igd in ingredients:
-            if igd in ingredientsList:
-                match += 1
+        for igd in ingredients: # recipe ingredient 
+            if igd in ingredientsList: # if recipe ingredient exists in user's selected ingredient list 
+                    match += 1
             else:
                 missing_igds.append(igd)
-        if match == num_select:
-            for miss in missing_igds:
-                if len(igds_frequency) > 0:
-                    if igds_frequency[igd] is not None:
-                        new_frequency = igds_frequency[miss] + 1
-                        igds_frequency[miss] = new_frequency
-                    else:
-                        igds_frequency[miss] = 1
-                else:
+        if match == num_select: # if recipe matches all of user's ingredients 
+            for miss in missing_igds: # for other unmatched ingredients in recipe, increment by 1 in frequency
+                if miss not in igds_frequency: # ingredient not a key in igds_frequency
                     igds_frequency[miss] = 1
-    
+                else:
+                    igds_frequency[miss] += 1
+    igds_frequency_sorted = sorted(igds_frequency.items(), key = lambda item : (-item[1], item[0]))
+    finalList = [x[0] for x in igds_frequency_sorted]
+    return finalList
+
+
+    igdsSuggestions
     if len(igds_frequency) <= 5:
         igdsSuggestions = sorted(igds_frequency.keys())
     else:
+        print(igds_frequency.items())
         igds_frequency_sort = sorted(igds_frequency.items(), 
                         key=lambda kv: kv[1], reverse=True)
         tmp_igds = []  
