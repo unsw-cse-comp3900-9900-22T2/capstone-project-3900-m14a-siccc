@@ -5,7 +5,7 @@ from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
 
 
-def recipeMatch(ingredientsList):
+def recipeMatch(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
@@ -22,7 +22,7 @@ def recipeMatch(ingredientsList):
     db = psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
-    for recipe in info:
+    for recipe in getFilteredRecipes(info, blacklist):
         ingredientString = recipe[8]
         ingredients = ingredientString.split(', ')
         missingIngList = ingredients.copy()

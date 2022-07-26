@@ -29,7 +29,8 @@ CORS(APP)
 def recipeMatchFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
-    info = recipeMatch(ingredients)
+    blacklist = temp['blacklist']
+    info = recipeMatch(ingredients, blacklist)
     if len(info) == 0:
         addFrequency(ingredients)
     return dumps({
