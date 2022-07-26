@@ -653,7 +653,7 @@ const RecipeCreate = () => {
                     sx={{ mt: 3, mb: 2 }}
                     onClick={() => navigate('/')}
                   >
-                    Cancel
+                    Back
                   </Button>
                 </Grid>
               </Grid>
