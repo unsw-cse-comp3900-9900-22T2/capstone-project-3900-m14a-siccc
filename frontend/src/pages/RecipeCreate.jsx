@@ -665,12 +665,21 @@ const RecipeCreate = () => {
       <Grid container component="main" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+<<<<<<< HEAD
              
             <h2> Create Recipe</h2>
             Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
+=======
+            <h2>Create Recipe</h2>
+            Title
+            <br></br>
+            <TextField type="text" variant="outlined" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
+>>>>>>> 82b9621 (added some basic styling to recipe create and a TODO for ingredient suggestions)
 
             Servings&nbsp;
-            <input type="number"
+            <br></br>
+            <TextField type="number"
+            variant="outlined"
             name="servings"
             min="0"
             value={servings}
@@ -678,9 +687,11 @@ const RecipeCreate = () => {
             /> < br/>
 
             Cooking Time&nbsp;
-            <input type="number"
+            <br></br>
+            <TextField type="number"
             name="servings"
             min="0"
+            variant="outlined"
             value={cookingTime}
             onChange={e => setCookingTime(e.target.value)}
             /> < br/>
@@ -728,7 +739,7 @@ const RecipeCreate = () => {
             <CatSuggestion/>
 
             <h3>Select your ingredients:</h3>
-            <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/>
+            <TextField variant="outlined" placeholder='Search ingredients' onChange={inputHandler}/>
             <List input={inputText}/>
             {
               Object.keys(categories).map((category, idx) => {
@@ -742,12 +753,12 @@ const RecipeCreate = () => {
                       return(
                         <div key = {idx2}>
                           <label>
-                            {ingredient.text}
-                            <input
+                            <Checkbox
                               onChange={() => toggleCategoryIngredients(category, idx2)}
                               type="checkbox"
                               checked={ingredient.check}
                             />
+                            {ingredient.text}
                           </label>
                           {/* If ingredient is checked */}
                           {/*ingredient.check
