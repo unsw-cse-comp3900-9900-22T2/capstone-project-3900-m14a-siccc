@@ -4,7 +4,6 @@ import psycopg2
 from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
 
-
 def recipeMatch(ingredientsList):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
@@ -34,11 +33,13 @@ def recipeMatch(ingredientsList):
                     missingIngList.remove(j)
         if matching == len(ingredients) or matching == len(ingredients) - 1:
             missingIng = ''
+            partialMatch = False
             if matching == len(ingredients) - 1:
                 ing = missingIngList.pop()
                 ing = ing.split(' ')
                 ing.pop(0)
                 missingIng = " ".join(ing)
+                partialMatch = True
             ingDict = {
                     "recipeID": recipe[0],
                     "title": recipe[7],
@@ -50,11 +51,11 @@ def recipeMatch(ingredientsList):
                     "cookingSteps": recipe[6],
                     "ingredients": recipe[8],
                     "missingIngredient": missingIng,
+                    "partialMatch": partialMatch,
             }
             recipeList.append(ingDict)
 
     return recipeList
-
 
 def recipeDetails(recipeID):
     """ Retrieves recipe details given a recipe id
