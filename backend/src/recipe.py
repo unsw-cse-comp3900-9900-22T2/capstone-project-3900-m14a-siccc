@@ -118,7 +118,7 @@ def ingredientsSuggestions(ingredientsList):
     igdsSuggestions = []
     igds_frequency = {}
     for recipe in info:
-        ingredients = recipe[8].split(', ')
+        ingredients = [i.split(' ')[1] for i in recipe[8].split(', ')]
         match = 0
         missing_igds = []
         for igd in ingredients:
