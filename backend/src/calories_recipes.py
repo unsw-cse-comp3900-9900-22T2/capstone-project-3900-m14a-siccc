@@ -134,6 +134,7 @@ def getFixedCGrams():
         dict[ingredient[0]] = ingredient[3]
     return dict
 
+# is the original one without blacklist even used? 
 def getCaloriesRecipesBlacklist(calories, blacklist):
     """ Input the number of calories and return the recipes if the 
         calories of this recipe is less than or equal to the input calories.
