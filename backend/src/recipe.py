@@ -129,16 +129,19 @@ def ingredientsSuggestions(ingredientsList):
         if match == num_select:
             for miss in missing_igds:
                 if len(igds_frequency) > 0:
-                    if igds_frequency[igd] is not None:
+                    if igds_frequency.get(igd) is not None:
                         new_frequency = igds_frequency[miss] + 1
                         igds_frequency[miss] = new_frequency
                     else:
                         igds_frequency[miss] = 1
                 else:
                     igds_frequency[miss] = 1
-    
+        print(f"{recipe[0]}: ingredients_rec = {ingredients}\n\tmissing ingredients = {missing_igds}\n\tmatch = {match}\n\t"+
+             f"frequency = {igds_frequency}\n")
+    print(f"final frequency = {igds_frequency} \n") 
     if len(igds_frequency) <= 5:
         igdsSuggestions = sorted(igds_frequency.keys())
+        print(f"less than 5, so suggesions = {igdsSuggestions}\n")
     else:
         igds_frequency_sort = sorted(igds_frequency.items(), 
                         key=lambda kv: kv[1], reverse=True)
