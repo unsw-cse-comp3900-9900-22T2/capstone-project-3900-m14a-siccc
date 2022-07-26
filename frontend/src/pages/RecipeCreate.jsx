@@ -665,16 +665,9 @@ const RecipeCreate = () => {
       <Grid container component="main" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-<<<<<<< HEAD
              
             <h2> Create Recipe</h2>
             Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
-=======
-            <h2>Create Recipe</h2>
-            Title
-            <br></br>
-            <TextField type="text" variant="outlined" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
->>>>>>> 82b9621 (added some basic styling to recipe create and a TODO for ingredient suggestions)
 
             Servings&nbsp;
             <br></br>
