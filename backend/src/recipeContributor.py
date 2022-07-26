@@ -12,7 +12,7 @@ def insertRecipe(recipeDetails):
     """
     
     db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
-    recipeList = retrieveRecipeList(db);
+    recipeList = retrieveRecipeList(db)
     noOfRecipes = len(recipeList)
     recipeID = noOfRecipes + 1
     servings = recipeDetails['servings']
@@ -23,13 +23,16 @@ def insertRecipe(recipeDetails):
     ingredients = recipeDetails['ingredients']
     calories = calorieCalculation(ingredients)
     ing = ''
+    ingWithoutGrams = ''
     count = 0
     lengthDict = len(ingredients)
     for entry in ingredients.items():
         ingred, grams = entry
         ing = ing + str(grams) + ' ' + ingred
+        ingWithoutGrams = ingWithoutGrams + ingred
         if count != lengthDict - 1:
             ing = ing + ', '
+            ingWithoutGrams = ingWithoutGrams + ', '
         count += 1
     title = recipeDetails['title']
     cur = db.cursor()
@@ -40,6 +43,15 @@ def insertRecipe(recipeDetails):
     cur.execute(qry, [recipeID, servings, timeToCook, mealType, photo, calories, cookingSteps, title, ing])
     db.commit()
     info = cur.rowcount
+    
+    # Remove from frequency table if there is a match for newly inputted ingredients
+    qry = """
+    delete 
+    from frequency
+    where ingredients = %s
+    """
+    cur.execute(qry, [ingWithoutGrams])
+    db.commit()
     cur.close()
     return info
 
