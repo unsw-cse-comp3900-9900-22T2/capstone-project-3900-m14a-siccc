@@ -128,13 +128,17 @@ const AllIngredients = () => {
   //   setIngredients(newIngredient);
   // }
 
-  function toggleBlacklist (index) {
+  function toggleBlacklist (index, ingredientName) {
+    if (ingredientName) {
+      for (const ingredient of blacklist) {
+        if (ingredient.text === ingredientName) {
+          index = blacklist.indexOf(ingredient);
+        }
+      }
+    }
     const newBlacklist = [...blacklist];
     newBlacklist[index].check = !blacklist[index].check;
     setBlacklist(newBlacklist);
-    console.log(blacklist);
-    console.log(newBlacklist);
-    console.log(ingredients);
   }
 
   // Function to set ingrdients selected
@@ -337,6 +341,27 @@ const AllIngredients = () => {
     getIngredientSuggestions()
   }
 
+  function toggleBlacklistIngredients (category, index) {
+    const newBlacklist = [...blacklist];
+    console.log(categories[category][index].text)
+    for (const ingredient of blacklist) {
+      if (categories[category][index].text === ingredient.text){
+        const allIngreIdx = blacklist.indexOf(ingredient);
+        newBlacklist[allIngreIdx].check = !blacklist[allIngreIdx].check;
+        break;
+      }
+    }
+    setBlacklist(newBlacklist);
+  }
+
+  function blacklistIndex (category, index) {
+    for (const ingredient of blacklist) {
+      if (categories[category][index].text === ingredient.text){
+        return blacklist.indexOf(ingredient);
+      }
+    }
+  }
+
   React.useEffect(() => {
     //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
     //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
@@ -365,6 +390,33 @@ const AllIngredients = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // List for blacklist search bar
+  function SearchBlacklist(props) {
+    const filteredData = blacklist.filter((el) => {
+      if (props.input === '') {  
+        return null;
+      }
+      else {
+          return el.text.includes(props.input)
+      }
+    })
+
+    return(
+      <div>
+      {filteredData.map((ingredient, idx) => (
+        <div key={idx}>
+          <FormControlLabel 
+            control={<Checkbox/>} 
+            label={ingredient.text} 
+            onChange={() => toggleBlacklist(idx, ingredient.text)} 
+            checked={ingredient.check}
+          />
+        </div>
+      ))}
+      </div>
+    )
+  }
 
   // List for ingredient search bar
   function List(props) {
@@ -456,6 +508,11 @@ const AllIngredients = () => {
                 onChange={() => toggleCategoryIngredients(props.input, idx2)} 
                 checked={ingredient.check}
               />
+              <input
+                onChange={() => toggleBlacklistIngredients(props.input, idx2)}
+                type="checkbox"
+                checked={blacklist[blacklistIndex(props.input, idx2)].check}
+              />
               {/* <label>
                 {ingredient.text}
                 <input
@@ -543,18 +600,28 @@ const AllIngredients = () => {
             <ViewCategory input={inputCat}/>
             
             <h2>Blacklist your ingredients</h2>
-            <small>These ingredients will not appear in your list</small>
+            <small>Recipes with these ingredients will not show in your search</small>
+            <br/><br/>
+            <TextField placeholder="Blacklist ingredients" variant="outlined" onChange={inputHandler}/>
+            <SearchBlacklist input={inputText}/>
+            <br/>
+            <h2>Your Blacklisted Ingredients</h2>
             {blacklist.map((name, idx) => (
-                <div key={idx}>
-                  <label>
-                    {name.text}
-                    <input
-                      onChange={() => toggleBlacklist(idx)}
-                      type="checkbox"
-                      checked={name.check}
-                    />
-                  </label>
-                </div>
+              <div>
+                {name.check
+                  ? <div key={idx}>
+                    <label>
+                      {name.text}
+                      <input
+                        onChange={() => toggleBlacklist(idx)}
+                        type="checkbox"
+                        checked={name.check}
+                      />
+                    </label>
+                  </div>
+                  : <></>
+                }
+              </div>
             ))}
             
             {/* {
