@@ -598,32 +598,43 @@ const RecipeCreate = () => {
                     categories[category].map((ingredient, idx2) => {
                       return(
                         <div key = {idx2}>
-                          <label>
-                            <Checkbox
-                              onChange={() => toggleCategoryIngredients(category, idx2)}
-                              type="checkbox"
-                              checked={ingredient.check}
-                            />
-                            {ingredient.text}
-                          </label>
-                          {/* If ingredient is checked */}
-                            {ingredient.check
-                              ? (<span>
-                                  <input type="number" 
-                                    name="grams" 
-                                    min="0"
-                                    placeholder='Enter values'
-                                    onChange={e => updateIngredientValue(e, ingredient.text)}/>
-
-                                  <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
-                                    <option name="grams" value="g">grams</option>
-                                    <option name="quantities" value="q">quantities</option>
-                                  </select> < br/>
-                                  
-                                </span>)
-                                
-                              : <></>
-                            }
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <Checkbox
+                                onChange={() => toggleCategoryIngredients(category, idx2)}
+                                type="checkbox"
+                                checked={ingredient.check}
+                              />
+                              {ingredient.text}
+                            </Grid>
+                            <Grid item xs={6}>
+                              {/* If ingredient is checked */}
+                              {ingredient.check
+                                ? (<span>
+                                    <TextField type="number"
+                                      name="grams" 
+                                      min="0"
+                                      placeholder='Enter values'
+                                      size='small'
+                                      onChange={e => updateIngredientValue(e, ingredient.text)}/>
+                                    <FormControl required size="small">
+                                      <Select
+                                        name="valueType"
+                                        onChange={e => updateIngredientMeasurement(e, ingredient.text)}
+                                      >
+                                        <MenuItem name="grams" value="g">grams</MenuItem>
+                                        <MenuItem name="quantities" value="q">quantitites</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                    {/* <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                                      <option name="grams" value="g">grams</option>
+                                      <option name="quantities" value="q">quantities</option>
+                                    </select> < br/> */}
+                                  </span>)
+                                  : <></>
+                                }
+                              </Grid>
+                            </Grid>
                           </div>
                         )
                       })
@@ -665,9 +676,16 @@ const RecipeCreate = () => {
       <Grid container component="main" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+<<<<<<< HEAD
+            <h2>Create Recipe</h2>
+            Title
+            <br></br>
+            <TextField type="text" variant="outlined" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
+=======
              
             <h2> Create Recipe</h2>
             Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
+>>>>>>> main
 
             Servings&nbsp;
             <br></br>
