@@ -134,6 +134,8 @@ def ingredientsSuggestions(ingredientsList):
                     igds_frequency[miss] += 1
     igds_frequency_sorted = sorted(igds_frequency.items(), key = lambda item : (-item[1], item[0]))
     finalList = [x[0] for x in igds_frequency_sorted]
+    if len(finalList) > 5: 
+        return finalList[:5]
     return finalList
 
 
