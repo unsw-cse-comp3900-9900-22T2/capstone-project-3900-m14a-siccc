@@ -525,11 +525,7 @@ const AllIngredients = () => {
                 )
               })
             } */}
-<<<<<<< HEAD
-            <h2>Ingredient Suggestions</h2>
-=======
             {/* <h2>Ingredient Suggestions</h2>
->>>>>>> main
             {
               ingredientSuggestions.map((suggestion, idx) => {
                 {console.log("here")}
@@ -539,11 +535,7 @@ const AllIngredients = () => {
                   </label>
                 </div>
               })
-<<<<<<< HEAD
-            }
-=======
             } */}
->>>>>>> main
 
             <h2>Your chosen ingredients:</h2>
             <ChosenIngredients/>
