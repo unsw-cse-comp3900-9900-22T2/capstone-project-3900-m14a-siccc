@@ -2,7 +2,7 @@ from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
 #from matplotlib.pyplot import get
-from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
+from src.calories_recipes import getCaloriesRecipesWithIngredients, getCaloriesRecipesWithIngredientsBlacklist, getRecipesWithCaloriesIngredientsMealType, getRecipesWithCaloriesIngredientsMealTypeBlacklist
 from src.error import InputError
 from src.recipe import recipeMatch, recipeDetails, recipeMatchwithBlacklist
 from src.ingredients import IngredientsViewAll
@@ -101,6 +101,29 @@ def recipeMatchwithBlacklistFlask():
     info = recipeMatchwithBlacklist(ingredients, blacklist)
     if len(info) == 0:
         addFrequency(ingredients)
+    return dumps({
+        'recipes': info
+    })
+
+@APP.route("/recipe/calorie/view/blacklist", methods = ['POST'])
+def recipeMatchCalorieFlaskBlacklist():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    calories = temp['calories']
+    blacklist = temp['blacklist']
+    info = getCaloriesRecipesWithIngredientsBlacklist(calories, ingredients, blacklist)
+    return dumps({
+        'recipes': info
+    })
+
+@APP.route("/recipe/calorie/mealtype/view/blacklist", methods = ['POST'])
+def recipeMatchMealTypeCalorieFlaskBlacklist():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    mealType = temp['mealType']
+    calories = temp['calories']
+    blacklist = temp['blacklist']
+    info = getRecipesWithCaloriesIngredientsMealTypeBlacklist(calories, ingredients, mealType, blacklist)
     return dumps({
         'recipes': info
     })
