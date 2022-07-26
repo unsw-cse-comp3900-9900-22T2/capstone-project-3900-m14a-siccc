@@ -609,17 +609,25 @@ const RecipeCreate = () => {
                           {/* If ingredient is checked */}
                             {ingredient.check
                               ? (<span>
-                                  <input type="number" 
+                                  <TextField type="number"
                                     name="grams" 
                                     min="0"
                                     placeholder='Enter values'
+                                    size='small'
                                     onChange={e => updateIngredientValue(e, ingredient.text)}/>
-
-                                  <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                                  <FormControl required size="small">
+                                    <Select
+                                      name="valueType"
+                                      onChange={e => updateIngredientMeasurement(e, ingredient.text)}
+                                    >
+                                      <MenuItem name="grams" value="g">grams</MenuItem>
+                                      <MenuItem name="quantities" value="q">quantitites</MenuItem>
+                                    </Select>
+                                  </FormControl>
+                                  {/* <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
                                     <option name="grams" value="g">grams</option>
                                     <option name="quantities" value="q">quantities</option>
-                                  </select> < br/>
-                                  
+                                  </select> < br/> */}
                                 </span>)
                                 
                               : <></>
