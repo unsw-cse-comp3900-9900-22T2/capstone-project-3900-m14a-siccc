@@ -2,12 +2,31 @@ import { Grid } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch, fileToDataUrl } from '../helpers.jsx';
-import { Box } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useState } from "react";
 import TextField from '@mui/material/TextField';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Checkbox } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import Slider from '@mui/material/Slider';
+import ListItem from '@mui/material/ListItem';
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Container from '@mui/material/Container';
 
 const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -23,6 +42,30 @@ const RecipeCreate = () => {
   const [categories, setCategories] = React.useState({});
   const [ingredientsGram, setIngredientsGram] = React.useState({});
   const [inputText, setInputText] = useState("");
+
+  const marks = [
+    { value: 0, label: '0'},
+    { value: 1, label: '1'},
+    { value: 2, label: '2'},
+    { value: 3, label: '3'},
+    { value: 4, label: '4'},
+    { value: 5, label: '5'},
+    { value: 6, label: '6'},
+    { value: 7, label: '7'},
+    { value: 8, label: '8'},
+    { value: 9, label: '9'},
+    { value: 10, label: '10'},
+    { value: 11, label: '11'},
+    { value: 12, label: '12'},
+    { value: 13, label: '13'},
+    { value: 14, label: '14'},
+    { value: 15, label: '15'},
+    { value: 16, label: '16'},
+    { value: 17, label: '17'},
+    { value: 18, label: '18'},
+    { value: 19, label: '19'},
+    { value: 20, label: '20'},
+  ]
 
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
@@ -149,6 +192,29 @@ const RecipeCreate = () => {
     console.log(newSteps);
   }
 
+  const changeSteps = (e) => {
+    setStepsNo(e.target.value);
+    const newSteps = [...steps];
+    const oldLength = newSteps.length;
+    if(parseInt(e.target.value) > oldLength) {
+      // Push the difference
+      const difference = parseInt(e.target.value) - oldLength;
+      var i = 0;
+      while(i < difference) {
+        newSteps.push(0)
+        i = i + 1;
+      }
+    } else {
+      const difference = oldLength - parseInt(e.target.value);
+      var i = 0;
+      while(i < difference) {
+        newSteps.pop()
+        i = i + 1;
+      }
+    }
+    setSteps(newSteps);
+  }
+  /*
   // Add the steps and add the number of steps
   const addStepsNo = () => {
     setStepsNo(stepsNo + 1);
@@ -166,7 +232,7 @@ const RecipeCreate = () => {
     newSteps.pop();
     setSteps(newSteps);
   }
-
+  */
   // Sends off data of the created recipe to backend
   const createRecipe = () => {
     console.log(ingredientsGram);
@@ -249,14 +315,28 @@ const RecipeCreate = () => {
         }
       }
       if (flag === 0) {
-        catSuggestions.push(<div>{categoryName}</div>)
+        catSuggestions.push(categoryName)
       }
     }
     return(
-      <div>
-          <h3>Suggested categories of ingredients:</h3>
-          {catSuggestions}
-      </div>
+      // <div>
+      //   <Typography component="h2" variant="h6">
+      //     Suggested categories of ingredients
+      //   </Typography>
+      //   <Typography component="h3" variant="body1">
+      //     {catSuggestions}
+      //   </Typography>
+      // </div>
+      catSuggestions.map((category, idx) => {
+        return(
+          <ListItem key={idx}>
+            <ListItemIcon>
+              <LocalDiningIcon/>
+            </ListItemIcon>
+            <ListItemText primary={category}/>
+          </ListItem>
+        )
+      })
     )
   }
 
@@ -319,18 +399,25 @@ const RecipeCreate = () => {
       {filteredData.map((ingredient, idx) => (
         <div key={idx}>
           <label>
-            {ingredient.text}
-            <input
+            <Checkbox
               onChange={() => toggleIngredients(idx, ingredient.text)}
-              type="checkbox"
               checked={ingredient.check}
             />
+            {ingredient.text} 
           </label>
         </div>
       ))}
       </div>
     )
   }
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#93c759'
+      }
+    }
+  });
 
 //   React.useEffect(() => {
 //     viewAllIngredients();
@@ -350,12 +437,232 @@ const RecipeCreate = () => {
 
   return (
     <>
-      <head>  
-        <title>
-          reeeeee
-        </title>
-      </head>
-      <Grid container direction="row" justifyContent="space-between">
+     <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="md">
+        <CssBaseline />
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: '#93c759' }}>
+              <MenuBookIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Create Recipe
+            </Typography>
+            <Box component="form" sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="title"
+                label="Title"
+                type="text"
+                name="title"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="servings"
+                label="Servings"
+                type="number"
+                id="servings"
+                min="0"
+                value={servings}
+                onChange={e => setServings(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="cookingTime"
+                type="number"
+                name="cookingTime"
+                label="Cooking Time"
+                min="0"
+                value={cookingTime}
+                onChange={e => setCookingTime(e.target.value)}
+              />
+              <FormControl fullWidth margin="normal" required>
+                <Select
+                  name="mealType"
+                  displayEmpty
+                  value={mealType}
+                  onChange={e => setMealType(e.target.value)}
+                >
+                  <MenuItem value="">Select Meal Type</MenuItem>
+                  <MenuItem value="Breakfast">Breakfast</MenuItem>
+                  <MenuItem value="Lunch">Lunch</MenuItem>
+                  <MenuItem value="Dinner">Dinner</MenuItem>
+                  <MenuItem value="Entree">Entrée</MenuItem>
+                  <MenuItem value="Main">Main</MenuItem>
+                  <MenuItem value="Dessert">Dessert</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+                startIcon={<PhotoCameraIcon/>}
+                sx={{ mt: 2, mb: 2}}
+                variant="contained" 
+                component="label"
+                fullWidth
+              >
+                Upload Recipe Photo
+                <input 
+                  type="file"
+                  name="thumbnail"
+                  accept="image/png, image/jpg, image/jpeg"
+                  hidden
+                  onChange={thumbnailUpdate}
+                />
+              </Button>
+              <Grid item>
+                {thumbnail !== ''
+                  ? (<img src={thumbnail} alt="recipe thumbnail" height="500px" width="700px"/>)
+                  : <></>
+                }
+              </Grid>
+              <Typography component="h2" variant="h6">
+                How many steps does your recipe have?
+              </Typography>
+              <Slider
+                marks={marks}
+                steps={10}
+                valueLabelDisplay='true'
+                min={0}
+                max={20}
+                onChange={changeSteps}
+              />
+              {steps.map((step, idx) => {
+                return (
+                  <div key={idx}>
+                    <TextField
+                      margin="normal"
+                      label={"Step "+ (idx + 1)}
+                      onChange={e => updateSteps(e, idx)}
+                      fullWidth
+                    />
+                  </div>
+                )
+              })}
+              <Grid container spacing={2}>
+                <Grid item xs={6} margin="normal">
+                  <Typography component="h2" variant="h6">
+                    Suggested Categories
+                  </Typography>
+                  <CatSuggestion/>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography component="h2" variant="h6">
+                    Frequently Searched Ingredients
+                  </Typography>
+                  {freqIngredients.map((ingredients, idx) => (
+                    // <div key={idx}>
+                    //   <Typography component="h3" variant="body1">
+                    //     {ingredients}
+                    //   </Typography>
+                    // </div>
+                    <ListItem key={idx}>
+                      <ListItemIcon>
+                        <LocalDiningIcon/>
+                      </ListItemIcon>
+                      <ListItemText primary={ingredients}/>
+                    </ListItem>
+                  ))}
+                </Grid>
+              </Grid>
+              <Typography component="h2" variant="h6">
+                Select your ingredients
+              </Typography>
+              <TextField
+                margin="normal"
+                fullWidth
+                placeholder='Search ingredients' 
+                onChange={inputHandler}
+              />
+              <List input={inputText}/>
+              {Object.keys(categories).map((category, idx) => {
+                return(
+                  <div key = {idx}>
+                    <h3>
+                      {category}
+                    </h3>
+                  {
+                    categories[category].map((ingredient, idx2) => {
+                      return(
+                        <div key = {idx2}>
+                          <label>
+                            <Checkbox
+                              onChange={() => toggleCategoryIngredients(category, idx2)}
+                              type="checkbox"
+                              checked={ingredient.check}
+                            />
+                            {ingredient.text}
+                          </label>
+                          {/* If ingredient is checked */}
+                            {ingredient.check
+                              ? (<span>
+                                  <input type="number" 
+                                    name="grams" 
+                                    min="0"
+                                    placeholder='Enter values'
+                                    onChange={e => updateIngredientValue(e, ingredient.text)}/>
+
+                                  <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
+                                    <option name="grams" value="g">grams</option>
+                                    <option name="quantities" value="q">quantities</option>
+                                  </select> < br/>
+                                  
+                                </span>)
+                                
+                              : <></>
+                            }
+                          </div>
+                        )
+                      })
+                    }
+                    </div>
+                  )
+                })
+              }
+              <Grid container spacing={2}>
+                <Grid item xs={6} margin="normal">
+                  <Button
+                    name="create"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    xs={6}
+                    onClick= {createRecipe}
+                  >
+                    Create
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    name="cancel"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    onClick={() => navigate('/')}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+      </Container>
+    </ThemeProvider>
+{/*     
+      <Grid container component="main" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
             <h2>Create Recipe</h2>
@@ -448,7 +755,7 @@ const RecipeCreate = () => {
                             {ingredient.text}
                           </label>
                           {/* If ingredient is checked */}
-                          {ingredient.check
+                          {/*ingredient.check
                             ? (<span>
                                 <input type="number" 
                                   name="grams" 
@@ -504,8 +811,8 @@ const RecipeCreate = () => {
                 }
               </div>
             ))} */}
-
-            <button name="create" onClick={ createRecipe }>Create</button>
+          
+            {/* <button name="create" onClick={ createRecipe }>Create</button>
             <button onClick={() => navigate('/')}>Cancel</button>
             
           </Box>
@@ -524,7 +831,7 @@ const RecipeCreate = () => {
               </Box>
           </Grid>
         </Grid>
-      </Grid>  
+      </Grid>   */}
     </>
   );
 }
