@@ -28,10 +28,12 @@ import Favorite from '@mui/icons-material/Favorite';
 const AllIngredients = () => {
   const navigate = useNavigate();
   const [ingredients, setIngredients] = React.useState([]);
+  const [blacklist, setBlacklist] = React.useState([]);
   const [recipes, setRecipes] =  React.useState([]);
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
+  const [blacklistInputText, setBlacklistInputText] = useState("");
   const [inputCat, setInputCat] = useState("");
   const [ingredientSuggestions, setIngredientSuggestions] = React.useState([]);
   var localCalories = localStorage.getItem('calories');
@@ -53,6 +55,11 @@ const AllIngredients = () => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
+
+  let blacklistInputHandler = (e) => {
+    var lowerCase = e.target.value.toLowerCase();
+    setBlacklistInputText(lowerCase);
+  };
   
   let calorieInputHandler = (e) => {
     const number = Math.abs(e.target.value);
@@ -67,10 +74,32 @@ const AllIngredients = () => {
   }
 
   // Displays all Ingredients
+  const viewAllBlacklist = async () => {
+    try {
+
+      const newBlacklist = [];
+      console.log(ingredients.length);
+      
+      // Sets a list of dictionary of ingredients if there is no local storage
+      if (blacklist.length === 0) {
+        const ingredientData = await apiFetch('GET', `ingredients/view`, null);
+        for (const ingredient of ingredientData) {
+          const elem = { text: ingredient, check: false };
+          newBlacklist.push(elem);
+        }
+        setBlacklist(newBlacklist);
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  // Displays all Ingredients
   const viewAllIngredients = async () => {
     try {
       console.log(ingredients);
       const ingredientList = [];
+      //const newBlacklist = [];
       console.log(ingredients.length);
       
       // Sets a list of dictionary of ingredients if there is no local storage
@@ -80,8 +109,10 @@ const AllIngredients = () => {
         for (const ingredient of ingredientData) {
           const elem = { text: ingredient, check: false };
           ingredientList.push(elem);
+          //newBlacklist.push(elem);
         }
         setIngredients(ingredientList);
+        //setBlacklist(newBlacklist);
       }
 
       console.log(ingredients)
@@ -103,6 +134,18 @@ const AllIngredients = () => {
   //   setIngredients(newIngredient);
   // }
 
+  function toggleBlacklist (index, ingredientName) {
+    if (ingredientName) {
+      for (const ingredient of blacklist) {
+        if (ingredient.text === ingredientName) {
+          index = blacklist.indexOf(ingredient);
+        }
+      }
+    }
+    const newBlacklist = [...blacklist];
+    newBlacklist[index].check = !blacklist[index].check;
+    setBlacklist(newBlacklist);
+  }
 
   // Function to set ingrdients selected
   function toggleIngredients (index, ingredientName) {
@@ -136,10 +179,10 @@ const AllIngredients = () => {
           console.log(categoryName);*/
           break;
         }
-        console.log(ingredientDict.text);
       }
     }
     setCategories(newCategory);
+    console.log(blacklist);
     
     //TODO: Send information of ingredients to backend for ingredient suggestions
     getIngredientSuggestions();
@@ -149,6 +192,7 @@ const AllIngredients = () => {
   const recipeMatch = async (clicked) => {
     try {
       const selectedIngredients = [];
+      const selectedBlacklist = [];
       console.log(clicked);
       // Checks if the ingredients are selected and pushes to list
       /*for (const ingredient of ingredients) {
@@ -164,12 +208,18 @@ const AllIngredients = () => {
         localStorage.setItem('ingredients', JSON.stringify(ingredients));
         localStorage.setItem('calories', JSON.stringify(calorieLimit));
         localStorage.setItem('mealType', JSON.stringify(mealType));
+        localStorage.setItem('blacklist', JSON.stringify(blacklist));
         for (const [, ingredients] of Object.entries(categories)) {
           console.log(ingredients)
           for (const ingredient of ingredients) {
             if (ingredient.check){
               selectedIngredients.push(ingredient.text);
             }
+          }
+        }
+        for (const i of blacklist) {
+          if (i.check){
+            selectedBlacklist.push(i.text);
           }
         }
       // If user didn't click search button, this means they refresh the page
@@ -197,6 +247,7 @@ const AllIngredients = () => {
         ingredients: selectedIngredients,
         calories: calorieLimit,
         mealType: mealType,
+        blacklist: selectedBlacklist,
       }
       if(calorieLimit != 0 && calorieLimit != null && 
         !isNaN(calorieLimit) && mealType != "") {
@@ -212,7 +263,11 @@ const AllIngredients = () => {
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
         console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
-      } else {
+      } else if (selectedBlacklist.length !== 0) {
+        // const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
+        // setRecipes(recipeData.recipes);
+      }
+      else {
         // Meal type and calorie limit are not selected
         const recipeData = await apiFetch('POST', `recipe/view`, null, body);
         setRecipes(recipeData.recipes);
@@ -292,6 +347,27 @@ const AllIngredients = () => {
     getIngredientSuggestions()
   }
 
+  function toggleBlacklistIngredients (category, index) {
+    const newBlacklist = [...blacklist];
+    console.log(categories[category][index].text)
+    for (const ingredient of blacklist) {
+      if (categories[category][index].text === ingredient.text){
+        const allIngreIdx = blacklist.indexOf(ingredient);
+        newBlacklist[allIngreIdx].check = !blacklist[allIngreIdx].check;
+        break;
+      }
+    }
+    setBlacklist(newBlacklist);
+  }
+
+  function blacklistIndex (category, index) {
+    for (const ingredient of blacklist) {
+      if (categories[category][index].text === ingredient.text){
+        return blacklist.indexOf(ingredient);
+      }
+    }
+  }
+
   React.useEffect(() => {
     //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
     //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
@@ -300,7 +376,7 @@ const AllIngredients = () => {
     // if there is local storage set the check lists to display the data
     if (localStorage.getItem('categories') && 
       Object.keys(JSON.parse(localStorage.getItem('categories'))).length !== 0) {
-
+      setBlacklist(JSON.parse(localStorage.getItem('blacklist')));
       setCategories(JSON.parse(localStorage.getItem('categories')));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
       if(localStorage.getItem('calories')) {
@@ -314,11 +390,39 @@ const AllIngredients = () => {
       console.log("ssssss")
     } else {
       viewAllIngredientsInCategories();
+      viewAllBlacklist();
       viewAllIngredients();
       console.log("nnnnnn")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // List for blacklist search bar
+  function SearchBlacklist(props) {
+    const filteredBlacklist = blacklist.filter((el) => {
+      if (props.input === '') {  
+        return null;
+      }
+      else {
+          return el.text.includes(props.input)
+      }
+    })
+
+    return(
+      <div>
+      {filteredBlacklist.map((ingredient, idx) => (
+        <div key={idx}>
+          <FormControlLabel 
+            control={<Checkbox/>} 
+            label={ingredient.text} 
+            onChange={() => toggleBlacklist(idx, ingredient.text)} 
+            checked={ingredient.check}
+          />
+        </div>
+      ))}
+      </div>
+    )
+  }
 
   // List for ingredient search bar
   function List(props) {
@@ -410,6 +514,11 @@ const AllIngredients = () => {
                 onChange={() => toggleCategoryIngredients(props.input, idx2)} 
                 checked={ingredient.check}
               />
+              <input
+                onChange={() => toggleBlacklistIngredients(props.input, idx2)}
+                type="checkbox"
+                checked={blacklist[blacklistIndex(props.input, idx2)].check}
+              />
               {/* <label>
                 {ingredient.text}
                 <input
@@ -495,7 +604,32 @@ const AllIngredients = () => {
               ))}
             </select> */}
             <ViewCategory input={inputCat}/>
-
+            
+            <h2>Blacklist your ingredients</h2>
+            <small>Recipes with these ingredients will not show in your search</small>
+            <br/><br/>
+            <TextField placeholder="Blacklist ingredients" variant="outlined" onChange={blacklistInputHandler}/>
+            <SearchBlacklist input={blacklistInputText}/>
+            <br/>
+            <h2>Your Blacklisted Ingredients</h2>
+            {blacklist.map((name, idx) => (
+              <div>
+                {name.check
+                  ? <div key={idx}>
+                    <label>
+                      {name.text}
+                      <input
+                        onChange={() => toggleBlacklist(idx)}
+                        type="checkbox"
+                        checked={name.check}
+                      />
+                    </label>
+                  </div>
+                  : <></>
+                }
+              </div>
+            ))}
+            
             {/* {
               Object.keys(categories).map((category, idx) => {
                 return(

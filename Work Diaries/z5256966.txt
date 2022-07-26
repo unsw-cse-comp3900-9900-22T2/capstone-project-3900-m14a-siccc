@@ -30,3 +30,11 @@ Distributed user stories to do
 Week 6
 Started on creating a recipe form
 Did some frontend work
+
+Week 7
+Added grams and quantities for recipe create
+Complete recipe create form
+
+Week 8
+Completed Demo B
+Wrote up rectrospective

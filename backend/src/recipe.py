@@ -118,7 +118,7 @@ def ingredientsSuggestions(ingredientsList):
     igdsSuggestions = []
     igds_frequency = {}
     for recipe in info:
-        ingredients = [i.split(' ')[1] for i in recipe[8].split(', ')]
+        ingredients = [" ".join(i.split(' ')[1:]) for i in recipe[8].split(', ')]
         match = 0
         missing_igds = []
         for igd in ingredients:
@@ -129,14 +129,15 @@ def ingredientsSuggestions(ingredientsList):
         if match == num_select:
             for miss in missing_igds:
                 if len(igds_frequency) > 0:
-                    if igds_frequency[igd] is not None:
+                    if igds_frequency.get(miss) is not None:
+                        print(f"\t{miss} = {igds_frequency[miss]}\n")
                         new_frequency = igds_frequency[miss] + 1
                         igds_frequency[miss] = new_frequency
                     else:
                         igds_frequency[miss] = 1
                 else:
                     igds_frequency[miss] = 1
-    
+
     if len(igds_frequency) <= 5:
         igdsSuggestions = sorted(igds_frequency.keys())
     else:
@@ -164,7 +165,14 @@ def ingredientsSuggestions(ingredientsList):
                             break
                     tmp_igds = [igds]
                     pre_frequency = fqy
-
+        if len(igdsSuggestions) < 5:
+            tmp_igds_sort = sorted(tmp_igds)
+            for i in tmp_igds_sort:
+                if len(igdsSuggestions) < 5:
+                    igdsSuggestions.append(i)
+                else:
+                    break
+                    
     return igdsSuggestions
 
     """

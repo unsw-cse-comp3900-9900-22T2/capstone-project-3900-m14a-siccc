@@ -1,4 +1,5 @@
 #from backend.src.helper import retrieveRecipeList
+from unittest import result
 import psycopg2
 from src.recipe import ingredientsSuggestions
 from src.recipeContributor import insertRecipe
@@ -35,246 +36,88 @@ import pytest
 #     insertRecipe(RandomRecipeDetails)
 
 
-
-
 def simple_ingredientsSuggestions_test_noIngredientSelected():
+    """
+        No any suggestions if user did not select anything.
+    """
     ingredientsList = []
     results = ingredientsSuggestions(ingredientsList)
-    answer = []
-    match = True
+    assert len(results) == 0
+
+
+def test_ingredientSuggestion_SelectThreeIngredients_noSuggestions():
+    ingredientsList = ["olive oil", "flour", "broccoli"]
+    results = ingredientsSuggestions(ingredientsList)
+    assert len(results) == 0
+
+
+def test_ingredientSuggestion_SelectOneIngredient_FourSuggestions():
+    ingredientsList = ["thyme"]
+    results = ingredientsSuggestions(ingredientsList)
+    answer = ['avocado', 'bacon', 'egg', 'flour']
+    assert len(results) == len(answer)
+    match = 0
     for i in range(len(answer)):
-        if answer[i] != results[i]:
-            match = False
-    assert match is True
+        if results[i] != answer[i]:
+            break
+        match += 1
+    assert len(results) == match
 
-def test_ingredientSuggestion_CurrentDatabaseBaconEgg():
-    ingredientsList = ["bacon", "egg"]
-    results = ingredientsSuggestions(ingredientsList)
-    answer = ["avocado", "bread", "flour", "beef", "olive oil"]
-    assert results == answer
+
+def test_ingredientSuggestion_SelectOneIngredient_FiveSuggestions():
+    """             freq	
+        olive oil 	2	    
+        egg         8       
+        flour 	    1	    
+        thyme 	    1	    
+        avo	        4	    
+        beef        3          
     """
-    Using current recipes saved in database, worked it out manually 
-    
-                    freq	match %
-        olive oil 	2	    66
-        flour 	    3	    40
-        thyme 	    1	    40
-        avo	        5	    50
-        cinnamon 	1	    33
-        duck 	    1	    25
-        bread	    3	    50
-        parsley 	1	    33
-        celery  	1	    33
-        rice	    1	    33
-        beef 	    3	    33
-        cheese 	    1	    25
-
-    Expected order 
-        avo
-        bread
-        flour
-        beef
-        olive oil 
-        thyme
-        celery 
-        cinnamon 
-        parsley 
-        rice
-        cheese 
-        duck 
-
-    Hopefully right
-
-    """
-def test_ingredientSuggestion_noRecipeIngredientsSelected():
-    """
-    Clear all recipes
-
-    User selects:
-    [bacon, egg]
-
-    Return: 
-    []
-    """
-    makeRecipeHelper(["1 bacon", "1 egg"])
-
-    ingredientsList = []
-    results = ingredientsSuggestions(ingredientsList)
-    
-    assert results == []
-
-def test_ingredientSuggestion_OneRecipeMatch():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon]
-
-    User selects:
-    [bacon]
-
-    Return: 
-    []
-    """
-    makeRecipeHelper(["1 bacon"])
-
     ingredientsList = ["bacon"]
     results = ingredientsSuggestions(ingredientsList)
-    
-    assert results == []
+    answer = ["egg", "avocado", "beef", "olive oil", "flour"]
+    assert len(answer) == len(results)
+    match = 0
+    for i in range(len(answer)):
+        if results[i] != answer[i]:
+            break
+        match += 1
+    assert len(results) == match
 
-def test_ingredientSuggestion_OneRecipeNoMatch():
+
+def test_ingredientSuggestion_SelecttwoIngredients_fourSuggestions():
+    """             freq	
+        olive oil 	2	    
+        flour 	    1	    
+        thyme 	    1	    
+        avo	        1	        
     """
-    Clear all recipes
-
-    Add recipe:
-    [egg, celery]
-
-    User selects:
-    [bacon, bread]
-
-    Return: 
-    []
-    """
-    makeRecipeHelper(["1 egg", "1 celery"])
-
-    ingredientsList = ["bacon", "bread"]
-    results = ingredientsSuggestions(ingredientsList)
-    
-    assert results == []
-
-def test_ingredientSuggestion_OneRecipeOneMatch():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, egg]
-
-    User selects:
-    [bacon]
-
-    Return: 
-    [egg]
-    """
-    makeRecipeHelper(["1 bacon", "1 egg"])
-
-    ingredientsList = ["bacon"]
-    results = ingredientsSuggestions(ingredientsList)
-    
-    assert results == ["egg"]
-
-def test_ingredientSuggestion_DiffFrequency():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, egg, rice]			
-    [bacon, egg, rice, eggplant]					
-    [bacon, egg, rice, eggplant, cabbage]	
-
-    User selects:
-    [bacon, egg]
-
-    Return: 
-    [rice, eggplant, cabbage]			
-
-    """
-    makeRecipeHelper(["1 bacon", "1 egg", "1 rice"])
-    makeRecipeHelper(["1 bacon", "1 egg", "1 rice", "1 eggplant"])
-    makeRecipeHelper(["1 bacon", "1 egg", "1 rice", "1 eggplant", "cabbage"])
-
     ingredientsList = ["bacon", "egg"]
     results = ingredientsSuggestions(ingredientsList)
+    answer = ["olive oil", "avocado", "flour", "thyme"]
+    assert len(results) == len(answer)
+    match = 0
+    for i in range(len(results)):
+        if results[i] != results[i]:
+            break
+        match += 1
+    assert match == len(results)
     
-    assert results == ["rice", "eggplant", "cabbage"]
+
+def test_ingredientSuggestion_threeIngredients_twoSuggestions():
+    ingredientsList = ["milk", "turkey", "cheese"]
+    results = ingredientsSuggestions(ingredientsList)
+    answer = ["spinach"]
+    assert len(results) == len(answer)
+    match = 0
+    for i in range(len(results)):
+        if results[i] != results[i]:
+            break
+        match += 1
+    assert match == len(results)
 
 
-def test_ingredientSuggestion_DiffMatch():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, egg, oil, apple]		
-    [bacon, egg, avocado]	
-    [bacon, orange]		
-
-    User selects:
-    [bacon, egg, oil]
-
-    Return: 
-    [apple, orange, avocado]			
-
-    """
-
-def test_ingredientSuggestion_Alpha():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, egg, rice, eggplant, cabbage]						
-    [bacon, egg, rice, eggplant, cabbage]	
-    [bacon, egg, rice, eggplant, cabbage]						
-
-    User selects:
-    [bacon, egg]
-
-    Return: 
-    [cabbage, eggplant, rice]			
-
-    """
-
-def test_ingredientSuggestion_DiffFrequencySameMatch():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, cabbage]
-    [bacon, eggplant]
-    [bacon, eggplant]
-    [bacon, rice]
-    [bacon, rice]
-    [bacon, rice]
-
-    User selects:
-    [bacon]
-
-    Return: 
-    [rice, eggplant, cabbage]			
-
-    """
-
-def test_ingredientSuggestion_SameFrequencySameMatchDiffAlpha():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, cabbage]
-    [bacon, eggplant]
-    [bacon, rice]
-    
-    User selects:
-    [bacon]
-
-    Return: 
-    [rice, eggplant, cabbage]			
-
-    """
-
-
-
-def test_ingredientSuggestion_FrequencyMatchAndAlpha():
-    """
-    Clear all recipes
-
-    Add recipe:
-    [bacon, egg, oil, avocado]			
-    [egg, rice, eggplant, cabbage]			
-    [bacon, egg, rice, cabbage, apple, orange]			
-
-    User selects:
-    [bacon, egg]
-
-    Return: 
-    [cabbage, rice, avocado, oil, eggplant]			
-
-    """
+def test_ingredientSuggestion_fiveIngredients_noSuggestions():
+    ingredientsList = ["bacon", "egg", "flour", "olive oil", "duck"]
+    results = ingredientsSuggestions(ingredientsList)
+    assert len(results) == 0
