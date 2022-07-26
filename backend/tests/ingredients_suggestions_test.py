@@ -55,3 +55,19 @@ def test_ingredientSuggestion_CurrentDatabaseBaconEgg():
     answer = ["olive oil", "avocado", "flour", "thyme", ]
     assert results == answer
 
+def test_ingredientSuggestion_CurrentDatabaseBacon():
+    ingredientsList = ["bacon"]
+    results = ingredientsSuggestions(ingredientsList)
+    answer = ["egg", "avocado", "beef", "olive oil", "flour"]
+    assert results == answer
+
+    """
+    egg	        8
+    olive oil 	2
+    flour 	    1
+    thyme 	    1
+    avocado 	4
+    beef 	    3
+   
+    """
+
