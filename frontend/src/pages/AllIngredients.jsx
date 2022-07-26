@@ -33,6 +33,7 @@ const AllIngredients = () => {
   const [categories, setCategories] = React.useState({});
   const [clickedSearch, setClickedSearch] = React.useState(false);
   const [inputText, setInputText] = useState("");
+  const [blacklistInputText, setBlacklistInputText] = useState("");
   const [inputCat, setInputCat] = useState("");
   const [ingredientSuggestions, setIngredientSuggestions] = React.useState([]);
   var localCalories = localStorage.getItem('calories');
@@ -53,6 +54,11 @@ const AllIngredients = () => {
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
+  };
+
+  let blacklistInputHandler = (e) => {
+    var lowerCase = e.target.value.toLowerCase();
+    setBlacklistInputText(lowerCase);
   };
   
   let calorieInputHandler = (e) => {
@@ -258,8 +264,8 @@ const AllIngredients = () => {
         console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
       } else if (selectedBlacklist.length !== 0) {
-        const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
-        setRecipes(recipeData.recipes);
+        // const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
+        // setRecipes(recipeData.recipes);
       }
       else {
         // Meal type and calorie limit are not selected
@@ -393,7 +399,7 @@ const AllIngredients = () => {
 
   // List for blacklist search bar
   function SearchBlacklist(props) {
-    const filteredData = blacklist.filter((el) => {
+    const filteredBlacklist = blacklist.filter((el) => {
       if (props.input === '') {  
         return null;
       }
@@ -404,7 +410,7 @@ const AllIngredients = () => {
 
     return(
       <div>
-      {filteredData.map((ingredient, idx) => (
+      {filteredBlacklist.map((ingredient, idx) => (
         <div key={idx}>
           <FormControlLabel 
             control={<Checkbox/>} 
@@ -602,8 +608,8 @@ const AllIngredients = () => {
             <h2>Blacklist your ingredients</h2>
             <small>Recipes with these ingredients will not show in your search</small>
             <br/><br/>
-            <TextField placeholder="Blacklist ingredients" variant="outlined" onChange={inputHandler}/>
-            <SearchBlacklist input={inputText}/>
+            <TextField placeholder="Blacklist ingredients" variant="outlined" onChange={blacklistInputHandler}/>
+            <SearchBlacklist input={blacklistInputText}/>
             <br/>
             <h2>Your Blacklisted Ingredients</h2>
             {blacklist.map((name, idx) => (
