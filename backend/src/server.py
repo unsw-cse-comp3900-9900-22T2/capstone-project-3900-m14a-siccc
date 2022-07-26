@@ -30,7 +30,12 @@ def recipeMatchFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
     info = recipeMatch(ingredients)
-    if len(info) == 0:
+    partialMatch = True
+    for entry in info:
+        if entry['partialMatch'] == False:
+            partialMatch = False
+            break
+    if len(info) == 0 or partialMatch:
         addFrequency(ingredients)
     return dumps({
         'recipes': info
