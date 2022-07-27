@@ -1,7 +1,7 @@
-from src.recipe import recipeMatch
+from src.recipe import getFilteredRecipes, recipeMatch
 
 
-def getMealType(meal, ingredientsList):
+def getMealType(meal, ingredientsList, blacklist):
     """ Select the meal type after the recipe match. 
 
             Parameters:
@@ -11,7 +11,7 @@ def getMealType(meal, ingredientsList):
             Returns:
                 recipleTypeList: list of all recipes ingredients
     """
-    recipeList = recipeMatch(ingredientsList)
+    recipeList = recipeMatch(ingredientsList, blacklist)
 
     recipeTypeList = []
 
