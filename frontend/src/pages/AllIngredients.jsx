@@ -248,24 +248,29 @@ const AllIngredients = () => {
 
   const getIngredientSuggestions = async () => {
     try {
-      const suggestionList = [];
+      const suggestionIngredients = [];
       for(const ingred of ingredients) {
         if(ingred.check == true) {
-          suggestionList.push(ingred);
+          suggestionIngredients.push(ingred.text);
         }
-      }
-      const suggestionIngredients = [];
-      for(const ingred of suggestionList) {
-        suggestionIngredients.push(ingred.text);
       }
       const body = {
         'ingredients': suggestionIngredients,
       }
+      console.log('here')
       console.log(body)
-      console.log("here")
       const ingredientSug = await apiFetch('POST', 'recipe/ingredient/suggestions', null, body);
-      console.log(ingredientSug)
-      setIngredientSuggestions(ingredientSug);
+      const finalList = [];
+      for(const ingredSug of ingredientSug['ingredients']) {
+        for(const ingred of ingredients) {
+          if(ingred.text == ingredSug) {
+            finalList.push(ingred)
+          }
+        }
+      }
+      console.log('now')
+      console.log(finalList)
+      setIngredientSuggestions(finalList);
     } catch (err) {
       alert(err.message)
     }
@@ -289,7 +294,37 @@ const AllIngredients = () => {
     }
     setIngredients(newIngredient);
 
-    getIngredientSuggestions()
+    getIngredientSuggestions();
+  }
+
+  function toggleSuggestions(ingredient) {
+    // Find ingredient in ingredients list, change check and set
+    const newIngredient = [...ingredients];
+    for (const ingred of ingredients) {
+      if(ingredient == ingred) {
+        const allIngreIdx = ingredients.indexOf(ingred);
+        newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
+        break
+      }
+    }
+    setIngredients(newIngredient);
+
+    // Find categories in categories list, change check and set
+    const newCategory = {...categories};
+    for (const [categoryName, ingredientsList] of Object.entries(categories)) {
+      for (const ingredientDict of ingredientsList) {
+        if(ingredientDict.text == ingredient.text) {
+          console.log('hmmm')
+          console.log(ingredientDict)
+          const matchIdx = categories[categoryName].indexOf(ingredientDict);
+          newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
+          break;
+        }
+      }
+    }
+    setCategories(newCategory);
+
+    getIngredientSuggestions();
   }
 
   React.useEffect(() => {
@@ -525,17 +560,20 @@ const AllIngredients = () => {
                 )
               })
             } */}
-            {/* <h2>Ingredient Suggestions</h2>
+            <h2>Ingredient Suggestions</h2>
             {
               ingredientSuggestions.map((suggestion, idx) => {
-                {console.log("here")}
+                return(
                 <div key = {idx}>
-                  <label>
-                    {console.log(suggestion)}
-                  </label>
+                  <Checkbox
+                    onChange={() => toggleSuggestions(suggestion)}
+                    type="checkbox"
+                    checked={suggestion.check}
+                  />
+                  {suggestion.text}
                 </div>
-              })
-            } */}
+              )})
+            }
 
             <h2>Your chosen ingredients:</h2>
             <ChosenIngredients/>
