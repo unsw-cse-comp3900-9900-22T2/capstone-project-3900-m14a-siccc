@@ -263,10 +263,10 @@ const AllIngredients = () => {
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
         console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
-      } else if (selectedBlacklist.length !== 0) {
-        // const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
-        // setRecipes(recipeData.recipes);
-      }
+      } //else if (selectedBlacklist.length !== 0) {
+      //   // const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
+      //   // setRecipes(recipeData.recipes);
+      // }
       else {
         // Meal type and calorie limit are not selected
         const recipeData = await apiFetch('POST', `recipe/view`, null, body);

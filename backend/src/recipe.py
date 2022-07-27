@@ -4,7 +4,7 @@ import psycopg2
 from src.helper import retrieveRecipe, retrieveRecipeList
 from src.config import host, user, password, dbname
 
-def recipeMatch(ingredientsList):
+def recipeMatch(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
@@ -21,6 +21,8 @@ def recipeMatch(ingredientsList):
     db = psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")
     info = retrieveRecipeList(db)
+    if blacklist != []:
+        info = getFilteredRecipes(info, blacklist)
     for recipe in info:
         ingredientString = recipe[8]
         ingredients = ingredientString.split(', ')
@@ -56,6 +58,88 @@ def recipeMatch(ingredientsList):
             recipeList.append(ingDict)
 
     return recipeList
+
+def recipeMatchwithBlacklist(ingredientsList, blacklist):
+    """ Sends front end a list of recipes that satisfy the list 
+        of ingredients that the user selected by alphabetically.
+        Parameters:
+            ingredientsList (str): list of ingredients user selected
+            blacklist (list): list of blacklisted ingredients user selected
+        Return:
+            recipeList (list): list of recipes id's satisfying the ingredients
+    """
+    # [[relevent percetage, recipe information], ...,
+    # [relevent percetage, recipe information]]
+    
+    recipeList = []
+    db = psycopg2.connect(
+        f"host={host} dbname={dbname} user={user} password={password}")
+    info = retrieveRecipeList(db)
+    filteredRecipeList = getFilteredRecipes(info, blacklist)
+    for recipe in filteredRecipeList:
+        ingredientString = recipe[8]
+        ingredients = ingredientString.split(', ')
+        missingIngList = ingredients.copy()
+        matching = 0
+        for i in ingredientsList:
+            for j in ingredients:
+                if i in j:
+                    matching += 1
+                    missingIngList.remove(j)
+        if matching == len(ingredients) or matching == len(ingredients) - 1:
+            missingIng = ''
+            if matching == len(ingredients) - 1:
+                ing = missingIngList.pop()
+                ing = ing.split(' ')
+                ing.pop(0)
+                missingIng = " ".join(ing)
+            ingDict = {
+                    "recipeID": recipe[0],
+                    "title": recipe[7],
+                    "servings": recipe[1],
+                    "timeToCook": recipe[2],
+                    "mealType": recipe[3],
+                    "photo": recipe[4],
+                    "calories": recipe[5],
+                    "cookingSteps": recipe[6],
+                    "ingredients": recipe[8],
+                    "missingIngredient": missingIng,
+            }
+            recipeList.append(ingDict)
+
+    return recipeList
+
+def getFilteredRecipes(recipes, blacklist):
+    """ Helper function for recipeMatch 
+    Parameters:
+        recipes(list): list of all existing recipes 
+        blacklist (list): list of blacklisted ingredients user selected
+    Return:
+        recipeList (list): list of recipes without ingredients from blacklist
+"""
+    filteredRecipeList = []
+    for recipe in recipes:
+        ingredientString = recipe[8]
+        ingredients = ingredientString.split(',')
+        if RecipeHasBlacklist(ingredients, blacklist) is False:
+            filteredRecipeList.append(recipe)
+    return filteredRecipeList
+
+
+def RecipeHasBlacklist(recipe, blacklist):
+    """
+    Helper function for getFilteredRecipes
+    Parameters:
+        recipe(list): list of ingredients in recipe 
+        blacklist (list): list of blacklisted ingredients user selected
+    Return:
+        recipeList (boolean): true if recipe contains any blacklisted ingredient, false otherwise 
+    """
+    for ingredient in recipe:
+        for unwanted in blacklist:
+            if unwanted in ingredient:
+                return True
+    return False
 
 def recipeDetails(recipeID):
     """ Retrieves recipe details given a recipe id
