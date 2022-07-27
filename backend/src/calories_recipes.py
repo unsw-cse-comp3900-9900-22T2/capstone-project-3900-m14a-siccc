@@ -51,8 +51,8 @@ def getCaloriesRecipesWithIngredients(calories, ingredientsList, blacklist):
                 recipeList: list of all recipes if the recipes are matching the requirements
     """
     recipeList = []
-    info = recipeMatch(ingredientsList)
-    for recipe in getFilteredRecipes(info, blacklist):
+    info = recipeMatch(ingredientsList, blacklist)
+    for recipe in info:
         if int(recipe["calories"]) <= int(calories):
             recipeList.append(recipe)
 
