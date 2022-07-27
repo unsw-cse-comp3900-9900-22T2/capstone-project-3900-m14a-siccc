@@ -163,21 +163,45 @@ def ingredientsSuggestions(ingredientsList):
                 missing_igds.append(igd)
         if match == num_select:
             for miss in missing_igds:
-                if len(igds_frequency) > 0:
-                    if igds_frequency.get(miss) is not None:
-                        print(f"\t{miss} = {igds_frequency[miss]}\n")
-                        new_frequency = igds_frequency[miss] + 1
-                        igds_frequency[miss] = new_frequency
-                    else:
-                        igds_frequency[miss] = 1
+                if len(igds_frequency) > 0 and igds_frequency.get(miss) is not None:
+                        igds_frequency[miss] = igds_frequency[miss] + 1
                 else:
                     igds_frequency[miss] = 1
 
-    if len(igds_frequency) <= 5:
-        igdsSuggestions = sorted(igds_frequency.keys())
-    else:
-        igds_frequency_sort = sorted(igds_frequency.items(), 
+    igds_frequency_sort = sorted(igds_frequency.items(), 
                         key=lambda kv: kv[1], reverse=True)
+    
+    tmp_igds = []  
+    pre_frequency = len(info)
+    for igds, fqy in igds_frequency_sort:
+        if len(igdsSuggestions) >= 5:
+            break
+        if len(tmp_igds) == 0:
+            tmp_igds.append(igds)
+            pre_frequency = fqy 
+        else:
+            if pre_frequency == fqy:
+                tmp_igds.append(igds)
+            else:
+                tmp_igds_sort = sorted(tmp_igds)
+                for item in tmp_igds_sort:
+                    if len(igdsSuggestions) < 5:
+                        igdsSuggestions.append(item)
+                    else:
+                        break
+                tmp_igds = [igds]
+                pre_frequency = fqy
+    
+    if len(igdsSuggestions) < 5:
+        tmp_igds_sort = sorted(tmp_igds)
+        igdsSuggestions = igdsSuggestions + tmp_igds_sort[:5-len(igdsSuggestions)]
+       
+    return igdsSuggestions
+    """           
+    if len(igds_frequency) <= 5:
+        igdsSuggestions = list(igds_frequency_sort.keys())
+    else:
+        
         tmp_igds = []  
         pre_frequency = len(info)
         full = False      
@@ -209,6 +233,7 @@ def ingredientsSuggestions(ingredientsList):
                     break
                     
     return igdsSuggestions
+    """
 
     """
     if len(ingredientsList) < 1:

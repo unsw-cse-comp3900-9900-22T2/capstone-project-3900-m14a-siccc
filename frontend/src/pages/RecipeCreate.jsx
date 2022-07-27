@@ -27,6 +27,7 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Container from '@mui/material/Container';
+import InputLabel from '@mui/material/InputLabel';
 
 const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -333,7 +334,7 @@ const RecipeCreate = () => {
             <ListItemIcon>
               <LocalDiningIcon/>
             </ListItemIcon>
-            <ListItemText primary={category}/>
+            <ListItemText primary={capitalizeFirstLetter(category)}/>
           </ListItem>
         )
       })
@@ -409,6 +410,10 @@ const RecipeCreate = () => {
       ))}
       </div>
     )
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   const theme = createTheme({
@@ -523,12 +528,10 @@ const RecipeCreate = () => {
                   onChange={thumbnailUpdate}
                 />
               </Button>
-              <Grid item>
-                {thumbnail !== ''
-                  ? (<img src={thumbnail} alt="recipe thumbnail" height="500px" width="700px"/>)
-                  : <></>
-                }
-              </Grid>
+              {thumbnail !== ''
+                ? (<Box component="img" src={thumbnail} alt="recipe thumbnail" sx={{height: 500, width: 700, mx:5}}/>)
+                : <></>
+              }
               <Typography component="h2" variant="h6">
                 How many steps does your recipe have?
               </Typography>
@@ -573,7 +576,7 @@ const RecipeCreate = () => {
                       <ListItemIcon>
                         <LocalDiningIcon/>
                       </ListItemIcon>
-                      <ListItemText primary={ingredients}/>
+                      <ListItemText primary={capitalizeFirstLetter(ingredients)}/>
                     </ListItem>
                   ))}
                 </Grid>
@@ -591,9 +594,9 @@ const RecipeCreate = () => {
               {Object.keys(categories).map((category, idx) => {
                 return(
                   <div key = {idx}>
-                    <h3>
-                      {category}
-                    </h3>
+                    <Typography component="h2" variant="h6">
+                      {capitalizeFirstLetter(category)}
+                    </Typography>
                   {
                     categories[category].map((ingredient, idx2) => {
                       return(
@@ -605,25 +608,29 @@ const RecipeCreate = () => {
                                 type="checkbox"
                                 checked={ingredient.check}
                               />
-                              {ingredient.text}
+                              {capitalizeFirstLetter(ingredient.text)}
                             </Grid>
                             <Grid item xs={6}>
                               {/* If ingredient is checked */}
                               {ingredient.check
                                 ? (<span>
                                     <TextField type="number"
+                                      required
                                       name="grams" 
                                       min="0"
-                                      placeholder='Enter values'
+                                      label="Amount"
                                       size='small'
                                       onChange={e => updateIngredientValue(e, ingredient.text)}/>
-                                    <FormControl required size="small">
+                                    <FormControl required size="small" sx={{ minWidth: 150 }}>
+                                      <InputLabel id="ingredientValue">Measurement</InputLabel>
                                       <Select
+                                        labelId="ingredientValue"
                                         name="valueType"
                                         onChange={e => updateIngredientMeasurement(e, ingredient.text)}
+                                        label="Value"
                                       >
-                                        <MenuItem name="grams" value="g">grams</MenuItem>
-                                        <MenuItem name="quantities" value="q">quantitites</MenuItem>
+                                        <MenuItem name="grams" value="g">Grams</MenuItem>
+                                        <MenuItem name="quantities" value="q">Quantitites</MenuItem>
                                       </Select>
                                     </FormControl>
                                     {/* <select name="valueType" onChange={e => updateIngredientMeasurement(e, ingredient.text)}>
@@ -676,16 +683,10 @@ const RecipeCreate = () => {
       <Grid container component="main" justifyContent="space-between">
         <Grid item>
           <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-<<<<<<< HEAD
             <h2>Create Recipe</h2>
             Title
             <br></br>
             <TextField type="text" variant="outlined" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
-=======
-             
-            <h2> Create Recipe</h2>
-            Title <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} /> < br/>
->>>>>>> main
 
             Servings&nbsp;
             <br></br>
