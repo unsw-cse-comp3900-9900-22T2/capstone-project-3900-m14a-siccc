@@ -1,10 +1,10 @@
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-from matplotlib.pyplot import get
+#from matplotlib.pyplot import get
 from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
 from src.error import InputError
-from src.recipe import recipeMatch, recipeDetails
+from src.recipe import ingredientsSuggestions, recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
 from src import config
@@ -29,8 +29,14 @@ CORS(APP)
 def recipeMatchFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
-    info = recipeMatch(ingredients)
-    if len(info) == 0:
+    blacklist = temp['blacklist']
+    info = recipeMatch(ingredients, blacklist)
+    partialMatch = True
+    for entry in info:
+        if entry['partialMatch'] == False:
+            partialMatch = False
+            break
+    if len(info) == 0 or partialMatch:
         addFrequency(ingredients)
     return dumps({
         'recipes': info
@@ -67,7 +73,8 @@ def recipeMatchCalorieFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
     calories = temp['calories']
-    info = getCaloriesRecipesWithIngredients(calories, ingredients)
+    blacklist = temp['blacklist']
+    info = getCaloriesRecipesWithIngredients(calories, ingredients, blacklist)
     return dumps({
         'recipes': info
     })
@@ -77,7 +84,8 @@ def recipeMatchMealTypeFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
     mealType = temp['mealType']
-    info = getMealType(mealType, ingredients)
+    blacklist = temp['blacklist']
+    info = getMealType(mealType, ingredients, blacklist)
     return dumps({
         'recipes': info
     })
@@ -88,11 +96,22 @@ def recipeMatchMealTypeCalorieFlask():
     ingredients = temp['ingredients']
     mealType = temp['mealType']
     calories = temp['calories']
-    info = getRecipesWithCaloriesIngredientsMealType(calories, ingredients, mealType)
+    blacklist = temp['blacklist']
+    info = getRecipesWithCaloriesIngredientsMealType(calories, ingredients, mealType, blacklist)
     return dumps({
         'recipes': info
     })
     
+@APP.route("/recipe/ingredient/suggestions", methods = ['POST'])
+def recipeIngredientSuggestionsFlask():
+    temp = request.get_json()
+    ingredients = temp['ingredients']
+    info = ingredientsSuggestions(ingredients)
+    return dumps({
+        'ingredients': info
+    })
+
+   
 if __name__ == "__main__":
     APP.run(port=config.port)
 

@@ -37,5 +37,28 @@ Week 5
 - Check the Jira and do the functionalities and stoires 
 
 Week 6
-- Keep doing demo.
-- 
+- Keep doing demo B.
+- Done the tasks for meal type.
+- Done the stories 9, 23 and 24 backend.
+
+
+Week 7
+- Keep doing demo B.
+- Improved meal type. This should connect with ingredients.
+- Done the test for meal type ingredients.
+- Prepared for the presentation of demo B in week 8.
+- Done the story 10 backend.
+
+
+Week 8
+- Done the presentation of demo B in week 8 lab.
+- Started story 7, started the ingredients suggestions list.
+
+
+Week 9
+- Improved the ingredients suggestions list.
+- Started a final quality code and final report. 
+- Prepared the final presentation.
+
+
+Week 10

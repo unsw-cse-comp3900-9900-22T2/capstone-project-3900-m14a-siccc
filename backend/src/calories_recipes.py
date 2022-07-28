@@ -2,7 +2,7 @@ import json
 import psycopg2
 from src.mealType import getMealType
 from src.helper import retrieveRecipeList, retrieveIngredients, getCalories, convertCalories
-from src.recipe import recipeMatch
+from src.recipe import getFilteredRecipes, recipeMatch
 from src.config import host, user, password, dbname
 
 def getCaloriesRecipes(calories):
@@ -38,7 +38,7 @@ def getCaloriesRecipes(calories):
 
 
 
-def getCaloriesRecipesWithIngredients(calories, ingredientsList):
+def getCaloriesRecipesWithIngredients(calories, ingredientsList, blacklist):
     """ Input the number of calories and ingtredients, so that return the recipes 
         if the calories of this recipe is less than or equal to the input calories
          and the ingredients are also matching.
@@ -51,7 +51,7 @@ def getCaloriesRecipesWithIngredients(calories, ingredientsList):
                 recipeList: list of all recipes if the recipes are matching the requirements
     """
     recipeList = []
-    info = recipeMatch(ingredientsList)
+    info = recipeMatch(ingredientsList, blacklist)
     for recipe in info:
         if int(recipe["calories"]) <= int(calories):
             recipeList.append(recipe)
@@ -59,7 +59,7 @@ def getCaloriesRecipesWithIngredients(calories, ingredientsList):
     return recipeList
 
 
-def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealType):
+def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealType, blacklist):
     """ Input the number of calories, ingtredients and meal type, so that return the recipes 
         if the calories of this recipe is less than or equal to the input calories,
         meal type and the ingredients are also matching.
@@ -73,7 +73,7 @@ def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealTyp
                 recipeList: list of all recipes if the recipes are matching the requirements
     """
     recipeList = []
-    info = getMealType(mealType, ingredientsList)
+    info = getMealType(mealType, ingredientsList, blacklist)
     for recipe in info:
         if int(recipe["calories"]) <= int(calories):
             recipeList.append(recipe)
