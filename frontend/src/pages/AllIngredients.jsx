@@ -22,6 +22,11 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import { styled } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Fab from '@mui/material/Fab';
+import Toolbar from '@mui/material/Toolbar';
+
 
 
 
@@ -396,123 +401,112 @@ const AllIngredients = () => {
     }
   }
 
+
   return (
     <>
-      <Grid container justifyContent="space-between">
+      <AppBar position="static" style={{ background: '#93C759' }}>
+      <Toolbar>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+            Recipe Recommendation System
+          </Typography>
+          <Button variant="outlined" style={{color:"#93C759", background: "#FFFFFF", borderColor: '#FFFFFF' }} onClick={() => navigate('/recipe-create')}>Create new recipes</Button> 
+        </Toolbar>
+      </AppBar>
+
+      <Grid container justifyContent="space-between" direction="row" border='4px solid yellow' spacing={2}>
+        
         <Grid item>
-          <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-            <p>Filter by calories</p>
-            {/* <Input variant="outline" placeholder='Input Calorie Limit' type = "number" onChange={calorieInputHandler} value = {calorieLimit}/> */}
-            <TextField 
-              id="calorie" 
-              placeholder="Input Calorie Limit"
-              variant="outlined" 
-              type="number" 
-              onChange={calorieInputHandler} 
-              value={calorieLimit}
-            />
-
-            < br/>
-            <p>What kind of meal is your recipe?</p>
-            {/* <select name="mealType" value={mealType} onChange={mealTypeHandler}>
-              <option name="empty" value="">Select one</option>
-              <option name="breakfast" value="Breakfast">Breakfast</option>
-              <option name="lunch" value="Lunch">Lunch</option>
-              <option name="dinner" value="Dinner">Dinner</option>
-              <option name="entree" value="Entree">Entrée</option>
-              <option name="main" value="Main">Main</option>
-              <option name="dessert" value="Dessert">Dessert</option>
-            </select> <br/> */}
-
-            <FormControl fullWidth>
-              <Select
-                name="mealType"
-                displayEmpty
-                value={mealType}
-                onChange={mealTypeHandler}
-              >
-                <MenuItem value="">Select one</MenuItem>
-                <MenuItem value="Breakfast">Breakfast</MenuItem>
-                <MenuItem value="Lunch">Lunch</MenuItem>
-                <MenuItem value="Dinner">Dinner</MenuItem>
-                <MenuItem value="Entree">Entrée</MenuItem>
-                <MenuItem value="Main">Main</MenuItem>
-                <MenuItem value="Dessert">Dessert</MenuItem>
-              </Select>
-            </FormControl>
-
-            <h2>Select your ingredients</h2>
-            {/* <Input variant="outline" placeholder='Search ingredients' onChange={inputHandler}/> */}
-            <TextField placeholder="Search ingredients" variant="outlined" onChange={inputHandler}/>
-            <List input={inputText}/>
-            <br/>
-            <FormControl fullWidth>
-              <Select
-                name="categories"
-                displayEmpty
-                value={inputCat}
-                onChange={categoryHandler}
-              >
-                <MenuItem value="">View ingredient categories</MenuItem>
-                {Object.keys(categories).map((category) => (
-                  <MenuItem name={category} value={category}>{category}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {/* <select name="categories" value={inputCat} onChange={categoryHandler}>
-              <option name="empty" value="">View ingredient categories</option>
+          <h2>Select your ingredients</h2>
+          <TextField placeholder="Search ingredients" variant="outlined" onChange={inputHandler}/>
+          <List input={inputText}/>
+          <br/>
+          <FormControl fullWidth>
+            <Select
+              name="categories"
+              displayEmpty
+              value={inputCat}
+              onChange={categoryHandler}
+            >
+              <MenuItem value="">View ingredient categories</MenuItem>
               {Object.keys(categories).map((category) => (
-                <option name={category} value={category}>{category}</option>
+                <MenuItem name={category} value={category}>{category}</MenuItem>
               ))}
-            </select> */}
-            <ViewCategory input={inputCat}/>
-
-            {/* {
-              Object.keys(categories).map((category, idx) => {
-                return(
-
-
-                  <div key = {idx}>
-                    <h3>
-                      {category}
-                    </h3>
-                  {
-                    categories[category].map((ingredient, idx2) => {
-                      return(
-                        <div key = {idx2}>
-                          <label>
-                            {ingredient.text}
-                            <input
-                              onChange={() => toggleCategoryIngredients(category, idx2)}
-                              type="checkbox"
-                              checked={ingredient.check}
-                            />
-                          </label>
-                        </div>
-                      )
-                    })
-                  }
-                  </div>
-                )
-              })
-            } */}
-            
-            <h2>Your chosen ingredients:</h2>
-            <ChosenIngredients/>
-            {/* <button name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</button> */}
-            <Button variant="text" name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</Button>
-
-            <br/><br/>
-            <Button variant="contained" name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</Button>
-          </Box>
+            </Select>
+          </FormControl>
+          <ViewCategory input={inputCat}/>
         </Grid>
-        <Grid item xs = {5}>
-          <Grid item>
-            <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-              {recipes.length !== 0
-                  ? <div>{recipes.map((recipe, idx) => {
-                    return (
-                      <Card sx={{ maxWidth: 345 }}>
+
+        <Grid item border='4px solid blue' sx={{width: "60%"}}>
+          <Grid container justifyContent="space-between" direction="column" spacing={2} border='4px solid red'>
+            <Grid item>
+              <Grid container justifyContent="space-between" direction="row" spacing={2} border='4px solid orange'>
+
+                <Grid item>
+                  <h2>Your chosen ingredients:</h2>
+                  <ChosenIngredients/>
+                  <Button variant="text" name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</Button>
+                </Grid>
+
+                <Grid item>
+                  <p>What kind of meal is your recipe?</p>
+                  <FormControl fullWidth>
+                    <Select
+                      name="mealType"
+                      displayEmpty
+                      value={mealType}
+                      onChange={mealTypeHandler}
+                    >
+                      <MenuItem value="">Select one</MenuItem>
+                      <MenuItem value="Breakfast">Breakfast</MenuItem>
+                      <MenuItem value="Lunch">Lunch</MenuItem>
+                      <MenuItem value="Dinner">Dinner</MenuItem>
+                      <MenuItem value="Entree">Entrée</MenuItem>
+                      <MenuItem value="Main">Main</MenuItem>
+                      <MenuItem value="Dessert">Dessert</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item>
+                  <p>Filter by calories</p>
+                  <TextField 
+                    id="calorie" 
+                    placeholder="Input Calorie Limit"
+                    variant="outlined" 
+                    type="number" 
+                    onChange={calorieInputHandler} 
+                    value={calorieLimit}
+                  />
+                </Grid>
+                
+                <Grid item spacing={3}>
+                  <Box pt="50px">
+                  <Button variant="contained" style={{ background: '#93C759' }} name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</Button>
+                  </Box>
+                </Grid>
+
+              </Grid>
+            </Grid>
+
+
+            <Grid item border='4px solid pink'>
+            {recipes.length !== 0
+              ? 
+              <Grid 
+                container
+                spacing={2}
+                direction="row"
+                justify="flex-start"
+                alignItems="flex-start"
+                // justifyContent="space-between"
+                // sx={4}
+                border='4px solid green'
+              >
+              {/* // <div style={{ display: "flex", flexWrap: "wrap", border:'4px solid green' }} > */}
+                {recipes.map((recipe, idx) => {
+                  return (
+                    <Grid item sx={{width: '25%'}}>
+                      <Card >
                         <CardActionArea onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>
                           <CardMedia
                             component="img"
@@ -532,22 +526,22 @@ const AllIngredients = () => {
                           </CardContent>
                         </CardActionArea>
                       </Card>
-                      // <div key={idx}>
-                      //   <h1 onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>{recipe.title}</h1>
-                      //   <img src={recipe.photo} alt="recipe thumbnail" height="200px" width="auto"/>
-                      //   {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
-                      //   <p>ingredients: {recipe.ingredients}</p>
-                      //   <hr></hr>
-                      // </div>
-                    )
-                }) }</div>
-                : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
-                  ? <h1>No Available Recipes</h1>
-                  : <></>
-              }
-            </Box>
+                    </Grid>
+                  )
+              }) }
+              </Grid>
+              // </div>
+              : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
+                ? <h1>No Available Recipes</h1>
+                : <></>
+            }
+                
+            
+            </Grid>
           </Grid>
         </Grid>
+
+        
         <Grid item xs = {2}>
           <Grid item>
             <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
@@ -566,11 +560,12 @@ const AllIngredients = () => {
                 </div>
               ))} */}
               {/* <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button> */}
-              <Button variant="outlined" onClick={() => navigate('/recipe-create')}>Create new recipes</Button>  
+               
             </Box>
           </Grid>
         </Grid>
       </Grid>
+      
     </>
   );
 }

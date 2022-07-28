@@ -35,3 +35,7 @@ Week 8
 - added some styling - changed elements, recipe cards
 - added calories to recipe cards
 - added error message for no ingredients selected
+
+Week 9
+- finalised styling of explorer page - changed layouts, colours, icons
+- added more specific error messages for recipe creation
