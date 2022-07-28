@@ -303,6 +303,7 @@ const AllIngredients = () => {
 
   const getIngredientSuggestions = async () => {
     try {
+      await new Promise(r => setTimeout(r, 750));
       const suggestionIngredients = [];
       for(const ingred of ingredients) {
         if(ingred.check == true) {
@@ -378,7 +379,7 @@ const AllIngredients = () => {
       }
     }
     setCategories(newCategory);
-
+    
     getIngredientSuggestions();
   }
 
