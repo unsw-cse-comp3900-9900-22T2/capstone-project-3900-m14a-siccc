@@ -645,7 +645,7 @@ const AllIngredients = () => {
                   <SearchBlacklist input={blacklistInputText}/>
                   <br/>
                   <h2>Your Blacklisted Ingredients</h2>
-                  {blacklist.map((name, idx) => (
+                  {/* {blacklist.map((name, idx) => (
                     <div>
                       {name.check
                         ? <div key={idx}>
@@ -661,7 +661,7 @@ const AllIngredients = () => {
                         : <></>
                       }
                     </div>
-                  ))}
+                  ))} */}
                 </Grid>
 
                 <Grid item>
@@ -696,7 +696,7 @@ const AllIngredients = () => {
                   />
                 </Grid>
                 
-                <Grid item spacing={3}>
+                <Grid item>
                   <Box pt="50px">
                   <Button variant="contained" style={{ background: '#93C759' }} name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</Button>
                   </Box>
