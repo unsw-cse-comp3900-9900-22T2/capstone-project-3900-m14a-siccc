@@ -307,6 +307,7 @@ const AllIngredients = () => {
   }
 
   const getIngredientSuggestions = async () => {
+    await new Promise(r => setTimeout(r, 750));
     try {
       const suggestionIngredients = [];
       for(const ingred of ingredients) {
@@ -454,7 +455,7 @@ const AllIngredients = () => {
         <div key={idx}>
           <FormControlLabel 
             control={<Checkbox/>} 
-            label={ingredient.text} 
+            label={CapitalizeFirstLetter(ingredient.text)}
             onChange={() => toggleBlacklist(idx, ingredient.text)} 
             checked={ingredient.check}
           />
@@ -481,7 +482,7 @@ const AllIngredients = () => {
         <div key={idx}>
           <FormControlLabel 
             control={<Checkbox/>} 
-            label={ingredient.text} 
+            label={CapitalizeFirstLetter(ingredient.text)}
             onChange={() => toggleIngredients(idx, ingredient.text)} 
             checked={ingredient.check}
           />
@@ -513,18 +514,10 @@ const AllIngredients = () => {
         <div key={idx}>
           <FormControlLabel 
             control={<Checkbox/>} 
-            label={ingredient.text} 
+            label={CapitalizeFirstLetter(ingredient.text)} 
             onChange={() => toggleIngredients(idx, ingredient.text)} 
             checked={ingredient.check}
           />
-          {/* <label>
-            {ingredient.text}
-            <input
-              onChange={() => toggleIngredients(idx, ingredient.text)}
-              type="checkbox"
-              checked={ingredient.check}
-            />
-          </label> */}
         </div>
       ))}
       </div>
@@ -557,7 +550,7 @@ const AllIngredients = () => {
                 type="checkbox"
                 checked={blacklist[blacklistIndex(props.input, idx2)].check}
               />
-              {ingredient.text} 
+              {CapitalizeFirstLetter(ingredient.text)}
             </div>
           )
         })
@@ -565,6 +558,9 @@ const AllIngredients = () => {
     }
   }
 
+  function CapitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <>
@@ -594,7 +590,7 @@ const AllIngredients = () => {
               >
                 <MenuItem value="">View ingredient categories</MenuItem>
                 {Object.keys(categories).map((category) => (
-                  <MenuItem name={category} value={category}>{category}</MenuItem>
+                  <MenuItem name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -619,7 +615,7 @@ const AllIngredients = () => {
                           type="checkbox"
                           checked={suggestion.check}
                         />
-                        {suggestion.text}
+                        {CapitalizeFirstLetter(suggestion.text)}
                       </div>
                     )})
                   }
@@ -646,7 +642,7 @@ const AllIngredients = () => {
                               type="checkbox"
                               checked={name.check}
                             />
-                            {name.text}
+                            {CapitalizeFirstLetter(name.text)}
                           </label>
                         </div>
                         : <></>
