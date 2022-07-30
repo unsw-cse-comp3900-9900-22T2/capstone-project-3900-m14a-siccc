@@ -3,8 +3,7 @@ from src.helper import retrieveIngredientNames, dbConnection
 
 
 def IngredientsViewAll():
-    """
-    View all ingredients from database and sort it by alphabetical. 
+    """View all ingredients from database and sort it by alphabetical. 
 
         Returns:
             ingredients (list): list of ingredient strings
@@ -18,7 +17,7 @@ def IngredientsViewAll():
 
 
 def CategoryViewAll():
-    """ View all ingredients by categories
+    """ View all ingredients by categories.
 
             Returns:
                 ingredients (list): list of dictionary key-value pairs 
