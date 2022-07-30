@@ -1,7 +1,6 @@
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-#from matplotlib.pyplot import get
 from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
 from src.error import InputError
 from src.recipe import ingredientsSuggestions, recipeMatch, recipeDetails
@@ -10,6 +9,7 @@ from src.ingredients_category import sortIngredientsInCategories
 from src import config
 from src.recipeContributor import insertRecipe, getNoRecipeMatchList, addFrequency
 from src.mealType import getMealType
+
 
 def defaultHandler(err):
     response = err.get_response()
@@ -42,20 +42,24 @@ def recipeMatchFlask():
         'recipes': info
     })
 
+
 @APP.route("/recipe/details/<page_id>", methods=['GET'])
 def recipeDetailsFlask(page_id):
     info = recipeDetails(page_id)
     return dumps(info)
     
+
 @APP.route("/ingredients/view", methods=['GET'])
 def IngredientsView():
     info = IngredientsViewAll()
     return dumps(info)
 
+
 @APP.route("/ingredients/categories", methods=['GET'])
 def ingredientsCategories():
     info = sortIngredientsInCategories()
     return dumps(info)
+
 
 @APP.route("/insert/recipe", methods=['POST'])
 def insertRecipeFlask():
@@ -64,9 +68,11 @@ def insertRecipeFlask():
     insertRecipe(recipeDetails)
     return dumps(1)
 
+
 @APP.route("/no/recipe/match", methods=['GET'])
 def getNoRecipeMatchFlask():
     return dumps(getNoRecipeMatchList())
+
 
 @APP.route("/recipe/calorie/view", methods = ['POST'])
 def recipeMatchCalorieFlask():
@@ -78,7 +84,8 @@ def recipeMatchCalorieFlask():
     return dumps({
         'recipes': info
     })
-    
+
+
 @APP.route("/recipe/mealtype/view", methods = ['POST'])
 def recipeMatchMealTypeFlask():
     temp = request.get_json()
@@ -90,6 +97,7 @@ def recipeMatchMealTypeFlask():
         'recipes': info
     })
     
+
 @APP.route("/recipe/calorie/mealtype/view", methods = ['POST'])
 def recipeMatchMealTypeCalorieFlask():
     temp = request.get_json()
@@ -101,6 +109,7 @@ def recipeMatchMealTypeCalorieFlask():
     return dumps({
         'recipes': info
     })
+    
     
 @APP.route("/recipe/ingredient/suggestions", methods = ['POST'])
 def recipeIngredientSuggestionsFlask():
