@@ -511,7 +511,7 @@ const RecipeCreate = () => {
               <Slider
                 marks={marks}
                 steps={10}
-                valueLabelDisplay='true'
+                valueLabelDisplay='on'
                 min={0}
                 max={20}
                 onChange={changeSteps}
