@@ -151,13 +151,28 @@ const RecipeCreate = () => {
     }
 
     if (event.target.value === 'g'){
-      newIngredientsGram[ingredientName] = newValue + "g";
+      newIngredientsGram[ingredientName] = newValue.replaceAll("g", "") + "g";
+      console.log(newIngredientsGram[ingredientName])
     } else if (event.target.value === 'q' && newValue.includes("g")){
-      newIngredientsGram[ingredientName] = newValue.replace("g", "");
+      newIngredientsGram[ingredientName] = newValue.replaceAll("g", "");
+      console.log(newIngredientsGram[ingredientName])
     }
 
     setIngredientsGram(newIngredientsGram);
     console.log(newIngredientsGram);
+  }
+
+  // Return grams or quanitities for ingredient
+  function measurementValue (ingredient) {
+    if (!ingredientsGram[ingredient]) {
+      return "";
+    }
+
+    if (ingredientsGram[ingredient].includes("g")){
+      return "g";
+    } else {
+      return "q";
+    }
   }
 
   // Set the thumbnail of listing
@@ -574,7 +589,7 @@ const RecipeCreate = () => {
                                         name="valueType"
                                         onChange={e => updateIngredientMeasurement(e, ingredient.text)}
                                         label="Value"
-                                        value ="g"
+                                        value={measurementValue(ingredient.text)}
                                       >
                                         <MenuItem name="grams" value="g">Grams</MenuItem>
                                         <MenuItem name="quantities" value="q">Quantitites</MenuItem>
