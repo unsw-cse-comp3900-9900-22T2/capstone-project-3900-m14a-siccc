@@ -1,4 +1,3 @@
-from backend.src.helper import retrieveRecipeList
 from src.recipe import recipeDetails, recipeMatch
 import pytest
 
