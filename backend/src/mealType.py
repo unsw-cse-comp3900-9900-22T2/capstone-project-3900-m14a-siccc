@@ -1,4 +1,5 @@
-from src.recipe import recipeMatch
+from src.helper import dbConnection, retrieveRecipeList
+from src.recipe import getFilteredRecipes, recipeMatch
 
 
 def getMealType(meal, ingredientsList, blacklist):
@@ -6,18 +7,39 @@ def getMealType(meal, ingredientsList, blacklist):
 
             Parameters:
                 meal (str): the name of meal type
-                ingredientsList (str): the list of ingredientsList
-                blackList (list): the list of blacklist
+                ingredientsList (str): the string of ingredientsList
+                blackist (list): the blacklist of ingredients
         
             Returns:
                 recipleTypeList (list): list of all recipes ingredients
     """
-    recipeList = recipeMatch(ingredientsList, blacklist)
+    if len(ingredientsList) <= 0 or ingredientsList == "" \
+        or ingredientsList is None:
+        info= retrieveRecipeList(dbConnection())
+        if blacklist != []:
+            info = getFilteredRecipes(info, blacklist) 
+        recipeList = []   
+        for recipe in info:
+            ingDict = {
+                    "recipeID": recipe[0],
+                    "title": recipe[7],
+                    "servings": recipe[1],
+                    "timeToCook": recipe[2],
+                    "mealType": recipe[3],
+                    "photo": recipe[4],
+                    "calories": recipe[5],
+                    "cookingSteps": recipe[6],
+                    "ingredients": recipe[8],
+                    "missingIngredient": "",
+                    "partialMatch": "",
+            }
+            recipeList.append(ingDict)
+    else:
+        recipeList = recipeMatch(ingredientsList, blacklist)
     recipeTypeList = []
     for recipe in recipeList:
-        if meal is None:
+        if meal is None or len(meal) == 0 or meal == "":
             recipeTypeList.append(recipe)
         elif recipe["mealType"] == meal:
             recipeTypeList.append(recipe)
-
     return recipeTypeList
