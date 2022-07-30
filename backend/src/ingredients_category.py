@@ -1,9 +1,7 @@
 import psycopg2
 from src.config import host, user, password, dbname
+from src.helper import dbConnection
 
-""" Sorts list of categories alphabetically and 
-    sends data to front end
-"""
 
 def sortingCategories():
     """ Sorting categories function to sort the list of categories 
@@ -12,7 +10,8 @@ def sortingCategories():
             Returns:
                 categories (list): the list of categories after sorting
     """
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = dbConnection()
+    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
     select * 
@@ -38,7 +37,8 @@ def sortingAllIngredients():
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = dbConnection()
+    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
     select * 
@@ -62,12 +62,13 @@ def sortingIngredients(cate):
         in one category by alphabetically.
 
             Parameters:
-                cate: the name of the categories
+                cate (str): the name of the categories
 
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = dbConnection()
+    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = f"""
     select * 
@@ -91,7 +92,8 @@ def sortIngredientsInCategories():
         returns a dictionary
         
             Returns:
-                (dict) : dictionary of all ingredients and categories sorted
+                result (dict) : dictionary of all ingredients and 
+                        categories sorted
     """
     result = {}
     listOfCategories = sortingCategories()
