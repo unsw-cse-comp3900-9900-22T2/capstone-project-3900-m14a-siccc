@@ -249,8 +249,15 @@ const RecipeCreate = () => {
       cookingTime === '' ||
       ingredients.length === 0 ||
       steps.length === 0)) {
-        
-        alert('Empty Input!');
+        var message = "Please enter the required information:\n"
+        if (title === '') message = message + "- Recipe title\n";
+        if (mealType === '') message = message + "- Meal type\n";
+        if (servings === '') message = message + "- Number of servings\n";
+        if (thumbnail === '') message = message + "- Recipe photo\n";
+        if (cookingTime === '') message = message + "- Estimated cooking time\n";
+        if (ingredients.length === 0) message = message + "- Ingredients\n";
+        if (steps.length === 0) message = message + "- Recipe steps\n";
+        alert(message)
         return;
       }
       
