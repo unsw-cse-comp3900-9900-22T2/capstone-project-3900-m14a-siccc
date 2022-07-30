@@ -1,8 +1,4 @@
-import json
-from lib2to3.pytree import convert
-import psycopg2
 from src.helper import dbConnection, retrieveRecipe, retrieveRecipeList
-from src.config import host, user, password, dbname
 
 def recipeMatch(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
@@ -60,12 +56,12 @@ def recipeMatch(ingredientsList, blacklist):
 def getFilteredRecipes(recipes, blacklist):
     """ Helper function for recipeMatch.
 
-        Parameters: 
-            recipes (list): list of all existing recipes 
-            blacklist (list): list of blacklisted ingredients user selected
+            Parameters: 
+                recipes (list): list of all existing recipes 
+                blacklist (list): list of blacklisted ingredients user selected
     
-        Return:
-            recipeList (list): list of recipes without ingredients from 
+            Return:
+                recipeList (list): list of recipes without ingredients from 
                         blacklist
 """
     filteredRecipeList = []
@@ -80,12 +76,12 @@ def getFilteredRecipes(recipes, blacklist):
 def RecipeHasBlacklist(recipe, blacklist):
     """Helper function for getFilteredRecipes.
 
-        Parameters:
-            recipe(list): list of ingredients in recipe 
-            blacklist (list): list of blacklisted ingredients user selected
+            Parameters:
+                recipe(list): list of ingredients in recipe 
+                blacklist (list): list of blacklisted ingredients user selected
     
-        Return:
-            recipeList (boolean): true if recipe contains any blacklisted 
+            Return:
+                recipeList (boolean): true if recipe contains any blacklisted 
                     ingredient, false otherwise 
     """
     for ingredient in recipe:
@@ -142,11 +138,11 @@ def ingredientsSuggestions(ingredientsList):
         2. If the previous condition is matched and get the same frequency for
            some ingredients, the ingredients will be ordered by alphabetical. 
 
-        Parameters:
-            ingredientsList (str): list of ingredients user selected
+            Parameters:
+                ingredientsList (str): list of ingredients user selected
 
-        Return:
-            getIngredientsSuggestions (list): list of ingredients are 
+            Return:
+                getIngredientsSuggestions (list): list of ingredients are 
                             satisfying the ingredients from the 
                             getIngredientsSuggestions function
     """
@@ -181,12 +177,12 @@ def getIngredientsSuggestions(igds_frequency_sort, pre_frequency):
     """Helper function for ingredientsSuggestions. To select the top 5 
        ingredients and return to the frontend.
 
-        Parameters:
-            igds_frequency_sort (list): list of suggestion ingredients
-            pre_frequency (int): the maximum number of frequency
+            Parameters:
+                igds_frequency_sort (list): list of suggestion ingredients
+                pre_frequency (int): the maximum number of frequency
         
-        Return:
-            igds_suggestions (list): list of top 5 suggestion ingreidents
+            Return:
+                igds_suggestions (list): list of top 5 suggestion ingreidents
     """
     igdsSuggestions = []
     tmp_igds = []  
