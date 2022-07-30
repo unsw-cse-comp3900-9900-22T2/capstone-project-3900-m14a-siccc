@@ -1,4 +1,6 @@
-from src.calories_recipes import getCaloriesRecipes, getCaloriesRecipesWithIngredients, calorieCalculation, getRecipesWithCaloriesIngredientsMealType
+from src.calories_recipes import getCaloriesRecipes, calorieCalculation
+from src.calories_recipes import getCaloriesRecipesWithIngredients
+from src.calories_recipes import getRecipesWithCaloriesIngredientsMealType
 import pytest
 
 

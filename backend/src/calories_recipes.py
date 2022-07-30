@@ -19,7 +19,6 @@ def getCaloriesRecipes(calories):
                         equal to the input calories
     """
     recipeList = []
-    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     db = dbConnection()
     info = retrieveRecipeList(db)
     for recipe in info:
@@ -98,8 +97,6 @@ def calorieCalculation(ingredientsDict):
                 calories (int): total calories of ingredients
     """
     db = dbConnection()
-    #db = psycopg2.connect(
-    #    f"host={host} dbname={dbname} user={user} password={password}")
     ingredientFixedGrams = getFixedCGrams()
 
     calories = 0
@@ -119,23 +116,19 @@ def calorieCalculation(ingredientsDict):
 
         currCalories = getCalories(db, ingredientName)
         caloriesConverted = convertCalories(int(currCalories), grams)
-
         calories += caloriesConverted
 
     return int(calories)
 
+
 def getFixedCGrams():
     """ Helper function to get fixed grams for all ingredients
-
-            Parameters:
-                None
 
             Returns:
                 (dictionary): dictionary of key-value pairs, 
                               ingredient(string): fixed_grams(int)
     """
-    db = psycopg2.connect(
-        f"host={host} dbname={dbname} user={user} password={password}")
+    db = dbConnection()
     info = retrieveIngredients(db)
     dict = {}
     for ingredient in info:
