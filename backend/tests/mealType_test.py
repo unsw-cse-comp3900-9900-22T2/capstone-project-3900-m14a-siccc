@@ -1,4 +1,3 @@
-#from src.mealType import getMealType
 from src.mealType import getMealType
 import pytest
 
