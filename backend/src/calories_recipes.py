@@ -1,23 +1,26 @@
 import json
 import psycopg2
 from src.mealType import getMealType
-from src.helper import retrieveRecipeList, retrieveIngredients, getCalories, convertCalories
+from src.helper import retrieveRecipeList, retrieveIngredients, getCalories
+from src.helper import convertCalories, dbConnection
 from src.recipe import getFilteredRecipes, recipeMatch
 from src.config import host, user, password, dbname
 
+
 def getCaloriesRecipes(calories):
-    """ Input the number of calories and return the recipes if the 
+    """ Input the number of calories and return the recipes if the  
         calories of this recipe is less than or equal to the input calories.
 
             Parameters:
-                calories: input calories
+                calories (int): input calories
         
             Returns:
-                recipeList: list of all recipes which are less than or equal to the input calories
+                recipeList (list): list of all recipes which are less than or 
+                        equal to the input calories
     """
-    
     recipeList = []
-    db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
+    db = dbConnection()
     info = retrieveRecipeList(db)
     for recipe in info:
         if recipe[5] <= calories:
@@ -37,18 +40,18 @@ def getCaloriesRecipes(calories):
     return recipeList
 
 
-
 def getCaloriesRecipesWithIngredients(calories, ingredientsList, blacklist):
-    """ Input the number of calories and ingtredients, so that return the recipes 
-        if the calories of this recipe is less than or equal to the input calories
-         and the ingredients are also matching.
+    """ Input the number of calories and ingtredients, so that return the
+        recipes if the calories of this recipe is less than or equal to 
+        the input calories and the ingredients are also matching.
 
             Parameters:
                 calories: input calories
                 ingredientsList: input ingredients
         
             Returns:
-                recipeList: list of all recipes if the recipes are matching the requirements
+                recipeList: list of all recipes if the recipes are 
+                            matching the requirements
     """
     recipeList = []
     info = recipeMatch(ingredientsList, blacklist)
@@ -59,10 +62,12 @@ def getCaloriesRecipesWithIngredients(calories, ingredientsList, blacklist):
     return recipeList
 
 
-def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealType, blacklist):
-    """ Input the number of calories, ingtredients and meal type, so that return the recipes 
-        if the calories of this recipe is less than or equal to the input calories,
-        meal type and the ingredients are also matching.
+def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, 
+                                                mealType, blacklist):
+    """ Input the number of calories, ingtredients and meal type, so that 
+        return the recipes if the calories of this recipe is less than or 
+        equal to the input calories, meal type and the ingredients are 
+        also matching.
 
             Parameters:
                 calories: input calories
@@ -70,7 +75,8 @@ def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealTyp
                 mealType: meal type
         
             Returns:
-                recipeList: list of all recipes if the recipes are matching the requirements
+                recipeList: list of all recipes if the recipes are matching 
+                the requirements
     """
     recipeList = []
     info = getMealType(mealType, ingredientsList, blacklist)
@@ -80,28 +86,29 @@ def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, mealTyp
 
     return recipeList
 
+
 def calorieCalculation(ingredientsDict):
     """ Retrieves recipe details given ingredients (recipe id still or nah?)
 
             Parameters:
-                ingredients (Dictionary): Dictionary containing ingredients {ingredientName: amount}
+                ingredients (Dictionary): Dictionary containing ingredients 
+                e.g., {ingredientName: amount}
 
             Returns:
                 calories (int): total calories of ingredients
     """
-    db = psycopg2.connect(
-        f"host={host} dbname={dbname} user={user} password={password}")
-    # info = retrieveRecipe(db, recipeID)
-    # _, _, _, _, _, _, _, _, ingredients = info
+    db = dbConnection()
+    #db = psycopg2.connect(
+    #    f"host={host} dbname={dbname} user={user} password={password}")
     ingredientFixedGrams = getFixedCGrams()
 
     calories = 0
     for ingredientName, amount in ingredientsDict.items():
         grams = 0
         if isinstance(amount, str): 
-            if 'g' in amount:  # if in grams, amount is string
+            if 'g' in amount:  
                 grams = int(amount.rpartition('g')[0])
-        else:  # if in quantity, amount is integer
+        else:  
             quantity = 0
             if amount == 'half':
                 quantity = 0.5
@@ -109,11 +116,9 @@ def calorieCalculation(ingredientsDict):
                 quantity = int(amount)
 
             grams = int(ingredientFixedGrams[ingredientName]) * quantity
-            #print(quantity)
 
         currCalories = getCalories(db, ingredientName)
         caloriesConverted = convertCalories(int(currCalories), grams)
-        #print(ingredientName, grams, int(currCalories)/100, caloriesConverted)
 
         calories += caloriesConverted
 
@@ -126,7 +131,8 @@ def getFixedCGrams():
                 None
 
             Returns:
-                (dictionary): dictionary of key-value pairs, ingredient(string): fixed_grams(int)
+                (dictionary): dictionary of key-value pairs, 
+                              ingredient(string): fixed_grams(int)
     """
     db = psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")
