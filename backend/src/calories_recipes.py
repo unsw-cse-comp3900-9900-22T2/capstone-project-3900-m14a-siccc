@@ -1,42 +1,9 @@
 from src.mealType import getMealType
-from src.helper import retrieveRecipeList, retrieveIngredients, getCalories
+from src.helper import retrieveIngredients, getCalories
 from src.helper import convertCalories, dbConnection
 
 
-def getCaloriesRecipes(calories):
-    """ Input the number of calories and return the recipes if the  
-        calories of this recipe is less than or equal to the input calories.
-
-            Parameters:
-                calories (int): input calories
-        
-            Returns:
-                recipeList (list): list of all recipes which are less than or 
-                        equal to the input calories
-    """
-    recipeList = []
-    db = dbConnection()
-    info = retrieveRecipeList(db)
-    for recipe in info:
-        if recipe[5] <= calories:
-            ingDict = {
-                "recipeID": recipe[0],
-                "title": recipe[7],
-                "servings": recipe[1],
-                "timeToCook": recipe[2],
-                "mealType": recipe[3],
-                "photo": recipe[4],
-                "calories": recipe[5],
-                "cookingSteps": recipe[6],
-                "ingredients": recipe[8]
-            }
-            recipeList.append(ingDict)
-            
-    return recipeList
-
-
-def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList, 
-                                                mealType, blacklist):
+def getCaloriesRecipes(calories, ingredientsList, mealType, blacklist):
     """ Input the number of calories, ingtredients and meal type, so that 
         return the recipes if the calories of this recipe is less than or 
         equal to the input calories, meal type and the ingredients are 
@@ -46,6 +13,7 @@ def getRecipesWithCaloriesIngredientsMealType(calories, ingredientsList,
                 calories (int): input calories
                 ingredientsList (str) : input ingredients
                 mealType (str) : meal type
+                blackList (list) : list of black ingredients
         
             Returns:
                 recipeList (list): list of all recipes if the recipes are matching 
