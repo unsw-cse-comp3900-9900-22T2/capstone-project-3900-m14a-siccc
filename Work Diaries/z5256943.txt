@@ -38,4 +38,5 @@ Week 8
 
 Week 9
 - finalised styling of explorer page - changed layouts, colours, icons
+- finalised styling of recipe details page
 - added more specific error messages for recipe creation

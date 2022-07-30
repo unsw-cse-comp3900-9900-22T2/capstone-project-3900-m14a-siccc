@@ -26,6 +26,9 @@ import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Fab from '@mui/material/Fab';
 import Toolbar from '@mui/material/Toolbar';
+import { IndeterminateCheckBox } from '@mui/icons-material';
+import BlockIcon from '@mui/icons-material/Block';
+import { red } from '@mui/material/colors';
 
 
 
@@ -454,7 +457,7 @@ const AllIngredients = () => {
       {filteredBlacklist.map((ingredient, idx) => (
         <div key={idx}>
           <FormControlLabel 
-            control={<Checkbox/>} 
+            control={<Checkbox icon={<BlockIcon/>} checkedIcon={<BlockIcon style={{color: "red"}}/>}/>}
             label={CapitalizeFirstLetter(ingredient.text)}
             onChange={() => toggleBlacklist(idx, ingredient.text)} 
             checked={ingredient.check}
@@ -481,7 +484,7 @@ const AllIngredients = () => {
       {filteredData.map((ingredient, idx) => (
         <div key={idx}>
           <FormControlLabel 
-            control={<Checkbox/>} 
+            control={<Checkbox icon={<AddBoxIcon/>} checkedIcon={<IndeterminateCheckBoxIcon/>}/>} 
             label={CapitalizeFirstLetter(ingredient.text)}
             onChange={() => toggleIngredients(idx, ingredient.text)} 
             checked={ingredient.check}
@@ -513,10 +516,11 @@ const AllIngredients = () => {
       {filteredData.map((ingredient, idx) => (
         <div key={idx}>
           <FormControlLabel 
-            control={<Checkbox/>} 
+            control={<Checkbox checkedIcon={<IndeterminateCheckBoxIcon/>}/>} 
             label={CapitalizeFirstLetter(ingredient.text)} 
             onChange={() => toggleIngredients(idx, ingredient.text)} 
             checked={ingredient.check}
+
           />
         </div>
       ))}
@@ -544,11 +548,15 @@ const AllIngredients = () => {
               <Checkbox 
                 onChange={() => toggleCategoryIngredients(props.input, idx2)} 
                 checked={ingredient.check}
+                icon={<AddBoxIcon/>} 
+                checkedIcon={<IndeterminateCheckBoxIcon/>}
               />
               <Checkbox
                 onChange={() => toggleBlacklistIngredients(props.input, idx2)}
                 type="checkbox"
                 checked={blacklist[blacklistIndex(props.input, idx2)].check}
+                icon={<BlockIcon/>}
+                checkedIcon={<BlockIcon style={{color: "red"}}/>}
               />
               {CapitalizeFirstLetter(ingredient.text)}
             </div>
@@ -577,7 +585,10 @@ const AllIngredients = () => {
         
         <Grid item>
           <Box pl="30px">
-            <h2>Select your ingredients</h2>
+            <br/>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Select your ingredients
+            </Typography>
             <TextField placeholder="Search ingredients" variant="outlined" onChange={inputHandler}/>
             <List input={inputText}/>
             <br/>
@@ -605,7 +616,10 @@ const AllIngredients = () => {
               <Grid container justifyContent="space-between" direction="row" spacing={2}>
 
                 <Grid item>
-                  <h2>Ingredient Suggestions</h2>
+                  <br/>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Ingredient suggestions
+                  </Typography>
                   {
                     ingredientSuggestions.map((suggestion, idx) => {
                       return(
@@ -614,24 +628,33 @@ const AllIngredients = () => {
                           onChange={() => toggleSuggestions(suggestion)}
                           type="checkbox"
                           checked={suggestion.check}
+                          icon={<AddBoxIcon/>}
                         />
                         {CapitalizeFirstLetter(suggestion.text)}
                       </div>
                     )})
                   }
-                  <h2>Your chosen ingredients:</h2>
+                  <br/>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Your chosen ingredients
+                  </Typography>
                   <ChosenIngredients/>
                   <Button variant="text" name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</Button>
                 </Grid>
 
                 <Grid item>
-                  <h2>Blacklist your ingredients</h2>
+                  <br/>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Blacklist ingredients
+                  </Typography>
                   <small>Recipes with these ingredients will not show in your search</small>
                   <br/><br/>
                   <TextField placeholder="Blacklist ingredients" variant="outlined" onChange={blacklistInputHandler}/>
                   <SearchBlacklist input={blacklistInputText}/>
                   <br/>
-                  <h2>Your Blacklisted Ingredients</h2>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Your blacklisted ingredients
+                  </Typography>
                   {blacklist.map((name, idx) => (
                     <div>
                       {name.check
@@ -641,6 +664,7 @@ const AllIngredients = () => {
                               onChange={() => toggleBlacklist(idx)}
                               type="checkbox"
                               checked={name.check}
+                              checkedIcon={<BlockIcon style={{color: "red"}}/>}
                             />
                             {CapitalizeFirstLetter(name.text)}
                           </label>
@@ -652,7 +676,10 @@ const AllIngredients = () => {
                 </Grid>
 
                 <Grid item>
-                  <p>What kind of meal is your recipe?</p>
+                  <br/>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Meal type
+                  </Typography>
                   <FormControl fullWidth>
                     <Select
                       name="mealType"
@@ -672,7 +699,10 @@ const AllIngredients = () => {
                 </Grid>
 
                 <Grid item>
-                  <p>Filter by calories</p>
+                  <br/>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Maximum calories
+                  </Typography>
                   <TextField 
                     id="calorie" 
                     placeholder="Input Calorie Limit"
