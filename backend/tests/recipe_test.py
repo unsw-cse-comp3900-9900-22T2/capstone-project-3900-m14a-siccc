@@ -1,6 +1,5 @@
-#from src.ingredients import IngredientsViewAll
 from backend.src.helper import retrieveRecipeList
-from src.recipe import calorieCalculation, recipeDetails, recipeMatch
+from src.recipe import recipeDetails, recipeMatch
 import pytest
 
 def test_simple_match():
@@ -32,9 +31,3 @@ def test_details():
         'ingredients': '3g olive oil, 100g bacon, 2 eggs'
     }
     assert recipeDetails(1) == info
-
-# def test_calories():
-#     for i in range(1, 9):
-#         assert recipeDetails(i)['calories'] == calorieCalculation(i)
-        
-
