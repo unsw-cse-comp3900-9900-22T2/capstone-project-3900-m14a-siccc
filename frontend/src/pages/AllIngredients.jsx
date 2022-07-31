@@ -29,6 +29,8 @@ import Toolbar from '@mui/material/Toolbar';
 import { IndeterminateCheckBox } from '@mui/icons-material';
 import BlockIcon from '@mui/icons-material/Block';
 import { red } from '@mui/material/colors';
+import Logo from "../assets/logo1.png";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 
@@ -571,236 +573,246 @@ const AllIngredients = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#93c759'
+      }
+    }
+  });
+
   return (
     <>
-      <AppBar position="static" style={{ background: '#93C759' }}>
-      <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            Recipe Recommendation System
-          </Typography>
-          <Button variant="outlined" style={{color:"#93C759", background: "#FFFFFF", borderColor: '#FFFFFF' }} onClick={() => navigate('/recipe-create')}>Create new recipes</Button> 
-        </Toolbar>
-      </AppBar>
 
-      <Grid container justifyContent="space-between" direction="row" spacing={2}>
-        
-        <Grid item>
-          <Box pl="30px">
-            <br/>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Select your ingredients
+      <ThemeProvider theme={theme}>
+        <AppBar position="sticky">
+          <Toolbar>
+            <img src={Logo} alt="logo" height="50"/>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+              MASTERCOOK
             </Typography>
-            <TextField placeholder="Search ingredients" variant="outlined" onChange={inputHandler}/>
-            <List input={inputText}/>
-            <br/>
-            <FormControl fullWidth>
-              <Select
-                name="categories"
-                displayEmpty
-                value={inputCat}
-                onChange={categoryHandler}
-              >
-                <MenuItem value="">View ingredient categories</MenuItem>
-                {Object.keys(categories).map((category) => (
-                  <MenuItem name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <ViewCategory input={inputCat}/>
-          </Box>
-        </Grid>
-
-        <Grid item sx={{width: "84%"}}>
-          <Grid container justifyContent="space-between" direction="column" spacing={2}>
-            <Grid item>
-              <Box pl="20px">
-              <Grid container justifyContent="space-between" direction="row" spacing={2}>
-
-                <Grid item>
-                  <br/>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Ingredient suggestions
-                  </Typography>
-                  {
-                    ingredientSuggestions.map((suggestion, idx) => {
-                      return(
-                      <div key = {idx}>
-                        <Checkbox
-                          onChange={() => toggleSuggestions(suggestion)}
-                          type="checkbox"
-                          checked={suggestion.check}
-                          icon={<AddBoxIcon/>}
-                        />
-                        {CapitalizeFirstLetter(suggestion.text)}
-                      </div>
-                    )})
-                  }
-                  <br/>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Your chosen ingredients
-                  </Typography>
-                  <ChosenIngredients/>
-                  <Button variant="text" name="clearAll" onClick={(e)=> {clearAll(true)}}>Clear All Ingredients</Button>
-                </Grid>
-
-                <Grid item>
-                  <br/>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Blacklist ingredients
-                  </Typography>
-                  <small>Recipes with these ingredients will not show in your search</small>
-                  <br/><br/>
-                  <TextField placeholder="Blacklist ingredients" variant="outlined" onChange={blacklistInputHandler}/>
-                  <SearchBlacklist input={blacklistInputText}/>
-                  <br/>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Your blacklisted ingredients
-                  </Typography>
-                  {blacklist.map((name, idx) => (
-                    <div>
-                      {name.check
-                        ? <div key={idx}>
-                          <label>
-                            <Checkbox
-                              onChange={() => toggleBlacklist(idx)}
-                              type="checkbox"
-                              checked={name.check}
-                              checkedIcon={<BlockIcon style={{color: "red"}}/>}
-                            />
-                            {CapitalizeFirstLetter(name.text)}
-                          </label>
-                        </div>
-                        : <></>
-                      }
-                    </div>
-                  ))}
-                </Grid>
-
-                <Grid item>
-                  <br/>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Meal type
-                  </Typography>
-                  <FormControl fullWidth>
-                    <Select
-                      name="mealType"
-                      displayEmpty
-                      value={mealType}
-                      onChange={mealTypeHandler}
-                    >
-                      <MenuItem value="">Select one</MenuItem>
-                      <MenuItem value="Breakfast">Breakfast</MenuItem>
-                      <MenuItem value="Lunch">Lunch</MenuItem>
-                      <MenuItem value="Dinner">Dinner</MenuItem>
-                      <MenuItem value="Entree">Entrée</MenuItem>
-                      <MenuItem value="Main">Main</MenuItem>
-                      <MenuItem value="Dessert">Dessert</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item>
-                  <br/>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Maximum calories
-                  </Typography>
-                  <TextField 
-                    id="calorie" 
-                    placeholder="Input Calorie Limit"
-                    variant="outlined" 
-                    type="number" 
-                    onChange={calorieInputHandler} 
-                    value={calorieLimit}
-                  />
-                </Grid>
-                
-                <Grid item>
-                  <Box pt="50px" pr="20px">
-                    <Button variant="contained" style={{ background: '#93C759' }} name="search" onClick={(e)=> {recipeMatch(true)}}>Search Recipes</Button>
-                  </Box>
-                </Grid>
-
-              </Grid>
-              </Box>
-            </Grid>
-
-
-            <Grid item >
-              <Box pr="50px" pl="20px">
-            {recipes.length !== 0
-              ? 
-              <Grid 
-                container
-                spacing={2}
-                direction="row"
-                // justify="flex-start"
-                alignItems="stretch"
-                display="flex"
-              >
-              {/* // <div style={{ display: "flex", flexWrap: "wrap", border:'4px solid green' }} > */}
-                {recipes.map((recipe, idx) => {
-                  return (
-                    <Grid item sx={{width: '25%'}}>
-                      <Card style={{height: "100%"}}>
-                        <CardActionArea onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>
-                          <CardMedia
-                            component="img"
-                            height="200"
-                            image={recipe.photo}
-                            alt="recipe thumbnail"
-                          />
-                          <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                            {recipe.title}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
-                              <p>Ingredients: {recipe.ingredients}</p>
-                              <p>Calories: {recipe.calories}</p>
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Grid>
-                  )
-              }) }
-              </Grid>
-              // </div>
-              : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
-                ? <h1>No Available Recipes</h1>
-                : <></>
-            }
-                
-              </Box>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        
-        <Grid item xs = {2}>
+            <Button variant="outlined" style={{background: "#FFFFFF"}} onClick={() => navigate('/recipe-create')}><b>Create new recipes</b></Button> 
+          </Toolbar>
+        </AppBar>
+        <Grid container justifyContent="space-between" direction="row" spacing={2}>
+          
           <Grid item>
-            <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-              {/* <p>hello</p> */}
-              {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
-              {ingredients.map((ingredient, idx) => (
-                <div key={idx}>
-                  <label>
-                    {ingredient.text}
-                    <input
-                      onChange={() => toggleIngredients(idx)}
-                      type="checkbox"
-                      checked={ingredient.check}
-                    />
-                  </label>
-                </div>
-              ))} */}
-              {/* <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button> */}
-               
+            <Box pl="30px">
+              <br/>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Select your ingredients
+              </Typography>
+              <TextField placeholder="Search ingredients" variant="outlined" fullWidth onChange={inputHandler}/>
+              <List input={inputText}/>
+              <br/>
+              <FormControl fullWidth>
+                <Select
+                  name="categories"
+                  displayEmpty
+                  value={inputCat}
+                  onChange={categoryHandler}
+                >
+                  <MenuItem value="">View ingredient categories</MenuItem>
+                  {Object.keys(categories).map((category) => (
+                    <MenuItem name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <ViewCategory input={inputCat}/>
             </Box>
           </Grid>
+
+          <Grid item sx={{width: "84%"}}>
+            <Grid container justifyContent="space-between" direction="column" >
+              <Grid item xs={2}>
+                <Box pl="20px">
+                <Grid container justifyContent="space-between" direction="row" >
+
+                  <Grid item>
+                    <br/>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Ingredient suggestions
+                    </Typography>
+                    {
+                      ingredientSuggestions.map((suggestion, idx) => {
+                        return(
+                        <div key = {idx}>
+                          <Checkbox
+                            onChange={() => toggleSuggestions(suggestion)}
+                            type="checkbox"
+                            checked={suggestion.check}
+                            icon={<AddBoxIcon/>}
+                          />
+                          {CapitalizeFirstLetter(suggestion.text)}
+                        </div>
+                      )})
+                    }
+                    <br/>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Your chosen ingredients
+                    </Typography>
+                    <ChosenIngredients/>
+                    <Button variant="text" name="clearAll" onClick={(e)=> {clearAll(true)}}><b>Clear All Ingredients</b></Button>
+                  </Grid>
+
+                  <Grid item xs={2}>
+                    <br/>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Blacklist ingredients
+                    </Typography>
+                    <TextField placeholder="Search ingredients" variant="outlined" fullWidth onChange={blacklistInputHandler}/>
+                    <SearchBlacklist input={blacklistInputText}/>
+                    <br/>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Your blacklisted ingredients
+                    </Typography>
+                    <small>Recipes with these ingredients will not show in your search</small>
+                    {blacklist.map((name, idx) => (
+                      <div>
+                        {name.check
+                          ? <div key={idx}>
+                            <label>
+                              <Checkbox
+                                onChange={() => toggleBlacklist(idx)}
+                                type="checkbox"
+                                checked={name.check}
+                                checkedIcon={<BlockIcon style={{color: "red"}}/>}
+                              />
+                              {CapitalizeFirstLetter(name.text)}
+                            </label>
+                          </div>
+                          : <></>
+                        }
+                      </div>
+                    ))}
+                  </Grid>
+
+                  <Grid item xs={2}>
+                    <br/>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Meal type
+                    </Typography>
+                    <FormControl fullWidth>
+                      <Select
+                        name="mealType"
+                        displayEmpty
+                        value={mealType}
+                        onChange={mealTypeHandler}
+                      >
+                        <MenuItem value="">Select one</MenuItem>
+                        <MenuItem value="Breakfast">Breakfast</MenuItem>
+                        <MenuItem value="Lunch">Lunch</MenuItem>
+                        <MenuItem value="Dinner">Dinner</MenuItem>
+                        <MenuItem value="Entree">Entrée</MenuItem>
+                        <MenuItem value="Main">Main</MenuItem>
+                        <MenuItem value="Dessert">Dessert</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={2}>
+                    <br/>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                      Maximum calories
+                    </Typography>
+                    <TextField 
+                      id="calorie" 
+                      placeholder="Input calorie limit"
+                      variant="outlined" 
+                      type="number" 
+                      onChange={calorieInputHandler} 
+                      value={calorieLimit}
+                      fullWidth
+                    />
+                  </Grid>
+                  
+                  <Grid item>
+                    <Box pt="50px" pr="20px">
+                      <Button variant="contained" style={{ color: "#FFFFFF" }} name="search" onClick={(e)=> {recipeMatch(true)}}><b>Search Recipes</b></Button>
+                    </Box>
+                  </Grid>
+
+                </Grid>
+                </Box>
+              </Grid>
+
+
+              <Grid item >
+                <Box pr="50px" pl="20px" pt="20px">
+              {recipes.length !== 0
+                ? 
+                <Grid 
+                  container
+                  spacing={2}
+                  direction="row"
+                  // justify="flex-start"
+                  alignItems="stretch"
+                  display="flex"
+                >
+                {/* // <div style={{ display: "flex", flexWrap: "wrap", border:'4px solid green' }} > */}
+                  {recipes.map((recipe, idx) => {
+                    return (
+                      <Grid item sx={{width: '25%'}}>
+                        <Card style={{height: "100%"}}>
+                          <CardActionArea onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>
+                            <CardMedia
+                              component="img"
+                              height="200"
+                              image={recipe.photo}
+                              alt="recipe thumbnail"
+                            />
+                            <CardContent>
+                              <Typography gutterBottom variant="h5" component="div">
+                              {recipe.title}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
+                                <p>Ingredients: {recipe.ingredients}</p>
+                                <p>Calories: {recipe.calories}</p>
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                    )
+                }) }
+                </Grid>
+                // </div>
+                : ((clickedSearch && recipes.length === 0) || (localStorage.getItem('categories') && recipes.length === 0)) 
+                  ? <h1>No Available Recipes</h1>
+                  : <></>
+              }
+                  
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          
+          <Grid item xs = {2}>
+            <Grid item>
+              <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
+                {/* <p>hello</p> */}
+                {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
+                {ingredients.map((ingredient, idx) => (
+                  <div key={idx}>
+                    <label>
+                      {ingredient.text}
+                      <input
+                        onChange={() => toggleIngredients(idx)}
+                        type="checkbox"
+                        checked={ingredient.check}
+                      />
+                    </label>
+                  </div>
+                ))} */}
+                {/* <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button> */}
+                
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
-      
+      </ThemeProvider>
     </>
   );
 }

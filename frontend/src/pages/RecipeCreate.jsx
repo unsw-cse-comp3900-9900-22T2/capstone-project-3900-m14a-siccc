@@ -28,6 +28,10 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Container from '@mui/material/Container';
 import InputLabel from '@mui/material/InputLabel';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Logo from "../assets/logo1.png";
+
 
 const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -411,7 +415,7 @@ const RecipeCreate = () => {
               onChange={() => toggleIngredients(idx, ingredient.text)}
               checked={ingredient.check}
             />
-            {ingredient.text} 
+            {capitalizeFirstLetter(ingredient.text)} 
           </label>
         </div>
       ))}
@@ -449,7 +453,17 @@ const RecipeCreate = () => {
 
   return (
     <>
-     <ThemeProvider theme={theme}>
+
+      <ThemeProvider theme={theme}>
+        <AppBar position="sticky">
+          <Toolbar>
+            <img src={Logo} alt="logo" height="50"/>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+              MASTERCOOK
+            </Typography>
+            <Button variant="outlined" style={{background: "#FFFFFF"}} onClick={() => navigate('/')}><b>Search for recipes</b></Button> 
+          </Toolbar>
+        </AppBar>
       <Container component="main" maxWidth="md">
         <CssBaseline />
           <Box
@@ -525,8 +539,9 @@ const RecipeCreate = () => {
                 variant="contained" 
                 component="label"
                 fullWidth
+                style={{color: "#FFFFFF"}}
               >
-                Upload Recipe Photo
+                <b>Upload Recipe Photo</b>
                 <input 
                   type="file"
                   name="thumbnail"
@@ -658,7 +673,7 @@ const RecipeCreate = () => {
                 })
               }
               <Grid container spacing={2}>
-                <Grid item xs={6} margin="normal">
+                <Grid item xs={12} margin="normal">
                   <Button
                     name="create"
                     fullWidth
@@ -666,19 +681,9 @@ const RecipeCreate = () => {
                     sx={{ mt: 3, mb: 2 }}
                     xs={6}
                     onClick= {createRecipe}
+                    style={{color: "#FFFFFF"}}
                   >
-                    Create
-                  </Button>
-                </Grid>
-                <Grid item xs={6}>
-                  <Button
-                    name="cancel"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={() => navigate('/')}
-                  >
-                    Back
+                    <b>Create recipe</b>
                   </Button>
                 </Grid>
               </Grid>
