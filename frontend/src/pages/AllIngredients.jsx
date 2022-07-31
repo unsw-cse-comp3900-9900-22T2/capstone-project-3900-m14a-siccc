@@ -228,16 +228,16 @@ const AllIngredients = () => {
         mealType: mealType,
         blacklist: selectedBlacklist,
       }
-      if(calorieLimit !== 0 && calorieLimit !== null && 
-        !isNaN(calorieLimit) && mealType !== "") {
+      if(calorieLimit != 0 && calorieLimit != null && 
+        !isNaN(calorieLimit) && mealType != "") {
         // Meal type and calorie limit are selected
         const recipeData = await apiFetch('POST', 'recipe/calorie/mealtype/view', null, body)
         setRecipes(recipeData.recipes);
-      } else if (calorieLimit !== 0 && calorieLimit !== null && !isNaN(calorieLimit)) {
+      } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
-      } else if (mealType !== "") {
+      } else if (mealType != "") {
         // Meal type is selected but not calorie limit
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
         console.log(recipeData.recipes);
@@ -277,12 +277,11 @@ const AllIngredients = () => {
   }
 
   const getIngredientSuggestions = async () => {
-    await new Promise(r => setTimeout(r, 750));
     try {
       await new Promise(r => setTimeout(r, 750));
       const suggestionIngredients = [];
       for(const ingred of ingredients) {
-        if(ingred.check) {
+        if(ingred.check == true) {
           suggestionIngredients.push(ingred.text);
         }
       }
@@ -295,7 +294,7 @@ const AllIngredients = () => {
       const finalList = [];
       for(const ingredSug of ingredientSug['ingredients']) {
         for(const ingred of ingredients) {
-          if(ingred.text === ingredSug) {
+          if(ingred.text == ingredSug) {
             finalList.push(ingred)
           }
         }
@@ -333,7 +332,7 @@ const AllIngredients = () => {
     // Find ingredient in ingredients list, change check and set
     const newIngredient = [...ingredients];
     for (const ingred of ingredients) {
-      if(ingredient === ingred) {
+      if(ingredient == ingred) {
         const allIngreIdx = ingredients.indexOf(ingred);
         newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
         break
@@ -345,7 +344,7 @@ const AllIngredients = () => {
     const newCategory = {...categories};
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
       for (const ingredientDict of ingredientsList) {
-        if(ingredientDict.text === ingredient.text) {
+        if(ingredientDict.text == ingredient.text) {
           console.log('hmmm')
           console.log(ingredientDict)
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
@@ -457,14 +456,6 @@ const AllIngredients = () => {
             onChange={() => toggleIngredients(idx, ingredient.text)} 
             checked={ingredient.check}
           />
-          {/* <label>
-            {ingredient.text}
-            <input
-              onChange={() => toggleIngredients(idx, ingredient.text)}
-              type="checkbox"
-              checked={ingredient.check}
-            />
-          </label> */}
         </div>
       ))}
       </div>
@@ -473,26 +464,23 @@ const AllIngredients = () => {
 
   // chosen ingredients
   function ChosenIngredients() {
-    const filteredData = ingredients.filter((el) => {
-      if (el.check) {
-        return el;
-      }
-    })
-    console.log(filteredData)
-
     return(
       <div>
-      {filteredData.map((ingredient, idx) => (
-        <div key={idx}>
-          <FormControlLabel 
-            control={<Checkbox checkedIcon={<IndeterminateCheckBoxIcon/>}/>} 
-            label={CapitalizeFirstLetter(ingredient.text)} 
-            onChange={() => toggleIngredients(idx, ingredient.text)} 
-            checked={ingredient.check}
-
-          />
-        </div>
-      ))}
+        {ingredients.map((ingredient, idx) => (
+          <div key={idx}>
+            {ingredient.check
+              ? <div key={idx}>
+                  <FormControlLabel 
+                    control={<Checkbox checkedIcon={<IndeterminateCheckBoxIcon/>}/>} 
+                    label={CapitalizeFirstLetter(ingredient.text)} 
+                    onChange={() => toggleIngredients(idx, ingredient.text)} 
+                    checked={ingredient.check}
+                  />
+                </div>
+              : <></>
+            }
+          </div>
+        ))}
       </div>
     )
   }
@@ -545,11 +533,6 @@ const AllIngredients = () => {
         main: '#93c759'
       }
     },
-    // breakpoints: {
-    //   values: {
-    //     xs: 10000
-    //   }
-    // }
   });
 
   return (
@@ -585,7 +568,7 @@ const AllIngredients = () => {
                 >
                   <MenuItem value="">View ingredient categories</MenuItem>
                   {Object.keys(categories).map((category) => (
-                    <MenuItem name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
+                    <MenuItem key={category} name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -639,7 +622,7 @@ const AllIngredients = () => {
                     </Typography>
                     <small>Recipes with these ingredients will not show in your search</small>
                     {blacklist.map((name, idx) => (
-                      <div>
+                      <div key={idx}>
                         {name.check
                           ? <div key={idx}>
                             <label>
@@ -723,7 +706,7 @@ const AllIngredients = () => {
                 {/* // <div style={{ display: "flex", flexWrap: "wrap", border:'4px solid green' }} > */}
                   {recipes.map((recipe, idx) => {
                     return (
-                      <Grid item sx={{width: '25%', minWidth: "240px"}}>
+                      <Grid key={idx} item sx={{width: '25%', minWidth: "240px"}}>
                         <Card style={{height: "100%", minWidth: "240px"}}>
                           <CardActionArea onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>
                             <CardMedia
@@ -737,9 +720,9 @@ const AllIngredients = () => {
                               {recipe.title}
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {recipe.missingIngredient === '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
-                                <p>Ingredients: {recipe.ingredients}</p>
-                                <p>Calories: {recipe.calories}</p>
+                                {recipe.missingIngredient == '' ? <span><b> You have all ingredients </b></span> : <span><b> You are missing {recipe.missingIngredient} </b></span>}
+                                <span>Ingredients: {recipe.ingredients}</span>
+                                <span>Calories: {recipe.calories}</span>
                               </Typography>
                             </CardContent>
                           </CardActionArea>
