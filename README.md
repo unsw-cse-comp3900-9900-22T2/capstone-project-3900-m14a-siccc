@@ -7,4 +7,5 @@
 
 # Running Backend
 * cd to backend folder
+* pip install -r requirements.txt
 * run python3 -m src.server
