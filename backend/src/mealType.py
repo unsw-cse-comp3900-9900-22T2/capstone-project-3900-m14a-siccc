@@ -24,7 +24,7 @@ def getMealType(meal, ingredientsList, blacklist):
         Parameters:
             meal (str): the name of meal type
             ingredientsList (str): the string of ingredientsList
-            blackist (list): the blacklist of ingredients
+            blacklist (list): the blacklist of ingredients
         
         Returns:
             recipleTypeList (list): list of all recipes ingredients
