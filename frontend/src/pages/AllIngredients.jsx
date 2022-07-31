@@ -21,6 +21,9 @@ import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import BlockIcon from '@mui/icons-material/Block';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Logo from "../assets/logo1.png";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -79,7 +82,6 @@ const AllIngredients = () => {
     try {
 
       const newBlacklist = [];
-      console.log(ingredients.length);
       
       // Sets a list of dictionary of ingredients if there is no local storage
       if (blacklist.length === 0) {
@@ -98,10 +100,8 @@ const AllIngredients = () => {
   // Displays all Ingredients
   const viewAllIngredients = async () => {
     try {
-      console.log(ingredients);
       const ingredientList = [];
-      console.log(ingredients.length);
-      
+
       // Sets a list of dictionary of ingredients if there is no local storage
       if (ingredients.length === 0) {
         const ingredientData = await apiFetch('GET', `ingredients/view`, null);
@@ -111,10 +111,6 @@ const AllIngredients = () => {
         }
         setIngredients(ingredientList);
       }
-
-      console.log(ingredients)
-      console.log('here');
-      console.log(ingredientList);
     } catch (err) {
       alert(err.message);
     }
@@ -167,9 +163,6 @@ const AllIngredients = () => {
       }
     }
     setCategories(newCategory);
-    console.log(blacklist);
-    
-    //TODO: Send information of ingredients to backend for ingredient suggestions
     getIngredientSuggestions();
   }
 
@@ -178,7 +171,6 @@ const AllIngredients = () => {
     try {
       const selectedIngredients = [];
       const selectedBlacklist = [];
-      console.log(clicked);
       
       // If user clicks search, save the search into local storage
       if (clicked) {
@@ -189,7 +181,6 @@ const AllIngredients = () => {
         localStorage.setItem('mealType', JSON.stringify(mealType));
         localStorage.setItem('blacklist', JSON.stringify(blacklist));
         for (const [, ingredients] of Object.entries(categories)) {
-          console.log(ingredients)
           for (const ingredient of ingredients) {
             if (ingredient.check){
               selectedIngredients.push(ingredient.text);
@@ -205,9 +196,7 @@ const AllIngredients = () => {
       // Get categories from local storage and output the recipes
       } else {
         const categoryDict = JSON.parse(localStorage.getItem('categories'));
-        console.log(JSON.parse(localStorage.getItem('categories')));
         for (const [, ingredients] of Object.entries(categoryDict)) {
-          console.log(ingredients)
           for (const ingredient of ingredients) {
             if (ingredient.check){
               selectedIngredients.push(ingredient.text);
@@ -219,8 +208,6 @@ const AllIngredients = () => {
         alert("Please select some ingredients")
       }
 
-      console.log(calorieLimit)
-      console.log(mealType)
       // Matches recipe to selected ingredients
       const body = {
         ingredients: selectedIngredients,
@@ -228,19 +215,19 @@ const AllIngredients = () => {
         mealType: mealType,
         blacklist: selectedBlacklist,
       }
-      if(calorieLimit != 0 && calorieLimit != null && 
-        !isNaN(calorieLimit) && mealType != "") {
+
+      if(parseInt(calorieLimit) !== 0 && parseInt(calorieLimit) != null && 
+        !isNaN(parseInt(calorieLimit)) && mealType !== "") {
         // Meal type and calorie limit are selected
         const recipeData = await apiFetch('POST', 'recipe/calorie/mealtype/view', null, body)
         setRecipes(recipeData.recipes);
-      } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
+      } else if (parseInt(calorieLimit) !== 0 && parseInt(calorieLimit) !== null && !isNaN(parseInt(calorieLimit))) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
-      } else if (mealType != "") {
+      } else if (mealType !== "") {
         // Meal type is selected but not calorie limit
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
-        console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
       } else {
         // Meal type and calorie limit are not selected
@@ -270,7 +257,6 @@ const AllIngredients = () => {
         }
         setCategories(ingredientsInCategoriesDict)
       }
-      console.log(categories)
     } catch (err) {
       alert(err.message);
     }
@@ -288,8 +274,6 @@ const AllIngredients = () => {
       const body = {
         'ingredients': suggestionIngredients,
       }
-      console.log('here')
-      console.log(body)
       const ingredientSug = await apiFetch('POST', 'recipe/ingredient/suggestions', null, body);
       const finalList = [];
       for(const ingredSug of ingredientSug['ingredients']) {
@@ -299,8 +283,6 @@ const AllIngredients = () => {
           }
         }
       }
-      console.log('now')
-      console.log(finalList)
       setIngredientSuggestions(finalList);
     } catch (err) {
       alert(err.message)
@@ -314,7 +296,6 @@ const AllIngredients = () => {
 
     // Shows selected ingredient on all ingredients view
     const newIngredient = [...ingredients];
-    console.log(newCategory[category][index].text)
     for (const ingredient of ingredients) {
       if (newCategory[category][index].text === ingredient.text){
         const allIngreIdx = ingredients.indexOf(ingredient);
@@ -345,8 +326,6 @@ const AllIngredients = () => {
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
       for (const ingredientDict of ingredientsList) {
         if(ingredientDict.text === ingredient.text) {
-          console.log('hmmm')
-          console.log(ingredientDict)
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
           newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
           break;
@@ -360,7 +339,6 @@ const AllIngredients = () => {
 
   function toggleBlacklistIngredients (category, index) {
     const newBlacklist = [...blacklist];
-    console.log(categories[category][index].text)
     for (const ingredient of blacklist) {
       if (categories[category][index].text === ingredient.text){
         const allIngreIdx = blacklist.indexOf(ingredient);
@@ -380,9 +358,6 @@ const AllIngredients = () => {
   }
 
   React.useEffect(() => {
-    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
-    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-
     // Check that there is local storage stored, 
     // if there is local storage set the check lists to display the data
     if (localStorage.getItem('categories') && 
@@ -396,14 +371,11 @@ const AllIngredients = () => {
       if(localStorage.getItem('mealType')) {
         setMealType(JSON.parse(localStorage.getItem('mealType')))
       }
-      console.log(JSON.parse(localStorage.getItem('ingredients')));
       recipeMatch(false);
-      console.log("ssssss")
     } else {
       viewAllIngredientsInCategories();
       viewAllBlacklist();
       viewAllIngredients();
-      console.log("nnnnnn")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -613,14 +585,21 @@ const AllIngredients = () => {
                     <br/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Blacklist ingredients
+                      <Tooltip 
+                        placement="top"
+                        title="Recipes with these ingredients will not show in your search">
+                          <IconButton>
+                            <InfoOutlinedIcon />
+                          </IconButton>
+                      </Tooltip>
                     </Typography>
                     <TextField placeholder="Search ingredients" variant="outlined" fullWidth onChange={blacklistInputHandler}/>
                     <SearchBlacklist input={blacklistInputText}/>
                     <br/>
+
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Your blacklisted ingredients
                     </Typography>
-                    <small>Recipes with these ingredients will not show in your search</small>
                     {blacklist.map((name, idx) => (
                       <div key={idx}>
                         {name.check
@@ -699,11 +678,10 @@ const AllIngredients = () => {
                   container
                   spacing={2}
                   direction="row"
-                  // justify="flex-start"
                   alignItems="stretch"
                   display="flex"
                 >
-                {/* // <div style={{ display: "flex", flexWrap: "wrap", border:'4px solid green' }} > */}
+
                   {recipes.map((recipe, idx) => {
                     return (
                       <Grid key={idx} item sx={{width: '25%', minWidth: "240px"}}>
@@ -750,23 +728,7 @@ const AllIngredients = () => {
           
           <Grid item xs = {2}>
             <Grid item>
-              <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>
-                {/* <p>hello</p> */}
-                {/* <button name="allIngredients" onClick={viewAllIngredients}>All Ingredients</button>
-                {ingredients.map((ingredient, idx) => (
-                  <div key={idx}>
-                    <label>
-                      {ingredient.text}
-                      <input
-                        onChange={() => toggleIngredients(idx)}
-                        type="checkbox"
-                        checked={ingredient.check}
-                      />
-                    </label>
-                  </div>
-                ))} */}
-                {/* <button name="recipeCreate" onClick={() => navigate('/recipe-create')}>Create new recipes</button> */}
-                
+              <Box p='6' borderWidth='3px' borderBottomColor='black' padding='100px'>       
               </Box>
             </Grid>
           </Grid>
