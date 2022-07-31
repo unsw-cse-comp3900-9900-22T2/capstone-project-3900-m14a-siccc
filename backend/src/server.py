@@ -9,11 +9,11 @@ Date: 31/July/2022
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-from src.calories_recipes import getCaloriesRecipes
+from src.caloriesRecipes import getCaloriesRecipes
 from src.error import InputError
 from src.recipe import ingredientsSuggestions, recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
-from src.ingredients_category import sortIngredientsInCategories
+from src.ingredientsCategory import sortIngredientsInCategories
 from src import config
 from src.recipeContributor import insertRecipe, getNoRecipeMatchList
 from src.recipeContributor import addFrequency
