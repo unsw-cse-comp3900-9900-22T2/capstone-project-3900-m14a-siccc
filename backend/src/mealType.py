@@ -16,7 +16,7 @@ def getMealType(meal, ingredientsList, blacklist):
     if len(ingredientsList) <= 0 or ingredientsList == "" \
         or ingredientsList is None:
         info= retrieveRecipeList(dbConnection())
-        if blacklist != []:
+        if blacklist != [] or len(blacklist) <= 0:
             info = getFilteredRecipes(info, blacklist) 
         recipeList = []   
         for recipe in info:
