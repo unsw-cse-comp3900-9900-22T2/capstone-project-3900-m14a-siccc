@@ -8,7 +8,6 @@ Project Name: Project 1 - Recipe Recommendation System
 Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
 Date: 31/July/2022
 """
-from re import L
 import json
 import psycopg2
 from src.config import host, user, password, dbname
@@ -16,6 +15,10 @@ from src.config import host, user, password, dbname
 
 def getIngredient(db, name):
     """ Helper function to retrieve row of ingredient by name
+
+        Algorithm: linear search.
+
+        Final Time Complexisty: O(n)
 
             Parameters
                 db (database) : database
@@ -41,6 +44,10 @@ def getIngredient(db, name):
 
 def findIngredientsCategory(db, name):
     """ Helper function to retrieve ingredient category by name.
+
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
 
             Parameters
                 db : database
@@ -68,6 +75,10 @@ def findIngredientsCategory(db, name):
 def retrieveCategories(db):
     """ Helper function to retrieve list of categories
 
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
+
             Parameters
                 db: database
             
@@ -90,6 +101,10 @@ def retrieveCategories(db):
 
 def retrieveIngredientNames(db):
     """ Helper function to retrieve all ingredient names in database
+
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
 
             Parameters
                 db : database
@@ -114,6 +129,10 @@ def retrieveIngredientNames(db):
 def retrieveIngredients(db):
     """ Helper function to retrieve all ingredient tuples in database
 
+        Algorithm: linear search. 
+
+        Final Time Complexisty: O(n)
+
             Parameters
                 db : database
 
@@ -136,7 +155,11 @@ def retrieveIngredients(db):
 
 def retrieveRecipe(db, id):
     """ Helper function to retrieve recipe information given a 
-        recipe id
+        recipe id.
+
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
 
             Parameters:
                 db: database
@@ -161,7 +184,11 @@ def retrieveRecipe(db, id):
 
 
 def retrieveRecipeList(db):
-    """ Helper function to retrieve list of recipes
+    """ Helper function to retrieve list of recipes.
+
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
 
             Parameters:
                 db : database
@@ -186,6 +213,11 @@ def retrieveRecipeList(db):
 def retrieveRecipeIngredientsList(db):
     """ Helper function to retrieve list of recipe ingredients
 
+
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
+
             Parameters:
                 db : database
         
@@ -208,6 +240,10 @@ def retrieveRecipeIngredientsList(db):
 
 def getCalories(db, name):
     """ Helper function to retrieve ingredient calories by name
+
+        Algorithm: linear search.
+
+        Final Time Complexisty: O(n)
 
             Parameters
                 db : database
@@ -236,6 +272,10 @@ def convertCalories(currCalories, gramToConvert):
     """ Helper function to convert the calories of the ingredients
         to any specified number of grams
 
+        Algorithm: No Algorithm. 
+
+        Final Time Complexisty: O(1)
+
             Parameters:
                 currCalories (int): the 100g calorie value of ingredient
                 gramToConvert (int): the grams required by recipe
@@ -248,6 +288,10 @@ def convertCalories(currCalories, gramToConvert):
 
 def dbConnection():
     """ Helper function to connect with the database and retrive the data.
+
+        Algorithm: No algorithm
+
+        Final Time Complexisty: O(n1)
 
             Returns:
                 db(database): the data from database
