@@ -578,7 +578,12 @@ const AllIngredients = () => {
       primary: {
         main: '#93c759'
       }
-    }
+    },
+    // breakpoints: {
+    //   values: {
+    //     xs: 10000
+    //   }
+    // }
   });
 
   return (
@@ -596,7 +601,7 @@ const AllIngredients = () => {
         </AppBar>
         <Grid container justifyContent="space-between" direction="row" spacing={2}>
           
-          <Grid item>
+          <Grid item >
             <Box pl="30px">
               <br/>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -624,11 +629,11 @@ const AllIngredients = () => {
 
           <Grid item sx={{width: "84%"}}>
             <Grid container justifyContent="space-between" direction="column" >
-              <Grid item xs={2}>
+              <Grid item >
                 <Box pl="20px">
                 <Grid container justifyContent="space-between" direction="row" >
 
-                  <Grid item>
+                  <Grid item xs={2} style={{minWidth: "240px"}}>
                     <br/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Ingredient suggestions
@@ -655,7 +660,7 @@ const AllIngredients = () => {
                     <Button variant="text" name="clearAll" onClick={(e)=> {clearAll(true)}}><b>Clear All Ingredients</b></Button>
                   </Grid>
 
-                  <Grid item xs={2}>
+                  <Grid item xs={2} style={{minWidth: "240px"}}>
                     <br/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Blacklist ingredients
@@ -687,7 +692,7 @@ const AllIngredients = () => {
                     ))}
                   </Grid>
 
-                  <Grid item xs={2}>
+                  <Grid item xs={2} style={{minWidth: "240px"}}>
                     <br/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Meal type
@@ -710,7 +715,7 @@ const AllIngredients = () => {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={2}>
+                  <Grid item xs={2} style={{minWidth: "240px"}}>
                     <br/>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       Maximum calories
@@ -728,7 +733,7 @@ const AllIngredients = () => {
                   
                   <Grid item>
                     <Box pt="50px" pr="20px">
-                      <Button variant="contained" style={{ color: "#FFFFFF" }} name="search" onClick={(e)=> {recipeMatch(true)}}><b>Search Recipes</b></Button>
+                      <Button variant="contained" style={{ color: "#FFFFFF" }} name="search" onClick={(e)=> {recipeMatch(true)}}><b>Search for Recipes</b></Button>
                     </Box>
                   </Grid>
 
@@ -752,8 +757,8 @@ const AllIngredients = () => {
                 {/* // <div style={{ display: "flex", flexWrap: "wrap", border:'4px solid green' }} > */}
                   {recipes.map((recipe, idx) => {
                     return (
-                      <Grid item sx={{width: '25%'}}>
-                        <Card style={{height: "100%"}}>
+                      <Grid item sx={{width: '25%', minWidth: "240px"}}>
+                        <Card style={{height: "100%", minWidth: "240px"}}>
                           <CardActionArea onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>
                             <CardMedia
                               component="img"
