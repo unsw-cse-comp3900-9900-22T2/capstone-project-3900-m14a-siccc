@@ -135,12 +135,10 @@ const RecipeCreate = () => {
       newIngredientsGram[ingredientName] = String(event.target.value) + "g";
     }
     setIngredientsGram(newIngredientsGram);
-    console.log(newIngredientsGram);
   }
 
   // Updates dictionary to grams or in quantities
   function updateIngredientMeasurement (event, ingredientName) {
-    console.log(event.target.value);
     const newIngredientsGram = {...ingredientsGram};
     var newValue = '0g';
 
@@ -151,14 +149,11 @@ const RecipeCreate = () => {
 
     if (event.target.value === 'g'){
       newIngredientsGram[ingredientName] = newValue.replaceAll("g", "") + "g";
-      console.log(newIngredientsGram[ingredientName])
     } else if (event.target.value === 'q' && newValue.includes("g")){
       newIngredientsGram[ingredientName] = newValue.replaceAll("g", "");
-      console.log(newIngredientsGram[ingredientName])
     }
 
     setIngredientsGram(newIngredientsGram);
-    console.log(newIngredientsGram);
   }
 
   // Return grams or quanitities for ingredient
@@ -189,7 +184,6 @@ const RecipeCreate = () => {
     const newSteps = [...steps];
     newSteps[index] = event.target.value;
     setSteps(newSteps);
-    console.log(newSteps);
   }
 
   // Changes number of steps
@@ -215,7 +209,6 @@ const RecipeCreate = () => {
       }
     }
     setSteps(newSteps);
-    console.log(newSteps)
   }
   
   // Sends off data of the created recipe to backend
@@ -367,7 +360,6 @@ const RecipeCreate = () => {
     if(!newCategory[category][index].check) {
       delete ingredientsGram[newCategory[category][index].text];
     }
-    console.log(ingredientsGram)
   }
 
   // List for ingredient search bar
