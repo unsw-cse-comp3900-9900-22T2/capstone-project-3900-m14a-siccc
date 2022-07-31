@@ -133,10 +133,10 @@ def retrieveIngredients(db):
 
         Final Time Complexisty: O(n)
 
-            Parameters
+            Parameters:
                 db : database
 
-            Returns
+            Returns:
                 info (list): list of all ingredient tuples
     """
     cur = db.cursor()
@@ -245,11 +245,11 @@ def getCalories(db, name):
 
         Final Time Complexisty: O(n)
 
-            Parameters
+            Parameters:
                 db : database
                 name (str): name of ingredient
             
-            Returns
+            Returns:
                 calories (int): calories of ingredient per 100g
     """
     cur = db.cursor()

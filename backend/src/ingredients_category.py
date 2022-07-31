@@ -14,6 +14,12 @@ def sortingCategories():
     """ Sorting categories function to sort the list of categories 
         by alphabetically.
         
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). 
+
+        Final Time Complexisty: O(n)
+
             Returns:
                 categories (list): the list of categories after sorting
     """
@@ -40,6 +46,12 @@ def sortingAllIngredients():
     """ Sorting ingredients function to sort the list of ingredients
         in all categories by alphabetically.
 
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). 
+
+        Final Time Complexisty: O(n)
+
             Returns:
                 ingredients (list): the list of ingredients after sorting
     """
@@ -65,6 +77,12 @@ def sortingAllIngredients():
 def sortingIngredients(cate):
     """ Sorting ingredients function to sort the list of ingredients
         in one category by alphabetically.
+
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). 
+
+        Final Time Complexisty: O(n)
 
             Parameters:
                 cate (str): the name of the categories
@@ -95,6 +113,14 @@ def sortIngredientsInCategories():
     """ Sorts all categories and ingredients in the categories and 
         returns a dictionary
         
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). The time complexity of
+        "sortingIngredients" is O(n). Thus, the overall of time complexity is
+        O(n*n) = O(n^2).
+
+        Final Time Complexisty: O(n^2)
+
             Returns:
                 result (dict) : dictionary of all ingredients and 
                         categories sorted
