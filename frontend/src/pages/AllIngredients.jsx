@@ -281,7 +281,7 @@ const AllIngredients = () => {
       await new Promise(r => setTimeout(r, 750));
       const suggestionIngredients = [];
       for(const ingred of ingredients) {
-        if(ingred.check == true) {
+        if(ingred.check) {
           suggestionIngredients.push(ingred.text);
         }
       }
@@ -294,7 +294,7 @@ const AllIngredients = () => {
       const finalList = [];
       for(const ingredSug of ingredientSug['ingredients']) {
         for(const ingred of ingredients) {
-          if(ingred.text == ingredSug) {
+          if(ingred.text === ingredSug) {
             finalList.push(ingred)
           }
         }
@@ -332,7 +332,7 @@ const AllIngredients = () => {
     // Find ingredient in ingredients list, change check and set
     const newIngredient = [...ingredients];
     for (const ingred of ingredients) {
-      if(ingredient == ingred) {
+      if(ingredient === ingred) {
         const allIngreIdx = ingredients.indexOf(ingred);
         newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
         break
@@ -344,7 +344,7 @@ const AllIngredients = () => {
     const newCategory = {...categories};
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
       for (const ingredientDict of ingredientsList) {
-        if(ingredientDict.text == ingredient.text) {
+        if(ingredientDict.text === ingredient.text) {
           console.log('hmmm')
           console.log(ingredientDict)
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
@@ -720,9 +720,14 @@ const AllIngredients = () => {
                               {recipe.title}
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {recipe.missingIngredient == '' ? <span><b> You have all ingredients </b></span> : <span><b> You are missing {recipe.missingIngredient} </b></span>}
+                                {recipe.missingIngredient === '' ? <span><b> You have all ingredients </b></span> : <span><b> You are missing {recipe.missingIngredient} </b></span>}
+                                <br/>
                                 <span>Ingredients: {recipe.ingredients}</span>
+                                <br/>
                                 <span>Calories: {recipe.calories}</span>
+                                <br/>
+                                <span>Meal Type: {CapitalizeFirstLetter(recipe.mealType)}</span>
+                                <br/>
                               </Typography>
                             </CardContent>
                           </CardActionArea>

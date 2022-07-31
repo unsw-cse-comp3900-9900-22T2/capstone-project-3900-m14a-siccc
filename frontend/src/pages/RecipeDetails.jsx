@@ -20,7 +20,6 @@ const RecipeDetails = () => {
       try {
         const recipeData = await apiFetch('GET', `recipe/details/${params.id}`, null);
         setRecipe(recipeData);
-        //console.log('here');
 
       } catch (err) {
         alert(err.message);
@@ -52,7 +51,6 @@ const RecipeDetails = () => {
 
       <Box pl="100px" pt="50px" pb="100px">
         <Box >
-          {/* <>recipe{params.id}</> */}
           <Typography gutterBottom variant="h3" component="div">
             {recipe.title}
           </Typography>
