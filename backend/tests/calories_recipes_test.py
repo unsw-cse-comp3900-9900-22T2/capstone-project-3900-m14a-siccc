@@ -1,4 +1,4 @@
-from src.calories_recipes import getCaloriesRecipes, calorieCalculation
+from src.caloriesRecipes import getCaloriesRecipes, calorieCalculation
 import pytest
 
 

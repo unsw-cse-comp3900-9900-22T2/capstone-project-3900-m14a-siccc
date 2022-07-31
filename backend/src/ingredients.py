@@ -6,7 +6,7 @@ Project Name: Project 1 - Recipe Recommendation System
 Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
 Date: 31/July/2022
 """
-from src.ingredients_category import sortingCategories, sortingIngredients
+from src.ingredientsCategory import sortingCategories, sortingIngredients
 from src.helper import retrieveIngredientNames, dbConnection
 
 
