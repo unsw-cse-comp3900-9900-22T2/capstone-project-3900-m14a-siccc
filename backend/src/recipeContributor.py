@@ -8,7 +8,7 @@ Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
 Date: 31/July/2022
 """
 from src.helper import dbConnection, retrieveRecipeList
-from src.calories_recipes import calorieCalculation
+from src.caloriesRecipes import calorieCalculation
 
 def insertRecipe(recipeDetails):
     """ Inserts recipe into database when receiving details from
