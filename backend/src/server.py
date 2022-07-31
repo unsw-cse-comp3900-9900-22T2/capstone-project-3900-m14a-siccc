@@ -1,7 +1,7 @@
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-from src.calories_recipes import getCaloriesRecipesWithIngredients, getRecipesWithCaloriesIngredientsMealType
+from src.calories_recipes import getCaloriesRecipesWithIngredients, getCaloriesRecipes
 from src.error import InputError
 from src.recipe import ingredientsSuggestions, recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
@@ -105,12 +105,12 @@ def recipeMatchMealTypeCalorieFlask():
     mealType = temp['mealType']
     calories = temp['calories']
     blacklist = temp['blacklist']
-    info = getRecipesWithCaloriesIngredientsMealType(calories, ingredients, mealType, blacklist)
+    info = getCaloriesRecipes(calories, ingredients, mealType, blacklist)
     return dumps({
         'recipes': info
     })
     
-    
+
 @APP.route("/recipe/ingredient/suggestions", methods = ['POST'])
 def recipeIngredientSuggestionsFlask():
     temp = request.get_json()

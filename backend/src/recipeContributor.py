@@ -1,17 +1,15 @@
-import psycopg2
 from src.helper import dbConnection, retrieveRecipeList
 from src.calories_recipes import calorieCalculation
-from src.config import host, user, password, dbname
 
 def insertRecipe(recipeDetails):
     """ Inserts recipe into database when receiving details from
         the recipe contributor
 
-        Parameters:
-            recipeDetails (dictionary): Dictionary of the recipe details
+            Parameters:
+                recipeDetails (dictionary): Dictionary of the recipe details
         
-        Return:
-            info (list): The details of recipe
+            Return:
+                info (list): The details of recipe
     """
     db = dbConnection()
     recipeList = retrieveRecipeList(db)

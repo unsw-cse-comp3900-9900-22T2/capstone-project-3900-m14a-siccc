@@ -1,5 +1,3 @@
-import psycopg2
-from src.config import host, user, password, dbname
 from src.helper import dbConnection
 
 
@@ -11,7 +9,6 @@ def sortingCategories():
                 categories (list): the list of categories after sorting
     """
     db = dbConnection()
-    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
     select * 
@@ -38,7 +35,6 @@ def sortingAllIngredients():
                 ingredients (list): the list of ingredients after sorting
     """
     db = dbConnection()
-    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = """
     select * 
@@ -68,7 +64,6 @@ def sortingIngredients(cate):
                 ingredients (list): the list of ingredients after sorting
     """
     db = dbConnection()
-    #db = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password}")
     cur = db.cursor()
     qry = f"""
     select * 
