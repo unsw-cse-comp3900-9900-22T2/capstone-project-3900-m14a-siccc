@@ -30,15 +30,15 @@ def getCaloriesRecipes(calories, ingredientsList, mealType, blacklist):
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                calories (int): input calories
-                ingredientsList (str) : input ingredients
-                mealType (str) : meal type
-                blackList (list) : list of black ingredients
+        Parameters:
+            calories (int): input calories
+            ingredientsList (str) : input ingredients
+            mealType (str) : meal type
+            blackList (list) : list of black ingredients
         
-            Returns:
-                recipeList (list): list of all recipes if the recipes are 
-                matching the requirements
+        Returns:
+            recipeList (list): list of all recipes if the recipes are 
+            matching the requirements
     """
     recipeList = []
     info = getMealType(mealType, ingredientsList, blacklist)
@@ -61,12 +61,12 @@ def calorieCalculation(ingredientsDict):
 
         Final Time Complexisty: O(n^2).
 
-            Parameters:
-                ingredients (Dictionary): Dictionary containing ingredients 
-                e.g., {ingredientName: amount}
+        Parameters:
+            ingredients (Dictionary): Dictionary containing ingredients 
+            e.g., {ingredientName: amount}
 
-            Returns:
-                calories (int): total calories of ingredients
+        Returns:
+            calories (int): total calories of ingredients
     """
     db = dbConnection()
     ingredientFixedGrams = getFixedCGrams()
@@ -101,10 +101,13 @@ def getFixedCGrams():
         retrieveIngredients is O(n).
 
         Final Time Complexisty: O(n)
-
-            Returns:
-                (dictionary): dictionary of key-value pairs, 
-                              ingredient(string): fixed_grams(int)
+        
+        Parameters:
+            NONE
+            
+        Returns:
+            (dictionary): dictionary of key-value pairs, 
+                    ingredient(string): fixed_grams(int)
     """
     db = dbConnection()
     info = retrieveIngredients(db)

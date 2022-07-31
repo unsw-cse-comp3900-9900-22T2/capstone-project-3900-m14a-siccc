@@ -14,19 +14,20 @@ from src.recipe import getFilteredRecipes, recipeMatch
 def getMealType(meal, ingredientsList, blacklist):
     """ Select the meal type after the recipe match. 
 
-        Algorithm: linear search. The time complexity of "if" statement
-            is O(1) and the time complexity of "for" loop is O(n). 
-            O(1+n) = O(n).
+        Algorithm: linear search. 
+        
+        The time complexity of "if" statement is O(1) and the time complexity
+        of "for" loop is O(n). Thus, O(1+n) = O(n).
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                meal (str): the name of meal type
-                ingredientsList (str): the string of ingredientsList
-                blackist (list): the blacklist of ingredients
+        Parameters:
+            meal (str): the name of meal type
+            ingredientsList (str): the string of ingredientsList
+            blackist (list): the blacklist of ingredients
         
-            Returns:
-                recipleTypeList (list): list of all recipes ingredients
+        Returns:
+            recipleTypeList (list): list of all recipes ingredients
     """
     if len(ingredientsList) <= 0 or ingredientsList == "" \
         or ingredientsList is None:

@@ -20,12 +20,12 @@ def getIngredient(db, name):
 
         Final Time Complexisty: O(n)
 
-            Parameters
-                db (database) : database
-                name (str): name of ingredient
+        Parameters:
+            db (database) : database
+            name (str): name of ingredient
 
-            Return
-                category (str): category of ingredient
+        Return:
+            category (str): category of ingredient
     """
     cur = db.cursor()
     qry = """
@@ -49,12 +49,12 @@ def findIngredientsCategory(db, name):
 
         Final Time Complexisty: O(n)
 
-            Parameters
-                db : database
-                name (str): name of ingredient
+        Parameters:
+            db : database
+            name (str): name of ingredient
 
-            Return
-                category (str): category of ingredient
+        Return:
+            category (str): category of ingredient
     """
     cur = db.cursor()
     qry = """
@@ -79,11 +79,11 @@ def retrieveCategories(db):
 
         Final Time Complexisty: O(n)
 
-            Parameters
-                db: database
+        Parameters:
+            db (database): database
             
-            Returns
-                info: list of all tuples of categories
+        Returns:
+            info(list) : list of all tuples of categories
     """
     cur = db.cursor()
     qry = """
@@ -106,11 +106,11 @@ def retrieveIngredientNames(db):
 
         Final Time Complexisty: O(n)
 
-            Parameters
-                db : database
+        Parameters:
+            db (database): database
 
-            Returns
-                info (list): list of all ingredient names
+        Returns:
+            info (list): list of all ingredient names
     """
     cur = db.cursor()
     qry = """
@@ -133,11 +133,11 @@ def retrieveIngredients(db):
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                db : database
+        Parameters:
+            db (database): database
 
-            Returns:
-                info (list): list of all ingredient tuples
+        Returns:
+            info (list): list of all ingredient tuples
     """
     cur = db.cursor()
     qry = """
@@ -161,12 +161,12 @@ def retrieveRecipe(db, id):
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                db: database
-                id (int): recipe identifier
+        Parameters:
+            db (database): database
+            id (int): recipe identifier
 
-            Returns:
-                recipe (list): list of tuples of ingredient details
+        Returns:
+            info (list): list of tuples of ingredient details
     """
     cur = db.cursor()
     qry = """
@@ -190,11 +190,11 @@ def retrieveRecipeList(db):
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                db : database
+        Parameters:
+            db (database): database
         
-            Returns:
-                info: list of all recipes
+        Returns:
+            info (list): list of all recipes
     """
     cur = db.cursor()
     qry = """
@@ -211,18 +211,17 @@ def retrieveRecipeList(db):
 
 
 def retrieveRecipeIngredientsList(db):
-    """ Helper function to retrieve list of recipe ingredients
-
+    """ Helper function to retrieve list of recipe ingredients.
 
         Algorithm: linear search
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                db : database
+        Parameters:
+            db (database): database
         
-            Returns:
-                info: list of all recipes ingredients
+        Returns:
+            info (list): list of all recipes ingredients
     """
     cur = db.cursor()
     qry = """
@@ -245,12 +244,12 @@ def getCalories(db, name):
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                db : database
-                name (str): name of ingredient
+        Parameters:
+            db (database): database
+            name (str): name of ingredient
             
-            Returns:
-                calories (int): calories of ingredient per 100g
+        Returns:
+            calories (int): calories of ingredient per 100g
     """
     cur = db.cursor()
     qry = """
@@ -276,12 +275,12 @@ def convertCalories(currCalories, gramToConvert):
 
         Final Time Complexisty: O(1)
 
-            Parameters:
-                currCalories (int): the 100g calorie value of ingredient
-                gramToConvert (int): the grams required by recipe
+        Parameters:
+            currCalories (int): the 100g calorie value of ingredient
+            gramToConvert (int): the grams required by recipe
 
-            Returns:
-                (int): the new calorie value
+        Returns:
+            (int): the new calorie value
     """
     return int ((gramToConvert/100)*currCalories)
 
@@ -293,8 +292,11 @@ def dbConnection():
 
         Final Time Complexisty: O(n1)
 
-            Returns:
-                db(database): the data from database
+        Parameters:
+            NONE
+            
+        Returns:
+            db(database): the data from database
     """
     return psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")

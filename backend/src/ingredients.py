@@ -20,6 +20,9 @@ def IngredientsViewAll():
 
         Final Time Complexisty: O(n)
 
+        Parameters:
+            NONE
+            
         Returns:
             ingredients (list): list of ingredient strings
     """
@@ -40,11 +43,13 @@ def CategoryViewAll():
         "retrieveIngredientNames" is O(n). There are two "for" loop, so 
         overall time complexisty is O(n*n) = O(n^2).
 
-
         Final Time Complexisty: O(n)
 
-            Returns:
-                ingredients (list): list of dictionary key-value pairs 
+        Parameters:
+            NONE
+            
+        Returns:
+            ingredients (list): list of dictionary key-value pairs 
                         e.g., {ingredient: ___, category: ___}
     """
     ListCategories = sortingCategories()

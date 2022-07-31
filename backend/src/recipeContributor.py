@@ -14,11 +14,17 @@ def insertRecipe(recipeDetails):
     """ Inserts recipe into database when receiving details from
         the recipe contributor
 
-            Parameters:
-                recipeDetails (dictionary): Dictionary of the recipe details
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). 
         
-            Return:
-                info (list): The details of recipe
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            recipeDetails (dictionary): Dictionary of the recipe details
+        
+        Return:
+            info (list): The details of recipe
     """
     db = dbConnection()
     recipeList = retrieveRecipeList(db)
@@ -65,10 +71,19 @@ def insertRecipe(recipeDetails):
 
 
 def getNoRecipeMatchList():
-    """ Grabs the list of commonly input ingredients with no recipe match
-    
-            Return:
-                result (list): list of sets of ingredients ordered by most frequent
+    """ Grabs the list of commonly input ingredients with no recipe match.
+
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). 
+        
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            NONE
+            
+        Return:
+            result (list): list of sets of ingredients ordered by most frequent
     """
     db = dbConnection()
     cur = db.cursor()
@@ -88,15 +103,21 @@ def getNoRecipeMatchList():
 
 
 def addFrequency(ingredients):
-    """ Adds the set of ingredients to frequency table if 
-        there is no recipe match.
-        If the ingredient does not exist in the database,
-        we can add an entry. 
-        If the ingredient exists in the database, the frequency
-        of this ingredient would be plus one. 
+    """ Adds the set of ingredients to frequency table if there is no recipe
+        match.
+        If the ingredient does not exist in the database, we can add an entry. 
+        If the ingredient exists in the database, the frequency of this 
+        ingredient would be plus one. 
 
-            Parameters:
-                ingredients (list): set of ingredients
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). The time complexisty of
+        inserting and updateing SQL are O(1). 
+        
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            ingredients (list): set of ingredients
     """
     if len(ingredients) != 0:
         ingredients = ', '.join(ingredients)
@@ -133,11 +154,17 @@ def addFrequency(ingredients):
 def formatSteps(cookingSteps):
     """ The details of meal cooking steps would be added. 
 
-            Parameters:
-                cookingSteps (list): list of all the cooking steps
+        Algorithm: linear search.
+
+        The time complexity of the "while" loop is O(n). 
+        
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            cookingSteps (list): list of all the cooking steps
                 
-            Returns:
-                result (str): string of all the steps
+        Returns:
+            result (str): string of all the steps
     """
     result = ''
     counter = 1

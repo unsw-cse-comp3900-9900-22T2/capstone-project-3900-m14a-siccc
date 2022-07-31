@@ -17,11 +17,14 @@ def sortingCategories():
         Algorithm: linear search.
 
         The time complexity of the "for" loop is O(n). 
-
+        
         Final Time Complexisty: O(n)
 
-            Returns:
-                categories (list): the list of categories after sorting
+        Parameters:
+            NONE
+            
+        Returns:
+            categories (list): the list of categories after sorting
     """
     db = dbConnection()
     cur = db.cursor()
@@ -52,8 +55,11 @@ def sortingAllIngredients():
 
         Final Time Complexisty: O(n)
 
-            Returns:
-                ingredients (list): the list of ingredients after sorting
+        Parameters:
+            NONE
+            
+        Returns:
+            ingredients (list): the list of ingredients after sorting
     """
     db = dbConnection()
     cur = db.cursor()
@@ -84,11 +90,11 @@ def sortingIngredients(cate):
 
         Final Time Complexisty: O(n)
 
-            Parameters:
-                cate (str): the name of the categories
+        Parameters:
+            cate (str): the name of the categories
 
-            Returns:
-                ingredients (list): the list of ingredients after sorting
+        Returns:
+            ingredients (list): the list of ingredients after sorting
     """
     db = dbConnection()
     cur = db.cursor()
@@ -121,9 +127,11 @@ def sortIngredientsInCategories():
 
         Final Time Complexisty: O(n^2)
 
-            Returns:
-                result (dict) : dictionary of all ingredients and 
-                        categories sorted
+        Parameters:
+            NONE
+            
+        Returns:
+            result (dict) : dictionary of all ingredients and categories sorted
     """
     result = {}
     listOfCategories = sortingCategories()
