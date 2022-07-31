@@ -2,7 +2,6 @@ import React from 'react';
 import { apiFetch } from '../helpers.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react'
-import { Input } from '@chakra-ui/react'
 import { useState } from "react";
 import { Grid } from '@mui/material';
 import {Button} from '@mui/material';
@@ -13,25 +12,17 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
-import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
-import Fab from '@mui/material/Fab';
 import Toolbar from '@mui/material/Toolbar';
-import { IndeterminateCheckBox } from '@mui/icons-material';
 import BlockIcon from '@mui/icons-material/Block';
-import { red } from '@mui/material/colors';
 import Logo from "../assets/logo1.png";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 
 
 
@@ -109,24 +100,19 @@ const AllIngredients = () => {
     try {
       console.log(ingredients);
       const ingredientList = [];
-      //const newBlacklist = [];
       console.log(ingredients.length);
       
       // Sets a list of dictionary of ingredients if there is no local storage
       if (ingredients.length === 0) {
         const ingredientData = await apiFetch('GET', `ingredients/view`, null);
-        console.log("list is 0")
         for (const ingredient of ingredientData) {
           const elem = { text: ingredient, check: false };
           ingredientList.push(elem);
-          //newBlacklist.push(elem);
         }
         setIngredients(ingredientList);
-        //setBlacklist(newBlacklist);
       }
 
       console.log(ingredients)
-      //console.log(ingredients);
       console.log('here');
       console.log(ingredientList);
     } catch (err) {
@@ -137,12 +123,6 @@ const AllIngredients = () => {
   function categoryHandler(e) {
     setInputCat(e.target.value);
   };
-
-  // function toggleIngredients (index) {
-  //   const newIngredient = [...ingredients];
-  //   newIngredient[index].check = !ingredients[index].check;
-  //   setIngredients(newIngredient);
-  // }
 
   function toggleBlacklist (index, ingredientName) {
     if (ingredientName) {
@@ -175,8 +155,6 @@ const AllIngredients = () => {
 
 
     const newCategory = {...categories};
-    //console.log(newCategory[category][index].text)
-    //console.log(ingredients[index].text);
 
     // Shows selected ingredient on categories view
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
@@ -184,9 +162,6 @@ const AllIngredients = () => {
         if(ingredientDict.text === newIngredient[index].text) {
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
           newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
-          /*console.log(newIngredient[index].text);
-          console.log(matchIdx);
-          console.log(categoryName);*/
           break;
         }
       }
@@ -204,12 +179,6 @@ const AllIngredients = () => {
       const selectedIngredients = [];
       const selectedBlacklist = [];
       console.log(clicked);
-      // Checks if the ingredients are selected and pushes to list
-      /*for (const ingredient of ingredients) {
-        if (ingredient.check){
-          selectedIngredients.push(ingredient.text);
-        }
-      }*/
       
       // If user clicks search, save the search into local storage
       if (clicked) {
@@ -259,25 +228,21 @@ const AllIngredients = () => {
         mealType: mealType,
         blacklist: selectedBlacklist,
       }
-      if(calorieLimit != 0 && calorieLimit != null && 
-        !isNaN(calorieLimit) && mealType != "") {
+      if(calorieLimit !== 0 && calorieLimit !== null && 
+        !isNaN(calorieLimit) && mealType !== "") {
         // Meal type and calorie limit are selected
         const recipeData = await apiFetch('POST', 'recipe/calorie/mealtype/view', null, body)
         setRecipes(recipeData.recipes);
-      } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
+      } else if (calorieLimit !== 0 && calorieLimit !== null && !isNaN(calorieLimit)) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
-      } else if (mealType != "") {
+      } else if (mealType !== "") {
         // Meal type is selected but not calorie limit
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
         console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
-      } //else if (selectedBlacklist.length !== 0) {
-      //   // const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
-      //   // setRecipes(recipeData.recipes);
-      // }
-      else {
+      } else {
         // Meal type and calorie limit are not selected
         const recipeData = await apiFetch('POST', `recipe/view`, null, body);
         setRecipes(recipeData.recipes);
@@ -317,7 +282,7 @@ const AllIngredients = () => {
       await new Promise(r => setTimeout(r, 750));
       const suggestionIngredients = [];
       for(const ingred of ingredients) {
-        if(ingred.check == true) {
+        if(ingred.check) {
           suggestionIngredients.push(ingred.text);
         }
       }
@@ -330,7 +295,7 @@ const AllIngredients = () => {
       const finalList = [];
       for(const ingredSug of ingredientSug['ingredients']) {
         for(const ingred of ingredients) {
-          if(ingred.text == ingredSug) {
+          if(ingred.text === ingredSug) {
             finalList.push(ingred)
           }
         }
@@ -368,7 +333,7 @@ const AllIngredients = () => {
     // Find ingredient in ingredients list, change check and set
     const newIngredient = [...ingredients];
     for (const ingred of ingredients) {
-      if(ingredient == ingred) {
+      if(ingredient === ingred) {
         const allIngreIdx = ingredients.indexOf(ingred);
         newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
         break
@@ -380,7 +345,7 @@ const AllIngredients = () => {
     const newCategory = {...categories};
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
       for (const ingredientDict of ingredientsList) {
-        if(ingredientDict.text == ingredient.text) {
+        if(ingredientDict.text === ingredient.text) {
           console.log('hmmm')
           console.log(ingredientDict)
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
@@ -510,9 +475,10 @@ const AllIngredients = () => {
   function ChosenIngredients() {
     const filteredData = ingredients.filter((el) => {
       if (el.check) {
-        return el
+        return el;
       }
     })
+    console.log(filteredData)
 
     return(
       <div>
@@ -771,7 +737,7 @@ const AllIngredients = () => {
                               {recipe.title}
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
+                                {recipe.missingIngredient === '' ? <p><b> You have all ingredients </b></p> : <p><b> You are missing {recipe.missingIngredient} </b></p>}
                                 <p>Ingredients: {recipe.ingredients}</p>
                                 <p>Calories: {recipe.calories}</p>
                               </Typography>
