@@ -6,6 +6,8 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {Button} from '@mui/material';
+import Logo from "../assets/logo1.png";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const RecipeDetails = () => {
@@ -27,14 +29,24 @@ const RecipeDetails = () => {
     viewDetail();
   }, [params.id]);
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#93c759'
+      }
+    }
+  });
+
   return (
     <>
-      <AppBar position="static" style={{ background: '#93C759' }}>
+      <ThemeProvider theme={theme}>
+      <AppBar position="sticky">
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            Recipe Recommendation System
+          <img src={Logo} alt="logo" height="50"/>
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+            MASTERCOOK
           </Typography>
-          <Button variant="outlined" style={{color:"#93C759", background: "#FFFFFF", borderColor: '#FFFFFF' }} onClick={() => navigate('/recipe-create')}>Create new recipes</Button> 
+          <Button variant="outlined" style={{background: "#FFFFFF"}} onClick={() => navigate('/recipe-create')}><b>Create new recipes</b></Button> 
         </Toolbar>
       </AppBar>
 
@@ -78,10 +90,11 @@ const RecipeDetails = () => {
             )
           })}</span>
           <br></br>
-          <Button variant="contained" style={{ background: '#93C759' }} name="back" onClick={() => navigate(`/`)}>Back</Button>
+          <Button variant="contained" style={{ color: "#FFFFFF" }} name="back" onClick={() => navigate(`/`)}><b>Back</b></Button>
 
         </Box>  
       </Box>
+      </ThemeProvider>
     </>
   );
 
