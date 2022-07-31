@@ -1,3 +1,12 @@
+"""
+A recipeContributor.py can add the frequency after user selected some 
+ingredients or recipes. 
+
+Team name: 3900-M14A-SICCC
+Project Name: Project 1 - Recipe Recommendation System
+Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
+Date: 31/July/2022
+"""
 from src.helper import dbConnection, retrieveRecipeList
 from src.calories_recipes import calorieCalculation
 

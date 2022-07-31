@@ -1,3 +1,17 @@
+"""
+A calories_recipes.py can get the recipes by calories and can calculate the 
+total calories per recipe. 
+
+If user input calories, ingredients, meal type and blacklist, the user can 
+get the recipes as well.
+
+If user wants to know the total calories, the user also can search it.
+
+Team name: 3900-M14A-SICCC
+Project Name: Project 1 - Recipe Recommendation System
+Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
+Date: 31/July/2022
+"""
 from src.mealType import getMealType
 from src.helper import retrieveIngredients, getCalories
 from src.helper import convertCalories, dbConnection
@@ -16,8 +30,8 @@ def getCaloriesRecipes(calories, ingredientsList, mealType, blacklist):
                 blackList (list) : list of black ingredients
         
             Returns:
-                recipeList (list): list of all recipes if the recipes are matching 
-                the requirements
+                recipeList (list): list of all recipes if the recipes are 
+                matching the requirements
     """
     recipeList = []
     info = getMealType(mealType, ingredientsList, blacklist)
@@ -63,7 +77,7 @@ def calorieCalculation(ingredientsDict):
 
 
 def getFixedCGrams():
-    """ Helper function to get fixed grams for all ingredients
+    """ Helper function to get fixed grams for all ingredients.
 
             Returns:
                 (dictionary): dictionary of key-value pairs, 
