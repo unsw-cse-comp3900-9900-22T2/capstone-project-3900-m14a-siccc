@@ -1,13 +1,22 @@
+"""
+A server.py is linked with the frontend. 
+
+Team name: 3900-M14A-SICCC
+Project Name: Project 1 - Recipe Recommendation System
+Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
+Date: 31/July/2022
+"""
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-from src.calories_recipes import getCaloriesRecipesWithIngredients, getCaloriesRecipes
+from src.calories_recipes import getCaloriesRecipes
 from src.error import InputError
 from src.recipe import ingredientsSuggestions, recipeMatch, recipeDetails
 from src.ingredients import IngredientsViewAll
 from src.ingredients_category import sortIngredientsInCategories
 from src import config
-from src.recipeContributor import insertRecipe, getNoRecipeMatchList, addFrequency
+from src.recipeContributor import insertRecipe, getNoRecipeMatchList
+from src.recipeContributor import addFrequency
 from src.mealType import getMealType
 
 
@@ -80,7 +89,7 @@ def recipeMatchCalorieFlask():
     ingredients = temp['ingredients']
     calories = temp['calories']
     blacklist = temp['blacklist']
-    info = getCaloriesRecipesWithIngredients(calories, ingredients, blacklist)
+    info = getCaloriesRecipes(calories, ingredients, blacklist)
     return dumps({
         'recipes': info
     })

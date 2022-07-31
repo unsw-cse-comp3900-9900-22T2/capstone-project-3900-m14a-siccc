@@ -1,3 +1,15 @@
+"""
+A recipe.py can return the list of recipes which are matched the ingreidents
+that selected by the users. If the user has a blacklist of ingredients, the
+system also can filter the recipes. The system also can provide some 
+suggestions with the ingredients which are depended on the user selected 
+the ingredients. 
+
+Team name: 3900-M14A-SICCC
+Project Name: Project 1 - Recipe Recommendation System
+Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
+Date: 31/July/2022
+"""
 from src.helper import dbConnection, retrieveRecipe, retrieveRecipeList
 
 def recipeMatch(ingredientsList, blacklist):
@@ -124,7 +136,6 @@ def recipeDetails(recipeID):
         "cookingSteps": info[6],
         "ingredients": info[8]
     }
-
 
 
 def ingredientsSuggestions(ingredientsList):

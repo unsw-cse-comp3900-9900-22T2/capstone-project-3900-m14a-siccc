@@ -1,3 +1,13 @@
+"""
+A helper.py stores the helper functions. 
+
+The helper function would be simplify for other files.
+
+Team name: 3900-M14A-SICCC
+Project Name: Project 1 - Recipe Recommendation System
+Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
+Date: 31/July/2022
+"""
 from re import L
 import json
 import psycopg2
@@ -8,7 +18,7 @@ def getIngredient(db, name):
     """ Helper function to retrieve row of ingredient by name
 
             Parameters
-                db : database
+                db (database) : database
                 name (str): name of ingredient
 
             Return
@@ -30,7 +40,7 @@ def getIngredient(db, name):
 
 
 def findIngredientsCategory(db, name):
-    """ Helper function to retrieve ingredient category by name
+    """ Helper function to retrieve ingredient category by name.
 
             Parameters
                 db : database
