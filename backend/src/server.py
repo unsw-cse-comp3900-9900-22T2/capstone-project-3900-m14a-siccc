@@ -89,7 +89,7 @@ def recipeMatchCalorieFlask():
     ingredients = temp['ingredients']
     calories = temp['calories']
     blacklist = temp['blacklist']
-    info = getCaloriesRecipes(calories, ingredients, blacklist)
+    info = getCaloriesRecipes(calories, ingredients, "", blacklist)
     return dumps({
         'recipes': info
     })
