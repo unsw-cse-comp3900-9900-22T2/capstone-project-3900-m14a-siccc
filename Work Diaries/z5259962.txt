@@ -68,3 +68,9 @@ For week 8, we did our demo 2 and retrospective B right after our demo. We went 
 before discussing what to try next in this sprint. We also allocated tasks during the lab so we could get started straight away before our next meeting
 on Thursday. For sprint 3 our main focus is making the website look nice as we completed most functionality in the previous sprints. We only had a few
 stories for this sprint relating to functionality and plan to complete that within the first week leading up to the demo.
+
+Week 9
+
+In week 9, we finished all the functionalities and focused on styling. For styling I was tasked with the recipe create page. We decided to stick
+mainly to material UI libraries to remain consistent. There were also some minor bug fixes that were discovered while testing out near final product. 
+Towards the end of the week, we wrote our final demo as a team and practiced it before Monday.
