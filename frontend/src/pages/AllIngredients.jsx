@@ -204,9 +204,9 @@ const AllIngredients = () => {
           }
         }
       }
-      if (selectedIngredients.length === 0) {
-        alert("Please select some ingredients")
-      }
+      // if (selectedIngredients.length === 0) {
+      //   alert("Please select some ingredients")
+      // }
 
       // Matches recipe to selected ingredients
       const body = {
