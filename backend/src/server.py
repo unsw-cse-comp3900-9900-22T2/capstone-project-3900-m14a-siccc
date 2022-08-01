@@ -124,7 +124,8 @@ def recipeMatchMealTypeCalorieFlask():
 def recipeIngredientSuggestionsFlask():
     temp = request.get_json()
     ingredients = temp['ingredients']
-    info = ingredientsSuggestions(ingredients)
+    blacklist = temp['blacklist']
+    info = ingredientsSuggestions(ingredients, blacklist)
     return dumps({
         'ingredients': info
     })
