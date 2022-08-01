@@ -271,8 +271,15 @@ const AllIngredients = () => {
           suggestionIngredients.push(ingred.text);
         }
       }
+      const selectedBlacklist = [];
+      for (const i of blacklist) {
+        if (i.check){
+          selectedBlacklist.push(i.text);
+        }
+      }
       const body = {
         'ingredients': suggestionIngredients,
+        'blacklist': selectedBlacklist,
       }
       const ingredientSug = await apiFetch('POST', 'recipe/ingredient/suggestions', null, body);
       const finalList = [];
