@@ -12,7 +12,7 @@ from src.caloriesRecipes import calorieCalculation
 
 def insertRecipe(recipeDetails):
     """ Inserts recipe into database when receiving details from
-        the recipe contributor
+        the recipe contributor.
 
         Algorithm: linear search.
 

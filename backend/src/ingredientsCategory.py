@@ -117,7 +117,7 @@ def sortingIngredients(cate):
     
 def sortIngredientsInCategories():
     """ Sorts all categories and ingredients in the categories and 
-        returns a dictionary
+        returns a dictionary.
         
         Algorithm: linear search.
 

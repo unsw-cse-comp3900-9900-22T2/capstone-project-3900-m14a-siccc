@@ -14,6 +14,19 @@ from src.recipe import getFilteredRecipes, recipeMatch
 def getMealType(meal, ingredientsList, blacklist):
     """ Select the meal type after the recipe match. 
 
+        User input (meal, ingredientsList, blacklist):
+        Note: blacklist is alwasy assumed as an empty list if user did not
+              select any ingredients into the blacklist.
+        1. If user only input "meal-type", the user can get the recipes with 
+           selecting meal-type. The "ingrdientsList" and "blacklist" are an 
+           empty string and an empty list, respectively.
+        2. If user input "ingredientsList", whatever the user input the 
+           "blacklist" or not, the user can get the recipes with selecting 
+           ingreidents. This would be as same as "recipeMatch" function. 
+        3. If user input input "meal-type", "ingredientsList" and "blacklist",
+           the recipes would be filtered by "recipeMatch" function with 
+           the "ingredientsList" and the "blacklist.
+
         Algorithm: linear search. 
         
         The time complexity of "if" statement is O(1) and the time complexity

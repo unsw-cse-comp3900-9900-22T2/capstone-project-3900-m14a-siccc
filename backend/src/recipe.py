@@ -130,7 +130,7 @@ def RecipeHasBlacklist(recipe, blacklist):
 
 
 def recipeDetails(recipeID):
-    """ Retrieves recipe details given a recipe id.
+    """ Retrieves recipe details by given a recipe id.
 
         Algorithm: No algorithm.
 

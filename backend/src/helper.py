@@ -14,7 +14,7 @@ from src.config import host, user, password, dbname
 
 
 def getIngredient(db, name):
-    """ Helper function to retrieve row of ingredient by name
+    """ Helper function to retrieve row of ingredient by name.
 
         Algorithm: linear search.
 
@@ -73,7 +73,7 @@ def findIngredientsCategory(db, name):
 
 
 def retrieveCategories(db):
-    """ Helper function to retrieve list of categories
+    """ Helper function to retrieve list of categories.
 
         Algorithm: linear search
 
@@ -100,7 +100,7 @@ def retrieveCategories(db):
 
 
 def retrieveIngredientNames(db):
-    """ Helper function to retrieve all ingredient names in database
+    """ Helper function to retrieve all ingredient names in database.
 
         Algorithm: linear search
 
@@ -127,7 +127,7 @@ def retrieveIngredientNames(db):
 
 
 def retrieveIngredients(db):
-    """ Helper function to retrieve all ingredient tuples in database
+    """ Helper function to retrieve all ingredient tuples in database.
 
         Algorithm: linear search. 
 
@@ -238,7 +238,7 @@ def retrieveRecipeIngredientsList(db):
 
 
 def getCalories(db, name):
-    """ Helper function to retrieve ingredient calories by name
+    """ Helper function to retrieve ingredient calories by name.
 
         Algorithm: linear search.
 
@@ -269,7 +269,7 @@ def getCalories(db, name):
 
 def convertCalories(currCalories, gramToConvert):
     """ Helper function to convert the calories of the ingredients
-        to any specified number of grams
+        to any specified number of grams.
 
         Algorithm: No Algorithm. 
 
