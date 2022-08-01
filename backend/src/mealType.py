@@ -25,7 +25,7 @@ def getMealType(meal, ingredientsList, blacklist):
            ingreidents. This would be as same as "recipeMatch" function. 
         3. If user input input "meal-type", "ingredientsList" and "blacklist",
            the recipes would be filtered by "recipeMatch" function with 
-           the "ingredientsList" and the "blacklist.
+           the "ingredientsList" and the "blacklist".
 
         Algorithm: linear search. 
         
