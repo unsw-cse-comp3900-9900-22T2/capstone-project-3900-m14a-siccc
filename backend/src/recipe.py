@@ -170,15 +170,18 @@ def recipeDetails(recipeID):
     }
 
 
-def ingredientsSuggestions(ingredientsList):
+def ingredientsSuggestions(ingredientsList, blacklist):
     """ Sends front end a list of ingredients that satisfy the list 
         of ingredients that the user selected by top five ingredients
         in specific conditions. If the user did not select any ingredients,
         the system will not return any ingredients.
 
-        1. The most frequency ingredients in all recipes which do not include
+        1. If there are at least one ingredients in the blacklist, this recipe
+           will not be considered and these ingredients will not show in the 
+           the list of ingreidents' suggestion.
+        2. The most frequency ingredients in all recipes which do not include
            the ingredients in the user's selection ingredients list.
-        2. If the previous condition is matched and get the same frequency for
+        3. If the previous condition is matched and get the same frequency for
            some ingredients, the ingredients will be ordered by alphabetical. 
 
         Algorithm: linear search.
@@ -192,6 +195,7 @@ def ingredientsSuggestions(ingredientsList):
 
         Parameters:
             ingredientsList (str): list of ingredients user selected
+            blacklist (list): blacklist of ingredients user selected
 
         Return:
             getIngredientsSuggestions (list): list of ingredients are 
@@ -212,6 +216,10 @@ def ingredientsSuggestions(ingredientsList):
         for igd in ingredients:
             if igd in ingredientsList:
                 match += 1
+            elif len(blacklist) > 0 and igd in blacklist:
+                match = 0
+                missing_igds = []
+                break
             else:
                 missing_igds.append(igd)
         if match == num_select:
