@@ -36,3 +36,6 @@ Added styling to recipe details
 Week 9 
 Adding route for blacklist function 
 Started writing on report 
+
+Wk10 
+Wrote summary on user stories and how they link to functions we made 
