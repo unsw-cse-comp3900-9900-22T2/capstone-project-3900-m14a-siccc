@@ -74,3 +74,8 @@ Week 9
 In week 9, we finished all the functionalities and focused on styling. For styling I was tasked with the recipe create page. We decided to stick
 mainly to material UI libraries to remain consistent. There were also some minor bug fixes that were discovered while testing out near final product. 
 Towards the end of the week, we wrote our final demo as a team and practiced it before Monday.
+
+Week 10
+
+In week 10, we practiced our final demo a couple of times before our tutorial. After the final demo we discussed who's doing what part in the final report
+and which parts of the code to clean up for the final software quality hand in. We held a meeting on Thursday to discuss the report and to finalise everything before we hand it in. I updated the essential diagrams in the proposal and wrote the user guide to set up our application in VLAB.
