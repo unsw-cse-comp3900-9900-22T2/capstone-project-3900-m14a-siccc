@@ -42,10 +42,15 @@ def getCaloriesRecipes(calories, ingredientsList, mealType, blacklist):
     """
     recipeList = []
     info = getMealType(mealType, ingredientsList, blacklist)
+    id = []
     for recipe in info:
         if int(recipe["calories"]) <= int(calories):
-            recipeList.append(recipe)
-
+            if len(id) > 0 and int(recipe["recipeID"]) not in id:
+                recipeList.append(recipe)
+                id.append(int(recipe["recipeID"]))
+            elif len(id) == 0:
+                recipeList.append(recipe)
+                id.append(int(recipe["recipeID"]))
     return recipeList
 
 
