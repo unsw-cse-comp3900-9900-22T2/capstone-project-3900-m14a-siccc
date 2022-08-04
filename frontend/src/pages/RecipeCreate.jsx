@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch, fileToDataUrl } from '../helpers.jsx';
-import { Input } from '@chakra-ui/react'
+// import { Input } from '@chakra-ui/react'
 import { useState } from "react";
 import TextField from '@mui/material/TextField';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -419,7 +419,6 @@ const RecipeCreate = () => {
 
   return (
     <>
-
       <ThemeProvider theme={theme}>
         <AppBar position="sticky">
           <Toolbar>
@@ -430,225 +429,226 @@ const RecipeCreate = () => {
             <Button variant="outlined" style={{background: "#FFFFFF"}} onClick={() => navigate('/')}><b>Search for recipes</b></Button> 
           </Toolbar>
         </AppBar>
-      <Container component="main" maxWidth="md">
-        <CssBaseline />
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: '#93c759' }}>
-              <MenuBookIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Create Recipe
-            </Typography>
-            <Box component="form" sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="title"
-                label="Title"
-                type="text"
-                name="title"
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="servings"
-                label="Servings"
-                type="number"
-                id="servings"
-                min="0"
-                value={servings}
-                onChange={e => setServings(e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="cookingTime"
-                type="number"
-                name="cookingTime"
-                label="Cooking Time"
-                min="0"
-                value={cookingTime}
-                onChange={e => setCookingTime(e.target.value)}
-              />
-              <FormControl fullWidth margin="normal" required>
-                <Select
-                  name="mealType"
-                  displayEmpty
-                  value={mealType}
-                  onChange={e => setMealType(e.target.value)}
-                >
-                  <MenuItem value="">Select Meal Type</MenuItem>
-                  <MenuItem value="Breakfast">Breakfast</MenuItem>
-                  <MenuItem value="Lunch">Lunch</MenuItem>
-                  <MenuItem value="Dinner">Dinner</MenuItem>
-                  <MenuItem value="Entree">Entrée</MenuItem>
-                  <MenuItem value="Main">Main</MenuItem>
-                  <MenuItem value="Dessert">Dessert</MenuItem>
-                </Select>
-              </FormControl>
-              <Button
-                startIcon={<PhotoCameraIcon/>}
-                sx={{ mt: 2, mb: 2}}
-                variant="contained" 
-                component="label"
-                fullWidth
-                style={{color: "#FFFFFF"}}
-              >
-                <b>Upload Recipe Photo</b>
-                <input 
-                  type="file"
-                  name="thumbnail"
-                  accept="image/png, image/jpg, image/jpeg"
-                  hidden
-                  onChange={thumbnailUpdate}
+
+        <Container component="main" maxWidth="md">
+          <CssBaseline />
+            <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: '#93c759' }}>
+                <MenuBookIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Create Recipe
+              </Typography>
+              <Box component="form" sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="title"
+                  label="Title"
+                  type="text"
+                  name="title"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
                 />
-              </Button>
-              {thumbnail !== ''
-                ? (<Box component="img" src={thumbnail} alt="recipe thumbnail" sx={{height: 500, width: 700, mx:5}}/>)
-                : <></>
-              }
-              <Typography component="h2" variant="h6">
-                How many steps does your recipe have?
-              </Typography>
-              <Slider
-                marks={marks}
-                steps={10}
-                valueLabelDisplay='on'
-                min={0}
-                max={20}
-                onChange={changeSteps}
-              />
-              {steps.map((step, idx) => {
-                return (
-                  <div key={idx}>
-                    <TextField
-                      margin="normal"
-                      label={"Step "+ (idx + 1)}
-                      onChange={e => updateSteps(e, idx)}
-                      fullWidth
-                    />
-                  </div>
-                )
-              })}
-              <Grid container spacing={2}>
-                <Grid item xs={6} margin="normal">
-                  <Typography component="h2" variant="h6">
-                    Suggested Categories
-                  </Typography>
-                  <CatSuggestion/>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography component="h2" variant="h6">
-                    Frequently Searched Ingredients
-                  </Typography>
-                  {freqIngredients.map((ingredients, idx) => (
-                    <ListItem key={idx}>
-                      <ListItemIcon>
-                        <LocalDiningIcon/>
-                      </ListItemIcon>
-                      <ListItemText primary={capitalizeFirstLetter(ingredients)}/>
-                    </ListItem>
-                  ))}
-                </Grid>
-              </Grid>
-              <Typography component="h2" variant="h6">
-                Select your ingredients
-              </Typography>
-              <TextField
-                margin="normal"
-                fullWidth
-                placeholder='Search ingredients' 
-                onChange={inputHandler}
-              />
-              <List input={inputText}/>
-              {Object.keys(categories).map((category, idx) => {
-                return(
-                  <div key = {idx}>
-                    <Typography component="h2" variant="h6">
-                      {capitalizeFirstLetter(category)}
-                    </Typography>
-                  {
-                    categories[category].map((ingredient, idx2) => {
-                      return(
-                        <div key = {idx2}>
-                          <Grid container>
-                            <Grid item xs={6}>
-                              <Checkbox
-                                onChange={() => toggleCategoryIngredients(category, idx2)}
-                                type="checkbox"
-                                checked={ingredient.check}
-                              />
-                              {capitalizeFirstLetter(ingredient.text)}
-                            </Grid>
-                            <Grid item xs={6}>
-                              {/* If ingredient is checked */}
-                              {ingredient.check
-                                ? (<span>
-                                    <TextField type="number"
-                                      required
-                                      name="grams" 
-                                      min="0"
-                                      label="Amount"
-                                      size='small'
-                                      onChange={e => updateIngredientValue(e, ingredient.text)}/>
-                                    <FormControl required size="small" sx={{ minWidth: 150 }}>
-                                      <InputLabel id="ingredientValue">Measurement</InputLabel>
-                                      <Select
-                                        labelId="ingredientValue"
-                                        name="valueType"
-                                        onChange={e => updateIngredientMeasurement(e, ingredient.text)}
-                                        label="Value"
-                                        value={measurementValue(ingredient.text)}
-                                      >
-                                        <MenuItem name="grams" value="g">Grams</MenuItem>
-                                        <MenuItem name="quantities" value="q">Quantitites</MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  </span>)
-                                  : <></>
-                                }
-                              </Grid>
-                            </Grid>
-                          </div>
-                        )
-                      })
-                    }
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="servings"
+                  label="Servings"
+                  type="number"
+                  id="servings"
+                  min="0"
+                  value={servings}
+                  onChange={e => setServings(e.target.value)}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="cookingTime"
+                  type="number"
+                  name="cookingTime"
+                  label="Cooking Time"
+                  min="0"
+                  value={cookingTime}
+                  onChange={e => setCookingTime(e.target.value)}
+                />
+                <FormControl fullWidth margin="normal" required>
+                  <Select
+                    name="mealType"
+                    displayEmpty
+                    value={mealType}
+                    onChange={e => setMealType(e.target.value)}
+                  >
+                    <MenuItem value="">Select Meal Type</MenuItem>
+                    <MenuItem value="Breakfast">Breakfast</MenuItem>
+                    <MenuItem value="Lunch">Lunch</MenuItem>
+                    <MenuItem value="Dinner">Dinner</MenuItem>
+                    <MenuItem value="Entree">Entrée</MenuItem>
+                    <MenuItem value="Main">Main</MenuItem>
+                    <MenuItem value="Dessert">Dessert</MenuItem>
+                  </Select>
+                </FormControl>
+                <Button
+                  startIcon={<PhotoCameraIcon/>}
+                  sx={{ mt: 2, mb: 2}}
+                  variant="contained" 
+                  component="label"
+                  fullWidth
+                  style={{color: "#FFFFFF"}}
+                >
+                  <b>Upload Recipe Photo</b>
+                  <input 
+                    type="file"
+                    name="thumbnail"
+                    accept="image/png, image/jpg, image/jpeg"
+                    hidden
+                    onChange={thumbnailUpdate}
+                  />
+                </Button>
+                {thumbnail !== ''
+                  ? (<Box component="img" src={thumbnail} alt="recipe thumbnail" sx={{height: 500, width: 700, mx:5}}/>)
+                  : <></>
+                }
+                <Typography component="h2" variant="h6">
+                  How many steps does your recipe have?
+                </Typography>
+                <Slider
+                  marks={marks}
+                  steps={10}
+                  valueLabelDisplay='on'
+                  min={0}
+                  max={20}
+                  onChange={changeSteps}
+                />
+                {steps.map((step, idx) => {
+                  return (
+                    <div key={idx}>
+                      <TextField
+                        margin="normal"
+                        label={"Step "+ (idx + 1)}
+                        onChange={e => updateSteps(e, idx)}
+                        fullWidth
+                      />
                     </div>
                   )
-                })
-              }
-              <Grid container spacing={2}>
-                <Grid item xs={12} margin="normal">
-                  <Button
-                    name="create"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    xs={6}
-                    onClick= {createRecipe}
-                    style={{color: "#FFFFFF"}}
-                  >
-                    <b>Create recipe</b>
-                  </Button>
+                })}
+                <Grid container spacing={2}>
+                  <Grid item xs={6} margin="normal">
+                    <Typography component="h2" variant="h6">
+                      Suggested Categories
+                    </Typography>
+                    <CatSuggestion/>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography component="h2" variant="h6">
+                      Frequently Searched Ingredients
+                    </Typography>
+                    {freqIngredients.map((ingredients, idx) => (
+                      <ListItem key={idx}>
+                        <ListItemIcon>
+                          <LocalDiningIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={capitalizeFirstLetter(ingredients)}/>
+                      </ListItem>
+                    ))}
+                  </Grid>
                 </Grid>
-              </Grid>
+                <Typography component="h2" variant="h6">
+                  Select your ingredients
+                </Typography>
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  placeholder='Search ingredients' 
+                  onChange={inputHandler}
+                />
+                <List input={inputText}/>
+                {Object.keys(categories).map((category, idx) => {
+                  return(
+                    <div key = {idx}>
+                      <Typography component="h2" variant="h6">
+                        {capitalizeFirstLetter(category)}
+                      </Typography>
+                    {
+                      categories[category].map((ingredient, idx2) => {
+                        return(
+                          <div key = {idx2}>
+                            <Grid container>
+                              <Grid item xs={6}>
+                                <Checkbox
+                                  onChange={() => toggleCategoryIngredients(category, idx2)}
+                                  type="checkbox"
+                                  checked={ingredient.check}
+                                />
+                                {capitalizeFirstLetter(ingredient.text)}
+                              </Grid>
+                              <Grid item xs={6}>
+                                {/* If ingredient is checked */}
+                                {ingredient.check
+                                  ? (<span>
+                                      <TextField type="number"
+                                        required
+                                        name="grams" 
+                                        min="0"
+                                        label="Amount"
+                                        size='small'
+                                        onChange={e => updateIngredientValue(e, ingredient.text)}/>
+                                      <FormControl required size="small" sx={{ minWidth: 150 }}>
+                                        <InputLabel id="ingredientValue">Measurement</InputLabel>
+                                        <Select
+                                          labelId="ingredientValue"
+                                          name="valueType"
+                                          onChange={e => updateIngredientMeasurement(e, ingredient.text)}
+                                          label="Value"
+                                          value={measurementValue(ingredient.text)}
+                                        >
+                                          <MenuItem name="grams" value="g">Grams</MenuItem>
+                                          <MenuItem name="quantities" value="q">Quantitites</MenuItem>
+                                        </Select>
+                                      </FormControl>
+                                    </span>)
+                                    : <></>
+                                  }
+                                </Grid>
+                              </Grid>
+                            </div>
+                          )
+                        })
+                      }
+                      </div>
+                    )
+                  })
+                }
+                <Grid container spacing={2}>
+                  <Grid item xs={12} margin="normal">
+                    <Button
+                      name="create"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      xs={6}
+                      onClick= {createRecipe}
+                      style={{color: "#FFFFFF"}}
+                    >
+                      <b>Create recipe</b>
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
             </Box>
-          </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
     </>
   );
 }

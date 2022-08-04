@@ -40,3 +40,8 @@ Week 9
 - finalised styling of explorer page - changed layouts, colours, icons
 - finalised styling of recipe details page
 - added more specific error messages for recipe creation
+
+Week 10
+- did final system demo
+- final cleaning up of code
+- wrote report
