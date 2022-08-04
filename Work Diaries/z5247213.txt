@@ -61,9 +61,13 @@ Week 9
 - Prepared the final presentation.
 - Done the final demo
 - Attended all meeting for this project
+- Updated all the description of files in the backend
+- Updated all tests in the backend 
+- Updated all description of functions in the backend
 
 
 Week 10
 - Done Final demo presentation
 - Done Final report
 - Done peer assessment 
+- Done Final software quality

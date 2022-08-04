@@ -6,13 +6,23 @@ Project Name: Project 1 - Recipe Recommendation System
 Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
 Date: 31/July/2022
 """
-from src.ingredients_category import sortingCategories, sortingIngredients
+from src.ingredientsCategory import sortingCategories, sortingIngredients
 from src.helper import retrieveIngredientNames, dbConnection
 
 
 def IngredientsViewAll():
     """View all ingredients from database and sort it by alphabetical. 
 
+        Algorithm: No algorithm. 
+
+        The time complexity of the "for" loop is O(n). The time complexity of
+        "retrieveIngredientNames" is O(n).
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            NONE
+            
         Returns:
             ingredients (list): list of ingredient strings
     """
@@ -27,8 +37,19 @@ def IngredientsViewAll():
 def CategoryViewAll():
     """ View all ingredients by categories.
 
-            Returns:
-                ingredients (list): list of dictionary key-value pairs 
+        Algorithm: No algorithm.
+
+        The time complexity of the "for" loop is O(n). The time complexity of
+        "retrieveIngredientNames" is O(n). There are two "for" loop, so 
+        overall time complexisty is O(n*n) = O(n^2).
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            NONE
+            
+        Returns:
+            ingredients (list): list of dictionary key-value pairs 
                         e.g., {ingredient: ___, category: ___}
     """
     ListCategories = sortingCategories()

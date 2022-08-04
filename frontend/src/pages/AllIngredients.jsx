@@ -1,9 +1,7 @@
 import React from 'react';
 import { apiFetch } from '../helpers.jsx';
 import { useNavigate } from 'react-router-dom';
-// import { Box } from '@chakra-ui/react'
 import Box from '@mui/material/Box';
-// import { Input } from '@chakra-ui/react'
 import { useState } from "react";
 import { Grid } from '@mui/material';
 import {Button} from '@mui/material';
@@ -14,25 +12,20 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
-import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
-import Fab from '@mui/material/Fab';
 import Toolbar from '@mui/material/Toolbar';
-import { IndeterminateCheckBox } from '@mui/icons-material';
 import BlockIcon from '@mui/icons-material/Block';
-import { red } from '@mui/material/colors';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Logo from "../assets/logo1.png";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 
 
 
@@ -89,7 +82,6 @@ const AllIngredients = () => {
     try {
 
       const newBlacklist = [];
-      console.log(ingredients.length);
       
       // Sets a list of dictionary of ingredients if there is no local storage
       if (blacklist.length === 0) {
@@ -108,28 +100,17 @@ const AllIngredients = () => {
   // Displays all Ingredients
   const viewAllIngredients = async () => {
     try {
-      console.log(ingredients);
       const ingredientList = [];
-      //const newBlacklist = [];
-      console.log(ingredients.length);
-      
+
       // Sets a list of dictionary of ingredients if there is no local storage
       if (ingredients.length === 0) {
         const ingredientData = await apiFetch('GET', `ingredients/view`, null);
-        console.log("list is 0")
         for (const ingredient of ingredientData) {
           const elem = { text: ingredient, check: false };
           ingredientList.push(elem);
-          //newBlacklist.push(elem);
         }
         setIngredients(ingredientList);
-        //setBlacklist(newBlacklist);
       }
-
-      console.log(ingredients)
-      //console.log(ingredients);
-      console.log('here');
-      console.log(ingredientList);
     } catch (err) {
       alert(err.message);
     }
@@ -138,12 +119,6 @@ const AllIngredients = () => {
   function categoryHandler(e) {
     setInputCat(e.target.value);
   };
-
-  // function toggleIngredients (index) {
-  //   const newIngredient = [...ingredients];
-  //   newIngredient[index].check = !ingredients[index].check;
-  //   setIngredients(newIngredient);
-  // }
 
   function toggleBlacklist (index, ingredientName) {
     if (ingredientName) {
@@ -176,8 +151,6 @@ const AllIngredients = () => {
 
 
     const newCategory = {...categories};
-    //console.log(newCategory[category][index].text)
-    //console.log(ingredients[index].text);
 
     // Shows selected ingredient on categories view
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
@@ -185,17 +158,11 @@ const AllIngredients = () => {
         if(ingredientDict.text === newIngredient[index].text) {
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
           newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
-          /*console.log(newIngredient[index].text);
-          console.log(matchIdx);
-          console.log(categoryName);*/
           break;
         }
       }
     }
     setCategories(newCategory);
-    console.log(blacklist);
-    
-    //TODO: Send information of ingredients to backend for ingredient suggestions
     getIngredientSuggestions();
   }
 
@@ -204,13 +171,6 @@ const AllIngredients = () => {
     try {
       const selectedIngredients = [];
       const selectedBlacklist = [];
-      console.log(clicked);
-      // Checks if the ingredients are selected and pushes to list
-      /*for (const ingredient of ingredients) {
-        if (ingredient.check){
-          selectedIngredients.push(ingredient.text);
-        }
-      }*/
       
       // If user clicks search, save the search into local storage
       if (clicked) {
@@ -221,7 +181,6 @@ const AllIngredients = () => {
         localStorage.setItem('mealType', JSON.stringify(mealType));
         localStorage.setItem('blacklist', JSON.stringify(blacklist));
         for (const [, ingredients] of Object.entries(categories)) {
-          console.log(ingredients)
           for (const ingredient of ingredients) {
             if (ingredient.check){
               selectedIngredients.push(ingredient.text);
@@ -237,9 +196,7 @@ const AllIngredients = () => {
       // Get categories from local storage and output the recipes
       } else {
         const categoryDict = JSON.parse(localStorage.getItem('categories'));
-        console.log(JSON.parse(localStorage.getItem('categories')));
         for (const [, ingredients] of Object.entries(categoryDict)) {
-          console.log(ingredients)
           for (const ingredient of ingredients) {
             if (ingredient.check){
               selectedIngredients.push(ingredient.text);
@@ -247,12 +204,10 @@ const AllIngredients = () => {
           }
         }
       }
-      if (selectedIngredients.length === 0) {
-        alert("Please select some ingredients")
-      }
+      // if (selectedIngredients.length === 0) {
+      //   alert("Please select some ingredients")
+      // }
 
-      console.log(calorieLimit)
-      console.log(mealType)
       // Matches recipe to selected ingredients
       const body = {
         ingredients: selectedIngredients,
@@ -260,25 +215,21 @@ const AllIngredients = () => {
         mealType: mealType,
         blacklist: selectedBlacklist,
       }
-      if(calorieLimit != 0 && calorieLimit != null && 
-        !isNaN(calorieLimit) && mealType != "") {
+
+      if(parseInt(calorieLimit) !== 0 && parseInt(calorieLimit) != null && 
+        !isNaN(parseInt(calorieLimit)) && mealType !== "") {
         // Meal type and calorie limit are selected
         const recipeData = await apiFetch('POST', 'recipe/calorie/mealtype/view', null, body)
         setRecipes(recipeData.recipes);
-      } else if (calorieLimit != 0 && calorieLimit != null && !isNaN(calorieLimit)) {
+      } else if (parseInt(calorieLimit) !== 0 && parseInt(calorieLimit) !== null && !isNaN(parseInt(calorieLimit))) {
         // Calorie limit is selected but not meal type
         const recipeData = await apiFetch('POST', 'recipe/calorie/view', null, body);
         setRecipes(recipeData.recipes);
-      } else if (mealType != "") {
+      } else if (mealType !== "") {
         // Meal type is selected but not calorie limit
         const recipeData = await apiFetch('POST', 'recipe/mealtype/view', null, body);
-        console.log(recipeData.recipes);
         setRecipes(recipeData.recipes);
-      } //else if (selectedBlacklist.length !== 0) {
-      //   // const recipeData = await apiFetch('POST', 'recipe/blacklistView', null, body);
-      //   // setRecipes(recipeData.recipes);
-      // }
-      else {
+      } else {
         // Meal type and calorie limit are not selected
         const recipeData = await apiFetch('POST', `recipe/view`, null, body);
         setRecipes(recipeData.recipes);
@@ -306,38 +257,39 @@ const AllIngredients = () => {
         }
         setCategories(ingredientsInCategoriesDict)
       }
-      console.log(categories)
     } catch (err) {
       alert(err.message);
     }
   }
 
   const getIngredientSuggestions = async () => {
-    await new Promise(r => setTimeout(r, 750));
     try {
       await new Promise(r => setTimeout(r, 750));
       const suggestionIngredients = [];
       for(const ingred of ingredients) {
-        if(ingred.check == true) {
+        if(ingred.check) {
           suggestionIngredients.push(ingred.text);
+        }
+      }
+      const selectedBlacklist = [];
+      for (const i of blacklist) {
+        if (i.check){
+          selectedBlacklist.push(i.text);
         }
       }
       const body = {
         'ingredients': suggestionIngredients,
+        'blacklist': selectedBlacklist,
       }
-      console.log('here')
-      console.log(body)
       const ingredientSug = await apiFetch('POST', 'recipe/ingredient/suggestions', null, body);
       const finalList = [];
       for(const ingredSug of ingredientSug['ingredients']) {
         for(const ingred of ingredients) {
-          if(ingred.text == ingredSug) {
+          if(ingred.text === ingredSug) {
             finalList.push(ingred)
           }
         }
       }
-      console.log('now')
-      console.log(finalList)
       setIngredientSuggestions(finalList);
     } catch (err) {
       alert(err.message)
@@ -351,7 +303,6 @@ const AllIngredients = () => {
 
     // Shows selected ingredient on all ingredients view
     const newIngredient = [...ingredients];
-    console.log(newCategory[category][index].text)
     for (const ingredient of ingredients) {
       if (newCategory[category][index].text === ingredient.text){
         const allIngreIdx = ingredients.indexOf(ingredient);
@@ -369,7 +320,7 @@ const AllIngredients = () => {
     // Find ingredient in ingredients list, change check and set
     const newIngredient = [...ingredients];
     for (const ingred of ingredients) {
-      if(ingredient == ingred) {
+      if(ingredient === ingred) {
         const allIngreIdx = ingredients.indexOf(ingred);
         newIngredient[allIngreIdx].check = !ingredients[allIngreIdx].check;
         break
@@ -381,9 +332,7 @@ const AllIngredients = () => {
     const newCategory = {...categories};
     for (const [categoryName, ingredientsList] of Object.entries(categories)) {
       for (const ingredientDict of ingredientsList) {
-        if(ingredientDict.text == ingredient.text) {
-          console.log('hmmm')
-          console.log(ingredientDict)
+        if(ingredientDict.text === ingredient.text) {
           const matchIdx = categories[categoryName].indexOf(ingredientDict);
           newCategory[categoryName][matchIdx].check = !categories[categoryName][matchIdx].check
           break;
@@ -397,7 +346,6 @@ const AllIngredients = () => {
 
   function toggleBlacklistIngredients (category, index) {
     const newBlacklist = [...blacklist];
-    console.log(categories[category][index].text)
     for (const ingredient of blacklist) {
       if (categories[category][index].text === ingredient.text){
         const allIngreIdx = blacklist.indexOf(ingredient);
@@ -417,9 +365,6 @@ const AllIngredients = () => {
   }
 
   React.useEffect(() => {
-    //console.log(Object.keys(JSON.parse(localStorage.getItem('categories'))).length);
-    //Object.keys(JSON.parse(localStorage.getItem('categories'))).length != 0
-
     // Check that there is local storage stored, 
     // if there is local storage set the check lists to display the data
     if (localStorage.getItem('categories') && 
@@ -433,14 +378,11 @@ const AllIngredients = () => {
       if(localStorage.getItem('mealType')) {
         setMealType(JSON.parse(localStorage.getItem('mealType')))
       }
-      console.log(JSON.parse(localStorage.getItem('ingredients')));
       recipeMatch(false);
-      console.log("ssssss")
     } else {
       viewAllIngredientsInCategories();
       viewAllBlacklist();
       viewAllIngredients();
-      console.log("nnnnnn")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -493,14 +435,6 @@ const AllIngredients = () => {
             onChange={() => toggleIngredients(idx, ingredient.text)} 
             checked={ingredient.check}
           />
-          {/* <label>
-            {ingredient.text}
-            <input
-              onChange={() => toggleIngredients(idx, ingredient.text)}
-              type="checkbox"
-              checked={ingredient.check}
-            />
-          </label> */}
         </div>
       ))}
       </div>
@@ -509,25 +443,23 @@ const AllIngredients = () => {
 
   // chosen ingredients
   function ChosenIngredients() {
-    const filteredData = ingredients.filter((el) => {
-      if (el.check) {
-        return el
-      }
-    })
-
     return(
       <div>
-      {filteredData.map((ingredient, idx) => (
-        <div key={idx}>
-          <FormControlLabel 
-            control={<Checkbox checkedIcon={<IndeterminateCheckBoxIcon/>}/>} 
-            label={CapitalizeFirstLetter(ingredient.text)} 
-            onChange={() => toggleIngredients(idx, ingredient.text)} 
-            checked={ingredient.check}
-
-          />
-        </div>
-      ))}
+        {ingredients.map((ingredient, idx) => (
+          <div key={idx}>
+            {ingredient.check
+              ? <div key={idx}>
+                  <FormControlLabel 
+                    control={<Checkbox checkedIcon={<IndeterminateCheckBoxIcon/>}/>} 
+                    label={CapitalizeFirstLetter(ingredient.text)} 
+                    onChange={() => toggleIngredients(idx, ingredient.text)} 
+                    checked={ingredient.check}
+                  />
+                </div>
+              : <></>
+            }
+          </div>
+        ))}
       </div>
     )
   }
@@ -580,11 +512,6 @@ const AllIngredients = () => {
         main: '#93c759'
       }
     },
-    // breakpoints: {
-    //   values: {
-    //     xs: 10000
-    //   }
-    // }
   });
 
   return (
@@ -619,7 +546,7 @@ const AllIngredients = () => {
                 >
                   <MenuItem value="">View ingredient categories</MenuItem>
                   {Object.keys(categories).map((category) => (
-                    <MenuItem name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
+                    <MenuItem key={category} name={category} value={category}>{CapitalizeFirstLetter(category)}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -663,10 +590,18 @@ const AllIngredients = () => {
                       <br/>
                       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Blacklist ingredients
+                        <Tooltip 
+                          placement="top"
+                          title="Recipes with these ingredients will not show in your search">
+                            <IconButton>
+                              <InfoOutlinedIcon />
+                            </IconButton>
+                        </Tooltip>
                       </Typography>
                       <TextField placeholder="Search ingredients" variant="outlined" fullWidth onChange={blacklistInputHandler}/>
                       <SearchBlacklist input={blacklistInputText}/>
                       <br/>
+                      
                       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Your blacklisted ingredients
                       </Typography>
@@ -770,8 +705,13 @@ const AllIngredients = () => {
                                   <Typography variant="body2" color="text.secondary">
                                     {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p>
                                     : <p><b> You are missing {recipe.missingIngredient} </b></p>}
-                                    <p>Ingredients: {recipe.ingredients}</p>
-                                    <p>Calories: {recipe.calories}</p>
+                                    <br/>
+                                    <span>Ingredients: {recipe.ingredients}</span>
+                                    <br/>
+                                    <span>Calories: {recipe.calories}</span>
+                                    <br/>
+                                    <span>Meal Type: {CapitalizeFirstLetter(recipe.mealType)}</span>
+                                    <br/>
                                   </Typography>
                                 </CardContent>
                               </CardActionArea>

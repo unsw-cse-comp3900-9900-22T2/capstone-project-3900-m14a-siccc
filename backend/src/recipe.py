@@ -16,6 +16,18 @@ def recipeMatch(ingredientsList, blacklist):
     """ Sends front end a list of recipes that satisfy the list 
         of ingredients that the user selected by alphabetically.
 
+        Algorithm: linear search. 
+        
+        The time complexity of "if" statement is O(1) and the time complexity
+        of "for" loop is O(n). 
+
+        The time complexity of "dbConnection" is O(1) and the time comlexity 
+        of "retrieveRecipeList" is O(n).
+        
+        Thus, O(n*n*n) = O(n^3).
+
+        Final Time Complexisty: O(n^3)
+
         Parameters:
             ingredientsList (str): list of ingredients user selected
             blacklist (list): list of blacklisted ingredients
@@ -68,12 +80,19 @@ def recipeMatch(ingredientsList, blacklist):
 def getFilteredRecipes(recipes, blacklist):
     """ Helper function for recipeMatch.
 
-            Parameters: 
-                recipes (list): list of all existing recipes 
-                blacklist (list): list of blacklisted ingredients user selected
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). The time complexisty
+        of "RecipeHasBlacklist" is O(n^2). Thus, O(n^2*n) = O(n^3).
+        
+        Final Time Complexisty: O(n^3)
+
+        Parameters: 
+            recipes (list): list of all existing recipes 
+            blacklist (list): list of blacklisted ingredients user selected
     
-            Return:
-                recipeList (list): list of recipes without ingredients from 
+        Return:
+            recipeList (list): list of recipes without ingredients from 
                         blacklist
 """
     filteredRecipeList = []
@@ -88,12 +107,19 @@ def getFilteredRecipes(recipes, blacklist):
 def RecipeHasBlacklist(recipe, blacklist):
     """Helper function for getFilteredRecipes.
 
-            Parameters:
-                recipe(list): list of ingredients in recipe 
-                blacklist (list): list of blacklisted ingredients user selected
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). There are two "for"
+        loop, so O(n*n) = O(n^2).
+        
+        Final Time Complexisty: O(n^2)
+
+        Parameters:
+            recipe(list): list of ingredients in recipe 
+            blacklist (list): list of blacklisted ingredients user selected
     
-            Return:
-                recipeList (boolean): true if recipe contains any blacklisted 
+        Return:
+            recipeList (boolean): true if recipe contains any blacklisted 
                     ingredient, false otherwise 
     """
     for ingredient in recipe:
@@ -104,23 +130,29 @@ def RecipeHasBlacklist(recipe, blacklist):
 
 
 def recipeDetails(recipeID):
-    """ Retrieves recipe details given a recipe id.
+    """ Retrieves recipe details by given a recipe id.
 
-            Parameters:
-                recipeID (int): recipe id as an integer
+        Algorithm: No algorithm.
 
-            Returns:
-                dict {
-                    recipeID (int): id of recipe
-                    title (str): title of recipe
-                    servings (int): serving size of recipe
-                    timeToCook (int): cooking time
-                    mealType (str): meal type
-                    photo (binary): photo of meal
-                    calories (int): calories of meal
-                    cookingSteps (str): cooking steps of recipe
-                    ingredients (str): ingredients of recipe
-                }
+        The time complexity of the "retrieveRecipe" is O(n). 
+        
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            recipeID (int): recipe id as an integer
+
+        Returns:
+            dict {
+                recipeID (int): id of recipe
+                title (str): title of recipe
+                servings (int): serving size of recipe
+                timeToCook (int): cooking time
+                mealType (str): meal type
+                photo (binary): photo of meal
+                calories (int): calories of meal
+                cookingSteps (str): cooking steps of recipe
+                ingredients (str): ingredients of recipe
+            }
     """
     db = dbConnection()
     info = retrieveRecipe(db, recipeID)
@@ -138,22 +170,35 @@ def recipeDetails(recipeID):
     }
 
 
-def ingredientsSuggestions(ingredientsList):
+def ingredientsSuggestions(ingredientsList, blacklist):
     """ Sends front end a list of ingredients that satisfy the list 
         of ingredients that the user selected by top five ingredients
         in specific conditions. If the user did not select any ingredients,
         the system will not return any ingredients.
 
-        1. The most frequency ingredients in all recipes which do not include
+        1. If there are at least one ingredients in the blacklist, this recipe
+           will not be considered and these ingredients will not show in the 
+           the list of ingreidents' suggestion.
+        2. The most frequency ingredients in all recipes which do not include
            the ingredients in the user's selection ingredients list.
-        2. If the previous condition is matched and get the same frequency for
+        3. If the previous condition is matched and get the same frequency for
            some ingredients, the ingredients will be ordered by alphabetical. 
 
-            Parameters:
-                ingredientsList (str): list of ingredients user selected
+        Algorithm: linear search.
 
-            Return:
-                getIngredientsSuggestions (list): list of ingredients are 
+        The time complexity of the "for" loop is O(n). There are two "for"
+        loop, so it is O(n^2). The time complexisty of sorting dictionary
+        is O(n^2). The time complexisty of 
+        "getIngredientsSuggestions" is also O(n^2). 
+        
+        Final Time Complexisty: O(n^2)
+
+        Parameters:
+            ingredientsList (str): list of ingredients user selected
+            blacklist (list): blacklist of ingredients user selected
+
+        Return:
+            getIngredientsSuggestions (list): list of ingredients are 
                             satisfying the ingredients from the 
                             getIngredientsSuggestions function
     """
@@ -164,17 +209,23 @@ def ingredientsSuggestions(ingredientsList):
     info = retrieveRecipeList(db)
     igds_frequency = {}
     for recipe in info:
-        ingredients = [" ".join(i.split(' ')[1:]) for i in recipe[8].split(', ')]
+        ingredients = [" ".join(i.split(' ')[1:]) \
+                            for i in recipe[8].split(', ')]
         match = 0
         missing_igds = []
         for igd in ingredients:
             if igd in ingredientsList:
                 match += 1
+            elif len(blacklist) > 0 and igd in blacklist:
+                match = 0
+                missing_igds = []
+                break
             else:
                 missing_igds.append(igd)
         if match == num_select:
             for miss in missing_igds:
-                if len(igds_frequency) > 0 and igds_frequency.get(miss) is not None:
+                if len(igds_frequency) > 0 and \
+                    igds_frequency.get(miss) is not None:
                         igds_frequency[miss] = igds_frequency[miss] + 1
                 else:
                     igds_frequency[miss] = 1
@@ -188,12 +239,19 @@ def getIngredientsSuggestions(igds_frequency_sort, pre_frequency):
     """Helper function for ingredientsSuggestions. To select the top 5 
        ingredients and return to the frontend.
 
-            Parameters:
-                igds_frequency_sort (list): list of suggestion ingredients
-                pre_frequency (int): the maximum number of frequency
+        Algorithm: linear search.
+
+        The time complexity of the "for" loop is O(n). There is two "for"
+        loop, so the time complexisty is O(n^2).
         
-            Return:
-                igds_suggestions (list): list of top 5 suggestion ingreidents
+        Final Time Complexisty: O(n^2)
+
+        Parameters:
+            igds_frequency_sort (list): list of suggestion ingredients
+            pre_frequency (int): the maximum number of frequency
+        
+        Return:
+            igds_suggestions (list): list of top 5 suggestion ingreidents
     """
     igdsSuggestions = []
     tmp_igds = []  
@@ -218,6 +276,7 @@ def getIngredientsSuggestions(igds_frequency_sort, pre_frequency):
     
     if len(igdsSuggestions) < 5:
         tmp_igds_sort = sorted(tmp_igds)
-        igdsSuggestions = igdsSuggestions + tmp_igds_sort[:5-len(igdsSuggestions)]
+        igdsSuggestions = igdsSuggestions + \
+            tmp_igds_sort[:5-len(igdsSuggestions)]
     
     return igdsSuggestions

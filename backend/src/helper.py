@@ -8,21 +8,24 @@ Project Name: Project 1 - Recipe Recommendation System
 Author: Cameron Khuu, Carla Phan, Christopher Tsang, Sylvia Huang, Xin Tian Luo
 Date: 31/July/2022
 """
-from re import L
 import json
 import psycopg2
 from src.config import host, user, password, dbname
 
 
 def getIngredient(db, name):
-    """ Helper function to retrieve row of ingredient by name
+    """ Helper function to retrieve row of ingredient by name.
 
-            Parameters
-                db (database) : database
-                name (str): name of ingredient
+        Algorithm: linear search.
 
-            Return
-                category (str): category of ingredient
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database) : database
+            name (str): name of ingredient
+
+        Return:
+            category (str): category of ingredient
     """
     cur = db.cursor()
     qry = """
@@ -42,12 +45,16 @@ def getIngredient(db, name):
 def findIngredientsCategory(db, name):
     """ Helper function to retrieve ingredient category by name.
 
-            Parameters
-                db : database
-                name (str): name of ingredient
+        Algorithm: linear search
 
-            Return
-                category (str): category of ingredient
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db : database
+            name (str): name of ingredient
+
+        Return:
+            category (str): category of ingredient
     """
     cur = db.cursor()
     qry = """
@@ -66,13 +73,17 @@ def findIngredientsCategory(db, name):
 
 
 def retrieveCategories(db):
-    """ Helper function to retrieve list of categories
+    """ Helper function to retrieve list of categories.
 
-            Parameters
-                db: database
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
             
-            Returns
-                info: list of all tuples of categories
+        Returns:
+            info(list) : list of all tuples of categories
     """
     cur = db.cursor()
     qry = """
@@ -89,13 +100,17 @@ def retrieveCategories(db):
 
 
 def retrieveIngredientNames(db):
-    """ Helper function to retrieve all ingredient names in database
+    """ Helper function to retrieve all ingredient names in database.
 
-            Parameters
-                db : database
+        Algorithm: linear search
 
-            Returns
-                info (list): list of all ingredient names
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
+
+        Returns:
+            info (list): list of all ingredient names
     """
     cur = db.cursor()
     qry = """
@@ -112,13 +127,17 @@ def retrieveIngredientNames(db):
 
 
 def retrieveIngredients(db):
-    """ Helper function to retrieve all ingredient tuples in database
+    """ Helper function to retrieve all ingredient tuples in database.
 
-            Parameters
-                db : database
+        Algorithm: linear search. 
 
-            Returns
-                info (list): list of all ingredient tuples
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
+
+        Returns:
+            info (list): list of all ingredient tuples
     """
     cur = db.cursor()
     qry = """
@@ -136,14 +155,18 @@ def retrieveIngredients(db):
 
 def retrieveRecipe(db, id):
     """ Helper function to retrieve recipe information given a 
-        recipe id
+        recipe id.
 
-            Parameters:
-                db: database
-                id (int): recipe identifier
+        Algorithm: linear search
 
-            Returns:
-                recipe (list): list of tuples of ingredient details
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
+            id (int): recipe identifier
+
+        Returns:
+            info (list): list of tuples of ingredient details
     """
     cur = db.cursor()
     qry = """
@@ -161,13 +184,17 @@ def retrieveRecipe(db, id):
 
 
 def retrieveRecipeList(db):
-    """ Helper function to retrieve list of recipes
+    """ Helper function to retrieve list of recipes.
 
-            Parameters:
-                db : database
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
         
-            Returns:
-                info: list of all recipes
+        Returns:
+            info (list): list of all recipes
     """
     cur = db.cursor()
     qry = """
@@ -184,13 +211,17 @@ def retrieveRecipeList(db):
 
 
 def retrieveRecipeIngredientsList(db):
-    """ Helper function to retrieve list of recipe ingredients
+    """ Helper function to retrieve list of recipe ingredients.
 
-            Parameters:
-                db : database
+        Algorithm: linear search
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
         
-            Returns:
-                info: list of all recipes ingredients
+        Returns:
+            info (list): list of all recipes ingredients
     """
     cur = db.cursor()
     qry = """
@@ -207,14 +238,18 @@ def retrieveRecipeIngredientsList(db):
 
 
 def getCalories(db, name):
-    """ Helper function to retrieve ingredient calories by name
+    """ Helper function to retrieve ingredient calories by name.
 
-            Parameters
-                db : database
-                name (str): name of ingredient
+        Algorithm: linear search.
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            db (database): database
+            name (str): name of ingredient
             
-            Returns
-                calories (int): calories of ingredient per 100g
+        Returns:
+            calories (int): calories of ingredient per 100g
     """
     cur = db.cursor()
     qry = """
@@ -234,14 +269,18 @@ def getCalories(db, name):
 
 def convertCalories(currCalories, gramToConvert):
     """ Helper function to convert the calories of the ingredients
-        to any specified number of grams
+        to any specified number of grams.
 
-            Parameters:
-                currCalories (int): the 100g calorie value of ingredient
-                gramToConvert (int): the grams required by recipe
+        Algorithm: No Algorithm. 
 
-            Returns:
-                (int): the new calorie value
+        Final Time Complexisty: O(1)
+
+        Parameters:
+            currCalories (int): the 100g calorie value of ingredient
+            gramToConvert (int): the grams required by recipe
+
+        Returns:
+            (int): the new calorie value
     """
     return int ((gramToConvert/100)*currCalories)
 
@@ -249,8 +288,15 @@ def convertCalories(currCalories, gramToConvert):
 def dbConnection():
     """ Helper function to connect with the database and retrive the data.
 
-            Returns:
-                db(database): the data from database
+        Algorithm: No algorithm
+
+        Final Time Complexisty: O(n1)
+
+        Parameters:
+            NONE
+            
+        Returns:
+            db(database): the data from database
     """
     return psycopg2.connect(
         f"host={host} dbname={dbname} user={user} password={password}")

@@ -23,34 +23,55 @@ def getCaloriesRecipes(calories, ingredientsList, mealType, blacklist):
         equal to the input calories, meal type and the ingredients are 
         also matching.
 
-            Parameters:
-                calories (int): input calories
-                ingredientsList (str) : input ingredients
-                mealType (str) : meal type
-                blackList (list) : list of black ingredients
+        Algorithm: linear search. 
         
-            Returns:
-                recipeList (list): list of all recipes if the recipes are 
-                matching the requirements
+        The time complexity of "getMealType" is O(n). There is one "for" loop,
+        and one "if" statement under this "for" loop. Thus, O(1+n) = O(n).
+
+        Final Time Complexisty: O(n)
+
+        Parameters:
+            calories (int): input calories
+            ingredientsList (str) : input ingredients
+            mealType (str) : meal type
+            blackList (list) : list of black ingredients
+        
+        Returns:
+            recipeList (list): list of all recipes if the recipes are 
+            matching the requirements
     """
     recipeList = []
     info = getMealType(mealType, ingredientsList, blacklist)
+    id = []
     for recipe in info:
         if int(recipe["calories"]) <= int(calories):
-            recipeList.append(recipe)
-
+            if len(id) > 0 and int(recipe["recipeID"]) not in id:
+                recipeList.append(recipe)
+                id.append(int(recipe["recipeID"]))
+            elif len(id) == 0:
+                recipeList.append(recipe)
+                id.append(int(recipe["recipeID"]))
     return recipeList
 
 
 def calorieCalculation(ingredientsDict):
-    """ Retrieves recipe details given ingredients (recipe id still or nah?)
+    """ Retrieves recipe details given ingredients. 
 
-            Parameters:
-                ingredients (Dictionary): Dictionary containing ingredients 
-                e.g., {ingredientName: amount}
+        Algorithm: linear search. 
+        
+        The time complexity of "for" loop is O(n). The time complexity of 
+        the "getFixedGrams" and "getCalories" are both O(n). The time 
+        complexity of s"convertCalories" is O(1). Thus, the time complexity
+        should be O(n*n+n*1) = O(n^2).
 
-            Returns:
-                calories (int): total calories of ingredients
+        Final Time Complexisty: O(n^2).
+
+        Parameters:
+            ingredients (Dictionary): Dictionary containing ingredients 
+            e.g., {ingredientName: amount}
+
+        Returns:
+            calories (int): total calories of ingredients
     """
     db = dbConnection()
     ingredientFixedGrams = getFixedCGrams()
@@ -79,9 +100,19 @@ def calorieCalculation(ingredientsDict):
 def getFixedCGrams():
     """ Helper function to get fixed grams for all ingredients.
 
-            Returns:
-                (dictionary): dictionary of key-value pairs, 
-                              ingredient(string): fixed_grams(int)
+        Algorithm: linear search. 
+        
+        The time complexity of "for" loop is O(n). The time complexity of
+        retrieveIngredients is O(n).
+
+        Final Time Complexisty: O(n)
+        
+        Parameters:
+            NONE
+            
+        Returns:
+            (dictionary): dictionary of key-value pairs, 
+                    ingredient(string): fixed_grams(int)
     """
     db = dbConnection()
     info = retrieveIngredients(db)

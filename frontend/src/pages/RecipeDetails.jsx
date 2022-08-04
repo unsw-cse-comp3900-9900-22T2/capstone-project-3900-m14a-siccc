@@ -21,7 +21,6 @@ const RecipeDetails = () => {
       try {
         const recipeData = await apiFetch('GET', `recipe/details/${params.id}`, null);
         setRecipe(recipeData);
-        //console.log('here');
 
       } catch (err) {
         alert(err.message);
@@ -51,18 +50,19 @@ const RecipeDetails = () => {
           </Toolbar>
         </AppBar>
 
-        <Box pl="100px" pt="50px" pb="100px">
-          <Box >
-            <Typography gutterBottom variant="h3" component="div">
-              {recipe.title}
-            </Typography>
-            <img src={recipe.photo} alt="recipe thumbnail" height="300px" width="auto"/>
-            <Typography variant="body2" color="text.secondary">
-              <p><b>Meal Type:</b> {recipe.mealType}</p>
-              <p><b>Serving Size:</b> {recipe.servings} servings</p>
-              <p><b>Time To Cook:</b> {recipe.timeToCook} minutes</p>
-              <p><b>Total Calories:</b> {recipe.calories} calories</p>
-            </Typography>
+      <Box pl="100px" pt="50px" pb="100px">
+        <Box >
+          <Typography gutterBottom variant="h3" component="div">
+            {recipe.title}
+          </Typography>
+          <img src={recipe.photo} alt="recipe thumbnail" height="300px" width="auto"/>
+          <Typography variant="body2" color="text.secondary">
+            <br/>
+            <span><b>Meal Type:</b> {recipe.mealType}</span><br/><br/>
+            <span><b>Serving Size:</b> {recipe.servings} servings</span><br/><br/>
+            <span><b>Time To Cook:</b> {recipe.timeToCook} minutes</span><br/><br/>
+            <span><b>Total Calories:</b> {recipe.calories} calories</span><br/><br/>
+          </Typography>
 
             <Typography gutterBottom variant="h5" component="div">
               Ingredients:

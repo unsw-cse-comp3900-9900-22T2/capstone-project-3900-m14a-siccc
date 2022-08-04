@@ -2,24 +2,19 @@ import { Grid } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch, fileToDataUrl } from '../helpers.jsx';
-// import { Input } from '@chakra-ui/react'
 import { useState } from "react";
 import TextField from '@mui/material/TextField';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Checkbox } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import Slider from '@mui/material/Slider';
 import ListItem from '@mui/material/ListItem';
@@ -43,7 +38,7 @@ const RecipeCreate = () => {
   const [cookingTime, setCookingTime] = React.useState('')
   const [freqIngredients, setFreqIngredients] = React.useState([]);
   const [steps, setSteps] = React.useState([]);
-  const [stepsNo, setStepsNo] = React.useState(0);
+  // const [stepsNo, setStepsNo] = React.useState(0);
   const [categories, setCategories] = React.useState({});
   const [ingredientsGram, setIngredientsGram] = React.useState({});
   const [inputText, setInputText] = useState("");
@@ -140,12 +135,10 @@ const RecipeCreate = () => {
       newIngredientsGram[ingredientName] = String(event.target.value) + "g";
     }
     setIngredientsGram(newIngredientsGram);
-    console.log(newIngredientsGram);
   }
 
   // Updates dictionary to grams or in quantities
   function updateIngredientMeasurement (event, ingredientName) {
-    console.log(event.target.value);
     const newIngredientsGram = {...ingredientsGram};
     var newValue = '0g';
 
@@ -156,14 +149,11 @@ const RecipeCreate = () => {
 
     if (event.target.value === 'g'){
       newIngredientsGram[ingredientName] = newValue.replaceAll("g", "") + "g";
-      console.log(newIngredientsGram[ingredientName])
     } else if (event.target.value === 'q' && newValue.includes("g")){
       newIngredientsGram[ingredientName] = newValue.replaceAll("g", "");
-      console.log(newIngredientsGram[ingredientName])
     }
 
     setIngredientsGram(newIngredientsGram);
-    console.log(newIngredientsGram);
   }
 
   // Return grams or quanitities for ingredient
@@ -198,20 +188,21 @@ const RecipeCreate = () => {
 
   // Changes number of steps
   const changeSteps = (e) => {
-    setStepsNo(e.target.value);
+    // setStepsNo(e.target.value);
     const newSteps = [...steps];
     const oldLength = newSteps.length;
+    var i = 0;
     if(parseInt(e.target.value) > oldLength) {
       // Push the difference
       const difference = parseInt(e.target.value) - oldLength;
-      var i = 0;
+      i = 0;
       while(i < difference) {
         newSteps.push(0)
         i = i + 1;
       }
     } else {
       const difference = oldLength - parseInt(e.target.value);
-      var i = 0;
+      i = 0;
       while(i < difference) {
         newSteps.pop()
         i = i + 1;
@@ -233,7 +224,9 @@ const RecipeCreate = () => {
       thumbnail === '' ||
       cookingTime === '' ||
       ingredients.length === 0 ||
-      steps.length === 0)) {
+      steps.length === 0 || 
+      steps.includes(0) || 
+      steps.includes(''))) {
         var message = "Please enter the required information:\n"
         if (title === '') message = message + "- Recipe title\n";
         if (mealType === '') message = message + "- Meal type\n";
@@ -242,6 +235,7 @@ const RecipeCreate = () => {
         if (cookingTime === '') message = message + "- Estimated cooking time\n";
         if (ingredients.length === 0) message = message + "- Ingredients\n";
         if (steps.length === 0) message = message + "- Recipe steps\n";
+        if (steps.includes(0) || steps.includes('')) message = message + "- Missing instructions in steps\n";
         alert(message)
         return;
       }
@@ -366,7 +360,6 @@ const RecipeCreate = () => {
     if(!newCategory[category][index].check) {
       delete ingredientsGram[newCategory[category][index].text];
     }
-    console.log(ingredientsGram)
   }
 
   // List for ingredient search bar

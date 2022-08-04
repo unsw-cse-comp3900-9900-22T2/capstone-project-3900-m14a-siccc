@@ -1,8 +1,6 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
-import Home from './pages'
-import { ChakraProvider } from '@chakra-ui/react'
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -23,18 +21,10 @@ function App() {
           </Route>
           <Route element ={<RecipeDetails />} path ="/recipe-details/:id">
           </Route>
-          <Route element ={<Home />} path ="/test">
-          </Route>
         </Routes>
       </Router>
     </>
   );
-}
-
-function Test() {
-  return (
-    <div>test</div>
-  )
 }
 
 export default App;
