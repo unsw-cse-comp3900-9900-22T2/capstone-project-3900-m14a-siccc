@@ -70,3 +70,4 @@ Week 10
 - Done Final demo presentation
 - Done Final report
 - Done peer assessment 
+- Done Final software quality
