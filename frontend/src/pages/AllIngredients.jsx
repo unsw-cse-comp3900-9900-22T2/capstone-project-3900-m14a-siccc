@@ -605,9 +605,8 @@ const AllIngredients = () => {
                       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Your blacklisted ingredients
                       </Typography>
-                      <small>Recipes with these ingredients will not show in your search</small>
                       {blacklist.map((name, idx) => (
-                        <div>
+                        <div key={idx}>
                           {name.check
                             ? <div key={idx}>
                               <label>
@@ -689,7 +688,7 @@ const AllIngredients = () => {
                     >
                       {recipes.map((recipe, idx) => {
                         return (
-                          <Grid item sx={{width: '25%', minWidth: "240px"}}>
+                          <Grid key={idx} item sx={{width: '25%', minWidth: "240px"}}>
                             <Card style={{height: "100%", minWidth: "240px"}}>
                               <CardActionArea onClick={() => navigate(`/recipe-details/${recipe.recipeID}`)}>
                                 <CardMedia
@@ -703,8 +702,8 @@ const AllIngredients = () => {
                                   {recipe.title}
                                   </Typography>
                                   <Typography variant="body2" color="text.secondary">
-                                    {recipe.missingIngredient === '' ? <p><b> You have all ingredients </b></p>
-                                    : <p><b> You are missing {recipe.missingIngredient} </b></p>}
+                                    {recipe.missingIngredient === '' ? <span><b> You have all ingredients </b></span>
+                                    : <span><b> You are missing {recipe.missingIngredient} </b></span>}
                                     <br/>
                                     <span>Ingredients: {recipe.ingredients}</span>
                                     <br/>
