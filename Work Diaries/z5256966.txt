@@ -38,3 +38,12 @@ Complete recipe create form
 Week 8
 Completed Demo B
 Wrote up rectrospective
+
+Week 8
+Added blacklist for frontend 
+Cleaned up code
+
+Week 10
+Completed final Demo
+Added implementation challenges and details for report
+Finalising code and details
