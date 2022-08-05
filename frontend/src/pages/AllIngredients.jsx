@@ -703,7 +703,7 @@ const AllIngredients = () => {
                                   {recipe.title}
                                   </Typography>
                                   <Typography variant="body2" color="text.secondary">
-                                    {recipe.missingIngredient == '' ? <p><b> You have all ingredients </b></p>
+                                    {recipe.missingIngredient === '' ? <p><b> You have all ingredients </b></p>
                                     : <p><b> You are missing {recipe.missingIngredient} </b></p>}
                                     <br/>
                                     <span>Ingredients: {recipe.ingredients}</span>
